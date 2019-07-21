@@ -1,0 +1,21 @@
+nr-date-input {
+  margin: 0.2em;
+  padding: 0.2em;
+
+  border-width: 1px;
+  border-style: solid;
+
+  display: flex;
+  flex-direction: column;
+
+  & > label {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  & > input {
+    border-width: 1px;
+    border-style: solid;
+  }
+
+}

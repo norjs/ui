@@ -1,0 +1,15 @@
+<nr-icon class="menu-icon theme-menu-icon" type="{{$ctrl.type}}" ng-click="$ctrl.toggleMenuState()"
+    ng-class="$ctrl.getClasses()"></nr-icon>
+<div ng-if="$ctrl.isMenuOpen()" class="placeholder" ng-click="$ctrl.closeMenu($event)"></div>
+<div class="menu-container" ng-class="$ctrl.getClasses()" ng-if="$ctrl.isMenuOpen()">
+    <div class="menu theme-menu">
+        <div class="menu-item theme-menu-item"
+            ng-repeat="item in itemList = ($ctrl.getList()| filter:$ctrl.filterFunc) track by $ctrl.getItemId(item)"
+            ng-click="$ctrl.onClick($event, item, $ctrl.getItemValue(item))"><i class="fa fa-caret-right"
+                aria-hidden="true"></i>
+            {{$ctrl.getItemLabel(item)|translate}}</div>
+
+        <div ng-if="itemList.length === 0" class="menu-item theme-menu-item" ng-click="$ctrl.closeMenu($event)">
+            {{'common.menu.noItems'|translate}}</div>
+    </div>
+</div>

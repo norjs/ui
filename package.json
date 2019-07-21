@@ -1,0 +1,26 @@
+{
+  "name": "@norjs/web-common",
+  "version": "1.0.0",
+  "description": "Common NorJS frontend components",
+  "main": "src/CommonModule.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/norjs/web-common.git"
+  },
+  "keywords": [
+    "ui",
+    "form",
+    "forms",
+    "component",
+    "angularjs"
+  ],
+  "author": "Jaakko Heusala <jheusala@iki.fi>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/norjs/web-common/issues"
+  },
+  "homepage": "https://github.com/norjs/web-common#readme"
+}

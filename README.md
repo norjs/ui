@@ -1,2 +1,3 @@
-# web-common
-Common NorJS frontend components
+# `@norjs/ui`
+
+Common NorJS frontend components.

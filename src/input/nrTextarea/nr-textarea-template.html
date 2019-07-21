@@ -1,0 +1,20 @@
+<label
+    ng-if="::$ctrl.useLabel()"
+    translate="{{::$ctrl.getLabel()}}"
+></label>
+<textarea
+        class="form-input model-field theme-input"
+        ng-model-options="{
+            allowInvalid: '$inherit',
+            updateOn: 'default blur',
+            debounce: {
+                default: 250,
+                blur: 0
+            }
+        }"
+        ng-model="$ctrl.innerViewValue"
+        ng-change="$ctrl.onChange()"
+        ng-focus="$ctrl.onFocus($event)"
+        ng-blur="$ctrl.onBlur($event)"
+        autocomplete="off"
+></textarea>

@@ -1,0 +1,25 @@
+nr-textarea {
+  margin: 0.2em;
+  padding: 0.2em;
+  border-width: 1px;
+  border-style: solid;
+
+  display: flex;
+  flex-direction: column;
+
+  & > label {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  & > textarea {
+    border-width: 1px;
+    border-style: solid;
+
+    flex: 1;
+    resize: none;
+    font-size: 1rem;
+    padding: 0.5em;
+  }
+
+}

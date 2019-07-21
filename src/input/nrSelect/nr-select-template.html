@@ -1,0 +1,18 @@
+<label
+    ng-if="::$ctrl.useLabel()"
+    translate="{{::$ctrl.getLabel()}}"
+></label>
+<select
+        class="form-input select-item theme-input"
+        ng-model="$ctrl.innerViewValue"
+        ng-focus="$ctrl.onFocus($event)"
+        ng-blur="$ctrl.onBlur($event)"
+>
+    <option
+            class="select-item-value"
+            ng-repeat="item in $ctrl.getList() track by $ctrl.getItemId(item)"
+            ng-value="$ctrl.getItemValue(item)"
+            ng-selected="$ctrl.isItemSelected(item)"
+            translate="{{$ctrl.getItemLabel(item)}}"
+    ></option>
+</select>
