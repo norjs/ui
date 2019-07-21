@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {NrInputController} from '../NrInputController.js';
 import moment from "moment";
-import {ItemDataModel} from "../../classes/ItemDataModel";
 
 /**
  *
@@ -125,8 +124,9 @@ export class NrDateInputController extends NrInputController {
 		/**
 		 *
 		 * @type {string}
+		 * @fixme This should be from somewhere like a settings service
 		 */
-		this.MODEL_DATE_FORMAT = ItemDataModel.DATE_FORMAT;
+		this.MODEL_DATE_FORMAT = 'YYYY-MM-DD';
 
 		/**
 		 *
