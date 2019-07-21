@@ -1,6 +1,6 @@
 {
   "name": "@norjs/web-common",
-  "version": "1.0.0",
+  "version": "1.0.10",
   "description": "Common NorJS frontend components",
   "main": "src/CommonModule.js",
   "scripts": {
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/norjs/web-common/issues"
   },
-  "homepage": "https://github.com/norjs/web-common#readme"
+  "homepage": "https://github.com/norjs/web-common#readme",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
 }
