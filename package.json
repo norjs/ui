@@ -1,5 +1,5 @@
 {
-  "name": "@norjs/web-common",
+  "name": "@norjs/ui",
   "version": "1.0.10",
   "description": "Common NorJS frontend components",
   "main": "src/CommonModule.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/norjs/web-common.git"
+    "url": "git+https://github.com/norjs/ui.git"
   },
   "keywords": [
     "ui",
@@ -20,9 +20,9 @@
   "author": "Jaakko Heusala <jheusala@iki.fi>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/norjs/web-common/issues"
+    "url": "https://github.com/norjs/ui/issues"
   },
-  "homepage": "https://github.com/norjs/web-common#readme",
+  "homepage": "https://github.com/norjs/ui#readme",
   "dependencies": {
     "lodash": "^4.17.15"
   }
