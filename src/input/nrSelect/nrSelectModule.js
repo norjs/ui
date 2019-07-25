@@ -2,7 +2,7 @@ import angular from 'angular';
 import { nrSelectComponent } from './nrSelectComponent.js';
 
 export const nrSelectModule = angular.module(
-	"myapp.common.nrSelect"
+	"norjs.ui.input.nrSelect"
 	, [
 	])
     .component('nrSelect', nrSelectComponent)

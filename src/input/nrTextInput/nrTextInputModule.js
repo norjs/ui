@@ -2,7 +2,7 @@ import angular from 'angular';
 import { nrTextInputComponent } from './nrTextInputComponent.js';
 
 export const nrTextInputModule = angular.module(
-	"myapp.common.nrTextInput"
+	"norjs.ui.input.nrTextInput"
 	, [
 	])
     .component('nrTextInput', nrTextInputComponent)

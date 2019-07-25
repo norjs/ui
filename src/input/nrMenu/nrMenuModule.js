@@ -2,7 +2,7 @@ import angular from 'angular';
 import { nrMenuComponent } from './nrMenuComponent.js';
 
 export const nrMenuModule = angular.module(
-	"myapp.common.nrMenu"
+	"norjs.ui.input.nrMenu"
 	, [
 	])
     .component('nrMenu', nrMenuComponent)
