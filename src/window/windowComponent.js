@@ -10,8 +10,8 @@ let windowComponent = {
   template
   , transclude: true
   , bindings: {
-    __title: '@title'
-    , __onClose: '&?onClose'
+    __title: '@nrTitle'
+    , __onClose: '&?nrClose'
   }
   , controller: WindowController
 };

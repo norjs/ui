@@ -24,8 +24,8 @@ export class NrMenuController extends NrInputController {
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?type"
-			, __id: "@?id"
+			__type: "@?nrType"
+			, __id: "@?nrId"
 			, __getList: '&?getList'
 			, __getItemId: '&?getItemId'
 			, __getItemValue: '&?getItemValue'

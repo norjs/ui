@@ -10,7 +10,7 @@ import 'font-awesome/scss/font-awesome.scss';
 let iconComponent = {
   template
   , bindings: {
-    __type: "@type"
+    __type: "@nrType"
   }
   , controller: IconController
 };

@@ -27,10 +27,10 @@ export class NrSelectController extends NrInputController {
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?type"
-			, __id: "@?id"
-			, __name: "@?name"
-			, __label: "@?label"
+			__type: "@?nrType"
+			, __id: "@?nrId"
+			, __name: "@?nrName"
+			, __label: "@?nrLabel"
 			, __ngModel: "=?ngModel"
 			, __getList: '&?getList'
 			, __getItemId: '&?getItemId'

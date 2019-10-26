@@ -1,4 +1,7 @@
-<nr-icon class="menu-icon theme-menu-icon" type="{{$ctrl.type}}" ng-click="$ctrl.toggleMenuState()"
+<nr-icon
+    class="menu-icon theme-menu-icon"
+    nr-type="{{$ctrl.type}}"
+    ng-click="$ctrl.toggleMenuState()"
     ng-class="$ctrl.getClasses()"></nr-icon>
 <div ng-if="$ctrl.isMenuOpen()" class="placeholder" ng-click="$ctrl.closeMenu($event)"></div>
 <div class="menu-container" ng-class="$ctrl.getClasses()" ng-if="$ctrl.isMenuOpen()">

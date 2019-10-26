@@ -9,8 +9,8 @@ import NavController from './NavController';
 let navComponent = {
   template
   , bindings: {
-    __collection: "<?collection"
-    , __options: "<?options"
+    __collection: "<?nrCollection"
+    , __options: "<?nrOptions"
   }
   , controller: NavController
 };

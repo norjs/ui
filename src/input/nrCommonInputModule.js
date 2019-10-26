@@ -9,6 +9,7 @@ export const nrCommonInputModule = angular.module(
 	"norjs.ui.input"
 	, [
 		nrTextInputModule
+		, nrPasswordInputModule
 		, nrTextareaModule
 		, nrDateInputModule
 		, nrSelectModule

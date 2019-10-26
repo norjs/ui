@@ -27,10 +27,10 @@ export class NrTextareaController extends NrInputController {
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?type" // FIXME: This is not used?
-			, __id: "@?id" // FIXME: This is not used?
-			, __name: "@?name" // FIXME: This is not used?
-			, __label: "@?label"
+			__type: "@?nrType" // FIXME: This is not used?
+			, __id: "@?nrId" // FIXME: This is not used?
+			, __name: "@?nrName" // FIXME: This is not used?
+			, __label: "@?nrLabel"
 			, __ngModel: "=?ngModel"
 		};
 	}
