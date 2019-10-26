@@ -7,10 +7,10 @@ import CompileController from './CompileController';
 let compileComponent = {
   transclude: true
   , bindings: {
-    "__options": "<?options",
-    "__component": "@?component",
-    "__resolve": "<?resolve",
-    "__content": "@?content"
+    "__options": "<?nr-options",
+    "__component": "@?nr-component",
+    "__resolve": "<?nr-resolve",
+    "__content": "@?nr-content"
   }
   , controller: CompileController
 };

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import NrComponentController from '../../abstracts/NrComponentController';
 
 const defaultWindowWidth = 300;
 const defaultWindowHeight = 200;
@@ -60,19 +59,31 @@ const PRIVATE = {
  *
  * @ngInject
  */
-class WindowController extends NrComponentController {
+class WindowController {
+
+  static get nrName () {
+    return "nrWindowController";
+  }
+
+  get Class () {
+    return WindowController;
+  }
+
+  get nrName () {
+    return this.Class.nrName;
+  }
 
   /**
    *
-   * @param $injector {$injector}
-   * @param $element {$element}
-   * @param $attrs {$attrs}
-   * @param $scope {$scope}
+   * @param $element {JQLite}
+   * @param $scope {angular.IScopeService}
    * @ngInject
    */
-  constructor ($injector, $element, $attrs, $scope) {
-    'ngInject';
-    super("nrWindowController", $injector, $element, $attrs, $scope);
+  constructor ($element, $scope) {
+
+    this.$element = $element;
+
+    this.$scope = $scope;
 
     /**
      * @member {WindowService}

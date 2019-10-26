@@ -1,5 +1,5 @@
-import template from './nr-text-input-template.html';
-import './nr-text-input-styles.scss';
+import template from './nr-password-input-template.html';
+import './nr-password-input-styles.scss';
 import {NrPasswordInputController} from './NrPasswordInputController';
 
 /**

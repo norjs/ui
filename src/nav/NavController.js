@@ -1,30 +1,35 @@
 import _ from 'lodash';
-import NrComponentController from "../../abstracts/NrComponentController";
 
 /**
  *
  * @ngInject
  */
-class NavController extends NrComponentController {
+class NavController {
+
+  static get nrName () {
+    return "nrNavController";
+  }
+
+  get Class () {
+    return NavController;
+  }
+
+  get nrName () {
+    return this.Class.nrName;
+  }
 
   /**
    *
-   * @param $injector {$injector}
-   * @param $element {$element}
-   * @param $attrs {$attrs}
-   * @param $scope {$scope}
+   * @param $state {$state}
    * @ngInject
    */
-  constructor ($injector, $element, $attrs, $scope) {
-    'ngInject';
-
-    super("nrNavController", $injector, $element, $attrs, $scope);
+  constructor ($state) {
 
     /**
      *
      * @member {$state}
      */
-    this.$state = $injector.get('$state');
+    this.$state = $state;
 
   }
 
@@ -32,9 +37,11 @@ class NavController extends NrComponentController {
    * @fixme: Use .registerLifeCycleMethods
    */
   $onInit () {
-    super.$onInit();
+
     this.__collection = this.__collection || [];
+
     this.__options = this.__options || {};
+
   }
 
   getCollection () {

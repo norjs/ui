@@ -63,13 +63,18 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
+	 * @param $attrs {angular.IAttributes}
+	 * @param $element {JQLite}
 	 * @ngInject
-	 * @param $attrs {$attrs}
-	 * @param $element {$element}
 	 */
 	constructor ($attrs, $element) {
+
 		super();
 
+		/**
+		 *
+		 * @member {JQLite}
+		 */
 		this.$element = $element;
 
 		this.__type = undefined;
@@ -113,7 +118,6 @@ export class NrTextInputController extends NrInputController {
 		this[PRIVATE.focus] = false;
 
 	}
-
 
 	/**
 	 *
@@ -183,7 +187,6 @@ export class NrTextInputController extends NrInputController {
 		return this[PRIVATE.ngModelController];
 	}
 
-
 	/**
 	 * Returns the view value.
 	 *
@@ -200,9 +203,13 @@ export class NrTextInputController extends NrInputController {
 	 * @param trigger {string} Event that triggered the update.
 	 */
 	setViewValue (value, trigger) {
+
 		const ngModelController = this.getNgModelController();
+
 		ngModelController.$setViewValue(value, trigger);
+
 		ngModelController.$setDirty();
+
 	}
 
 
@@ -301,7 +308,13 @@ export class NrTextInputController extends NrInputController {
 	 * @private
 	 */
 	_updateFocusStyles () {
-		this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
+
+		if (this.$element) {
+			this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
+		} else {
+			console.warn(`${this.nrName}: Warning: No $element detected`);
+		}
+
 	}
 
 }

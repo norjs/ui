@@ -7,3 +7,5 @@ export const nrPasswordInputModule = angular.module(
 	])
     .component('nrPasswordInput', nrPasswordInputComponent)
 	.name;
+
+export default nrPasswordInputModule;

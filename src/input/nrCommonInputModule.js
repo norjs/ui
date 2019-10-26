@@ -1,5 +1,6 @@
 import angular from 'angular';
 import {nrTextInputModule} from './nrTextInput/nrTextInputModule.js';
+import {nrPasswordInputModule} from './nrPasswordInput/nrPasswordInputModule.js';
 import {nrTextareaModule} from './nrTextarea/nrTextareaModule.js';
 import {nrDateInputModule} from './nrDateInput/nrDateInputModule.js';
 import {nrSelectModule} from './nrSelect/nrSelectModule.js';

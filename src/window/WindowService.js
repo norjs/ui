@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import NrService from '../../abstracts/NrService';
 import angular from "angular";
 
 const PRIVATE = {
@@ -15,7 +14,19 @@ const PRIVATE = {
 /**
  * @ngInject
  */
-class WindowService extends NrService {
+export class WindowService {
+
+  static get nrName () {
+    return "WindowService";
+  }
+
+  get Class () {
+    return WindowService;
+  }
+
+  get nrName () {
+    return this.Class.nrName;
+  }
 
   /**
    *
@@ -25,9 +36,6 @@ class WindowService extends NrService {
    * @ngInject
    */
   constructor ($injector, $document, $rootScope) {
-    'ngInject';
-
-    super("WindowController", $injector);
 
     this[PRIVATE.$compile] = $injector.get('$compile');
     this[PRIVATE.$document] = $document;
@@ -56,9 +64,11 @@ class WindowService extends NrService {
    * @return {{width: number, height: number}}
    */
   register (window) {
-    this.$log.log('Registering a window: ', window);
+
+    console.log(`${this.nrName}: Registering a window: `, window);
 
     const previousWindow = this[PRIVATE.windows].length ? this[PRIVATE.windows][this[PRIVATE.windows].length -1] : undefined;
+
     this[PRIVATE.windows].push(window);
 
     if (previousWindow) {
@@ -79,8 +89,11 @@ class WindowService extends NrService {
    * @param window {WindowController}
    */
   unregister (window) {
-    this.$log.log('Unregistering a window: ', window);
+
+    console.log(`${this.nrName}: Unregistering a window: `, window);
+
     _.remove(this[PRIVATE.windows], w => w === window);
+
   }
 
   /**
@@ -91,6 +104,7 @@ class WindowService extends NrService {
    * @param resolve {object}
    */
   createWindow ({title, component, resolve}) {
+
     let element;
 
     const scope = this[PRIVATE.$rootScope].$new();
@@ -108,10 +122,10 @@ class WindowService extends NrService {
     };
 
     const html = `<nr-window 
-        title="{{::window.title}}" 
-        on-close="window.onClose()"
+        nr-title="{{::window.title}}" 
+        nr-close="window.onClose()"
         ><nr-compile 
-            options="window.options"
+            nr-options="window.options"
             ></nr-compile></nr-window>`;
     const template = angular.element(html);
     const linkFn = this[PRIVATE.$compile](template);

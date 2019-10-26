@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import NrComponentController from '../../abstracts/NrComponentController';
 
 const PRIVATE = {
   type: Symbol('_type')
@@ -10,21 +9,25 @@ const PRIVATE = {
  *
  * @ngInject
  */
-class IconController extends NrComponentController {
+class IconController {
+
+  static get nrName () {
+    return "nrIconController";
+  }
+
+  get Class () {
+    return IconController;
+  }
+
+  get nrName () {
+    return this.Class.nrName;
+  }
 
   /**
    *
-   * @param $injector {$injector}
-   * @param $element {$element}
-   * @param $attrs {$attrs}
-   * @param $scope {$scope}
    * @ngInject
    */
-  constructor ($injector, $element, $attrs, $scope) {
-    'ngInject';
-
-    super("nrIconController", $injector, $element, $attrs, $scope);
-
+  constructor () {
   }
 
   /**

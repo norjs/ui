@@ -1,6 +1,6 @@
 {
   "name": "@norjs/ui",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Common NorJS frontend components",
   "main": "./src/nrCommonModule.js",
   "scripts": {

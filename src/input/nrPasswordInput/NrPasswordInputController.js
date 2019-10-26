@@ -23,6 +23,22 @@ export class NrPasswordInputController extends NrInputController {
 
 	/**
 	 *
+	 * @returns {typeof NrPasswordInputController}
+	 */
+	get Class () {
+		return NrPasswordInputController;
+	}
+
+	static get nrName () {
+		return "NrPasswordInputController"
+	}
+
+	get nrName () {
+		return this.Class.nrName;
+	}
+
+	/**
+	 *
 	 * @returns {{__name: string, __ngModel: string, __type: string, __id: string, __label: string}}
 	 */
 	static getComponentBindings () {
@@ -68,6 +84,7 @@ export class NrPasswordInputController extends NrInputController {
 	 * @param $element {$element}
 	 */
 	constructor ($attrs, $element) {
+
 		super();
 
 		this.$element = $element;
@@ -113,7 +130,6 @@ export class NrPasswordInputController extends NrInputController {
 		this[PRIVATE.focus] = false;
 
 	}
-
 
 	/**
 	 *
@@ -300,7 +316,13 @@ export class NrPasswordInputController extends NrInputController {
 	 * @private
 	 */
 	_updateFocusStyles () {
-		this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
+
+		if (this.$element) {
+			this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
+		} else {
+			console.warn(`${this.nrName}: Warning: No $element detected`);
+		}
+
 	}
 
 }

@@ -1,6 +1,5 @@
 import angular from 'angular';
 import _ from 'lodash';
-import NrComponentController from '../../abstracts/NrComponentController';
 
 /**
  * This object contains symbols for private members of CompileController.
@@ -105,7 +104,11 @@ const NG_ATTRIBUTE_REGEXP = /^([=<@&])[?]?(.*)/;
  *
  * @ngInject
  */
-class CompileController extends NrComponentController {
+class CompileController {
+
+  static get nrName () {
+    return "nrCompileController";
+  }
 
   /**
    *
@@ -125,9 +128,6 @@ class CompileController extends NrComponentController {
 
   /**
    *
-   * @param $injector {$injector}
-   * @param $element {$element}
-   * @param $attrs {$attrs}
    * @param $scope {$scope}
    * @param $compile {$compile}
    * @param $parse
@@ -135,10 +135,7 @@ class CompileController extends NrComponentController {
    * @param nrCompileUtils
    * @ngInject
    */
-  constructor ($injector, $element, $attrs, $scope, $compile, $parse, $transclude, nrCompileUtils) {
-    'ngInject';
-
-    super("nrCompileController", $injector, $element, $attrs, $scope);
+  constructor ($scope, $compile, $parse, $transclude, nrCompileUtils) {
 
     /**
      *
@@ -272,7 +269,6 @@ class CompileController extends NrComponentController {
    * @fixme: Use .registerLifeCycleMethods
    */
   $onInit () {
-    super.$onInit();
 
     this[PRIVATE.initialized] = true;
 
