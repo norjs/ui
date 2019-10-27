@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import NrTag from "../NrTag";
 
 const PRIVATE = {
   type: Symbol('_type')
@@ -12,7 +13,7 @@ const PRIVATE = {
 class IconController {
 
   static get nrName () {
-    return "nrIconController";
+    return NrTag.ICON;
   }
 
   get Class () {

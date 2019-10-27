@@ -1,14 +1,18 @@
 import angular from 'angular';
 import windowComponent from './windowComponent';
 import WindowService from './WindowService';
+import NrTag from "../NrTag";
+import NrModuleName from "../NrModuleName";
+import NrServiceName from "../NrServiceName";
 
 export const windowModule = angular.module(
-  "norjs.ui.window"
+  NrModuleName.WINDOW
   , [
 
   ])
-  .component('nrWindow', windowComponent)
-  .service('nrWindowService', WindowService)
+  .component(NrTag.WINDOW, windowComponent)
+  .service(NrServiceName.WINDOW, WindowService)
   .name;
 
+// noinspection JSUnusedGlobalSymbols
 export default windowModule;

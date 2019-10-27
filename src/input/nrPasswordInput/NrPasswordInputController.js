@@ -1,9 +1,18 @@
 import _ from 'lodash';
-import {NrInputController} from '../NrInputController.js';
+import NrInputController from '../NrInputController.js';
+import NrAttribute from "../../NrAttribute";
+import NrTag from "../../NrTag";
+import NgAttribute from "../../NgAttribute";
+import LogUtils from "@norjs/utils/Log";
+import NrStyleClass from "../../NrStyleClass";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.PASSWORD_INPUT);
 
 /**
  *
- * @type {{useLabel: *, ngModel: *, innerViewValue: *, ngModelController: *}}
+ * @enum {Symbol}
+ * @readonly
  */
 const PRIVATE = {
 	useLabel: Symbol('useLabel'),
@@ -29,46 +38,54 @@ export class NrPasswordInputController extends NrInputController {
 		return NrPasswordInputController;
 	}
 
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
 	static get nrName () {
-		return "NrPasswordInputController"
+		return NrTag.PASSWORD_INPUT;
 	}
 
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
 	get nrName () {
 		return this.Class.nrName;
 	}
 
 	/**
 	 *
-	 * @returns {{__name: string, __ngModel: string, __type: string, __id: string, __label: string}}
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?nrType" // FIXME: This is not used?
-			, __id: "@?nrId" // FIXME: This is not used?
-			, __name: "@?nrName" // FIXME: This is not used?
-			, __label: "@?nrLabel"
-			, __ngModel: "=?ngModel"
+			__type: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
+			, __id: `@?${NrAttribute.ID}` // FIXME: This is not used?
+			, __name: `@?${NrAttribute.NAME}` // FIXME: This is not used?
+			, __label: `@?${NrAttribute.LABEL}`
+			, __ngModel: `=?${NgAttribute.MODEL}`
 		};
 	}
 
 	/**
 	 *
-	 * @returns {{__nrForm: string, __ngModelController: string}}
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentRequire () {
 		return {
-			__nrForm: '?^^nrForm',
-			__ngModelController: "?^ngModel"
+			__nrForm: `?^^${NrTag.FORM}`,
+			__ngModelController: `?^${NgAttribute.MODEL}`
 		};
 	}
 
 	/**
 	 *
 	 * @param template {string}
-	 * @returns {{template: string, controller: NrPasswordInputController, bindings: {__name: string, __ngModel: string, __type: string, __id: string, __label:
-	 *     string}, require: {__nrForm: string, __ngModelController: string}}}
+	 * @returns {angular.IComponentOptions}
 	 */
 	static getComponentConfig (template) {
+		// noinspection JSValidateTypes
 		return {
 			template
 			, bindings: this.getComponentBindings()
@@ -77,55 +94,90 @@ export class NrPasswordInputController extends NrInputController {
 		};
 	}
 
+	// noinspection DuplicatedCode
 	/**
 	 *
+	 * @param $attrs {angular.IAttributes}
+	 * @param $element {JQLite}
 	 * @ngInject
-	 * @param $attrs {$attrs}
-	 * @param $element {$element}
 	 */
 	constructor ($attrs, $element) {
 
 		super();
 
+		/**
+		 *
+		 * @member {JQLite}
+		 */
 		this.$element = $element;
 
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__type = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__id = undefined;
+
+		// noinspection JSUnusedGlobalSymbols
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__name = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__label = undefined;
 
+		// noinspection JSUnusedGlobalSymbols
+		/**
+		 *
+		 * @member {angular.IFormController|undefined}
+		 * @private
+		 */
 		this.__nrForm = undefined;
 
 		/**
 		 * The state for our .useLabel() implementation.
 		 *
-		 * @type {boolean}
+		 * @member {boolean}
 		 */
-		this[PRIVATE.useLabel] = !!_.has($attrs, 'label');
+		this[PRIVATE.useLabel] = !!_.has($attrs, NrAttribute.LABEL);
 
 		/**
-		 * The
+		 * The ng-model controller
 		 *
-		 * @type {ngModel.NgModelController}
+		 * @member {angular.INgModelController|undefined}
 		 */
 		this[PRIVATE.ngModelController] = undefined;
 
 		/**
 		 *
-		 * @type {string}
+		 * @member {angular.INgModelController|undefined}
 		 */
 		this[PRIVATE.ngModel] = undefined;
 
 		/**
 		 *
-		 * @type {string}
+		 * @member {string|undefined}
 		 */
 		this[PRIVATE.innerViewValue] = undefined;
 
 		/**
 		 * If `true`, this controller has focus.
 		 *
-		 * @type {boolean}
+		 * @member {boolean}
 		 */
 		this[PRIVATE.focus] = false;
 
@@ -148,6 +200,7 @@ export class NrPasswordInputController extends NrInputController {
 		return this.__label;
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller getter for AngularJS required feature.
 	 *
@@ -158,6 +211,7 @@ export class NrPasswordInputController extends NrInputController {
 		return this[PRIVATE.ngModelController];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller setter for AngularJS required feature.
 	 *
@@ -177,7 +231,7 @@ export class NrPasswordInputController extends NrInputController {
 	}
 
 	/**
-	 * Returns true if we already have AngularJS ngModel.NgModelController registered to this component.
+	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child input element which is in the template.
 	 *
@@ -188,11 +242,11 @@ export class NrPasswordInputController extends NrInputController {
 	}
 
 	/**
-	 * Returns AngularJS ngModel.NgModelController of this component, if one exists.
+	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child input element in the template.
 	 *
-	 * @returns {ngModel.NgModelController|undefined}
+	 * @returns {angular.INgModelController|undefined}
 	 */
 	getNgModelController () {
 		return this[PRIVATE.ngModelController];
@@ -230,7 +284,7 @@ export class NrPasswordInputController extends NrInputController {
 		this.innerViewValue = this.getViewValue();
 	}
 
-
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the getter for component attribute binding of the ng-model attribute given to this component.
 	 *
@@ -241,6 +295,7 @@ export class NrPasswordInputController extends NrInputController {
 		return this[PRIVATE.ngModel];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the setter for component attribute binding of the ng-model attribute given to this component.
 	 *
@@ -252,7 +307,6 @@ export class NrPasswordInputController extends NrInputController {
 	set __ngModel (value) {
 		this[PRIVATE.ngModel] = value;
 	}
-
 
 	/**
 	 * Called from the template when inner input element changes model value, eg. our inner view value.
@@ -317,12 +371,11 @@ export class NrPasswordInputController extends NrInputController {
 	 */
 	_updateFocusStyles () {
 
-		if (this.$element) {
-			this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
-		} else {
-			console.warn(`${this.nrName}: Warning: No $element detected`);
-		}
+		this.Class.toggleClass(this.$element, NrStyleClass.FOCUS, this[PRIVATE.focus]);
 
 	}
 
 }
+
+// noinspection JSUnusedGlobalSymbols
+export default NrPasswordInputController;

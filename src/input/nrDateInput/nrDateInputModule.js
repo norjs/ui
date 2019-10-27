@@ -1,9 +1,14 @@
 import angular from 'angular';
-import { nrDateInputComponent } from './nrDateInputComponent.js';
+import nrDateInputComponent from './nrDateInputComponent.js';
+import NrModuleName from "../../NrModuleName";
+import NrTag from "../../NrTag";
 
 export const nrDateInputModule = angular.module(
-	"norjs.ui.input.nrDateInput"
+	NrModuleName.DATE_INPUT
 	, [
 	])
-    .component('nrDateInput', nrDateInputComponent)
+    .component(NrTag.DATE_INPUT, nrDateInputComponent)
 	.name;
+
+// noinspection JSUnusedGlobalSymbols
+export default nrDateInputModule;

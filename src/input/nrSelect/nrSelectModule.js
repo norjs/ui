@@ -1,9 +1,14 @@
 import angular from 'angular';
-import { nrSelectComponent } from './nrSelectComponent.js';
+import nrSelectComponent from './nrSelectComponent.js';
+import NrTag from "../../NrTag";
+import NrModuleName from "../../NrModuleName";
 
 export const nrSelectModule = angular.module(
-	"norjs.ui.input.nrSelect"
+	NrModuleName.SELECT
 	, [
 	])
-    .component('nrSelect', nrSelectComponent)
+    .component(NrTag.SELECT, nrSelectComponent)
 	.name;
+
+// noinspection JSUnusedGlobalSymbols
+export default nrSelectModule;

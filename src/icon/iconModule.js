@@ -1,12 +1,15 @@
 import angular from 'angular';
 import iconComponent from './iconComponent';
+import NrModuleName from "../NrModuleName";
+import NrTag from "../NrTag";
 
 export const iconModule = angular.module(
-  "norjs.ui.icon"
+  NrModuleName.ICON
   , [
 
   ])
-  .component('nrIcon', iconComponent)
+  .component( NrTag.ICON, iconComponent)
   .name;
 
+// noinspection JSUnusedGlobalSymbols
 export default iconModule;

@@ -1,9 +1,12 @@
 import template from './nr-menu-template.html';
 import './nr-menu-styles.scss';
-import {NrMenuController} from './NrMenuController';
+import NrMenuController from './NrMenuController';
 
 /**
  *
- * @type {{template: string, controller: NrMenuController, bindings: {__name: string, __ngModel: string, __type: string, __id: string, __label: string}, require: {__nrForm: string, __ngModelController: string}}}
+ * @type {angular.IComponentOptions}
  */
 export const nrMenuComponent = NrMenuController.getComponentConfig(template);
+
+// noinspection JSUnusedGlobalSymbols
+export default nrMenuComponent;

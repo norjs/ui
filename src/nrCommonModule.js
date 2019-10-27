@@ -1,12 +1,13 @@
 import angular from 'angular';
-import {compileModule} from './compile/compileModule.js';
-import {iconModule} from './icon/iconModule.js';
-import {nrCommonInputModule} from './input/nrCommonInputModule.js';
-import {navModule} from './nav/navModule.js';
-import {windowModule} from './window/windowModule.js';
+import compileModule from './compile/compileModule.js';
+import iconModule from './icon/iconModule.js';
+import nrCommonInputModule from './input/nrCommonInputModule.js';
+import navModule from './nav/navModule.js';
+import windowModule from './window/windowModule.js';
+import NrModuleName from "./NrModuleName";
 
 export const nrCommonModule = angular.module(
-	"norjs.ui"
+	NrModuleName.UI
 	, [
 		compileModule
 		, iconModule
@@ -17,4 +18,5 @@ export const nrCommonModule = angular.module(
 	])
 	.name;
 
+// noinspection JSUnusedGlobalSymbols
 export default nrCommonModule;

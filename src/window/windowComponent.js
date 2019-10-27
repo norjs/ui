@@ -1,17 +1,18 @@
 import template from './window-template.html';
 import './window-styles.scss';
 import WindowController from './WindowController';
+import NrAttribute from "../NrAttribute";
 
 /**
  *
- * @type {{template, controller: WindowController}}
+ * @type {angular.IComponentOptions}
  */
-let windowComponent = {
+export const windowComponent = {
   template
   , transclude: true
   , bindings: {
-    __title: '@nrTitle'
-    , __onClose: '&?nrClose'
+    __title: `@${NrAttribute.WINDOW_TITLE}`
+    , __onClose: `&?${NrAttribute.WINDOW_CLOSE}`
   }
   , controller: WindowController
 };

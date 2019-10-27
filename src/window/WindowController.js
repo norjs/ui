@@ -1,14 +1,27 @@
 import _ from 'lodash';
+import NrTag from "../NrTag";
+import LogUtils from "@norjs/utils/Log";
+import angular from 'angular';
 
-const defaultWindowWidth = 300;
-const defaultWindowHeight = 200;
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.WINDOW);
 
 /**
  *
- * @type {{windowService: *, $document: *, $onInit: *, $onDestroy: *, $postLink: *, title: *, mouseMove: *, mouseUp: *, mouseDown: *, contentMouseDown: *,
- *     windowPosition: *, startX: *, startY: *, startWidth: *, startHeight: *, initialMouseX: *, initialMouseY: *, isMoving: *, options: *, contentElement: *,
- *     zIndex: *, contentAreaSeen: *, unbindFromDocument: *, initContentAreaElement: *, updateIsMoving: *, toggleElementClass: *, onDocumentMouseMove: *,
- *     onDocumentMouseUp: *, onElementMouseDown: *, onContentMouseDown: *}}
+ * @type {number}
+ */
+const NR_WINDOW_DEFAULT_WINDOW_WIDTH = 300;
+
+/**
+ *
+ * @type {number}
+ */
+const NR_WINDOW_DEFAULT_WINDOW_HEIGHT = 200;
+
+/**
+ *
+ * @enum {Symbol}
+ * @readonly
  */
 const PRIVATE = {
 
@@ -59,16 +72,28 @@ const PRIVATE = {
  *
  * @ngInject
  */
-class WindowController {
+export class WindowController {
 
+  /**
+   *
+   * @returns {NrTag|string}
+   */
   static get nrName () {
-    return "nrWindowController";
+    return NrTag.WINDOW;
   }
 
+  /**
+   *
+   * @returns {typeof WindowController}
+   */
   get Class () {
     return WindowController;
   }
 
+  /**
+   *
+   * @returns {NrTag|string}
+   */
   get nrName () {
     return this.Class.nrName;
   }
@@ -76,24 +101,57 @@ class WindowController {
   /**
    *
    * @param $element {JQLite}
-   * @param $scope {angular.IScopeService}
+   * @param $scope {angular.IScope}
+   * @param nrWindowService {nrWindowService}
+   * @param $document {$document}
    * @ngInject
    */
-  constructor ($element, $scope) {
+  constructor (
+      $element,
+      $scope,
+      nrWindowService,
+      $document
+  ) {
 
+    /**
+     *
+     * @member {JQLite}
+     * @private
+     */
     this.$element = $element;
 
+    /**
+     *
+     * @member {angular.IScope}
+     * @private
+     */
     this.$scope = $scope;
 
     /**
-     * @member {WindowService}
+     *
+     * @member {Function|function|undefined}
+     * @private
      */
-    this[PRIVATE.windowService] = $injector.get('nrWindowService');
+    this.__onClose = undefined;
+
+    /**
+     * @member {WindowService}
+     * @private
+     */
+    this[PRIVATE.windowService] = nrWindowService;
 
     /**
      * @member {$document}
+     * @private
      */
-    this[PRIVATE.$document] = $injector.get('$document');
+    this[PRIVATE.$document] = $document;
+
+    /**
+     *
+     * @member {JQLite|undefined}
+     * @private
+     */
+    this[PRIVATE.contentElement] = undefined;
 
     /**
      *
@@ -125,7 +183,6 @@ class WindowController {
      * @private
      */
     this[PRIVATE.contentMouseDown] = ($event) => this[PRIVATE.onContentMouseDown]($event);
-
 
     /**
      * The window position.
@@ -204,6 +261,7 @@ class WindowController {
       , height: this.getWindowHeight() + 'px'
     });
 
+    // FIXME: Refactor this from web client to a utility or a manager
     this.registerLifeCycleMethods({
       $onInit: PRIVATE.initMouseDownListener
       , $onDestroy: [
@@ -232,8 +290,11 @@ class WindowController {
    * This is one of the $onDestroy handlers.
    */
   [PRIVATE.unregisterFromWindowService] () {
-    this.$log.log('Unregistering from window service...');
+
+    nrLog.trace('Unregistering from window service...');
+
     this[PRIVATE.windowService].unregister(this);
+
   }
 
   /**
@@ -267,6 +328,7 @@ class WindowController {
     }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    * AngularJS binding attribute setter.
    *
@@ -277,6 +339,7 @@ class WindowController {
     this[PRIVATE.title] = value;
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    * AngularJS binding attribute getter.
    *
@@ -287,6 +350,7 @@ class WindowController {
     return this[PRIVATE.title];
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    * Set window title.
    *
@@ -294,7 +358,7 @@ class WindowController {
    */
   setTitle (value) {
     this[PRIVATE.title] = value;
-    this.$log.log('Window title set as: ', value);
+    nrLog.trace('Window title set as: ', value);
   }
 
   /**
@@ -314,6 +378,7 @@ class WindowController {
     return this.getTitle();
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @returns {boolean}
@@ -368,7 +433,7 @@ class WindowController {
    * @returns {number}
    */
   getWindowWidth () {
-    return _.get(this[PRIVATE.options], 'width', defaultWindowWidth);
+    return _.get(this[PRIVATE.options], 'width', NR_WINDOW_DEFAULT_WINDOW_WIDTH);
   }
 
   /**
@@ -376,7 +441,7 @@ class WindowController {
    * @returns {number}
    */
   getWindowHeight () {
-    return _.get(this[PRIVATE.options], 'height', defaultWindowHeight);
+    return _.get(this[PRIVATE.options], 'height', NR_WINDOW_DEFAULT_WINDOW_HEIGHT);
   }
 
   /**
@@ -387,6 +452,7 @@ class WindowController {
    * @private
    */
   [PRIVATE.initContentAreaElement] () {
+
     if (this[PRIVATE.contentElement]) return;
 
     this[PRIVATE.contentElement] = angular.element(this.$element[0].querySelector('.content-area'));
@@ -550,6 +616,7 @@ class WindowController {
     return false;
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @return {{x: (undefined | number), y: (undefined | number)}}
@@ -581,7 +648,6 @@ class WindowController {
    *
    * @param x
    * @param y
-   * @private
    */
   setWindowPosition (x, y) {
     this[PRIVATE.windowPosition] = {x, y};
@@ -669,11 +735,13 @@ class WindowController {
    * Close this window.
    */
   close () {
+
     if (_.isFunction(this.__onClose)) {
       this.__onClose({nrWindow:this});
     } else {
-      this.$log.error("No on-close handler implemented. Cannot close the window.");
+      nrLog.warn("No on-close handler implemented. Cannot close the window.");
     }
+
   }
 
 }

@@ -1,9 +1,25 @@
+import LogUtils from "@norjs/utils/Log";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger( "NrInputController" );
 
 /**
  *
  * @abstract
  */
 export class NrInputController {
+
+	/**
+	 * @returns {string}
+	 * @abstract
+	 */
+	static get nrName () {}
+
+	/**
+	 * @returns {string}
+	 * @abstract
+	 */
+	get nrName () {}
 
 	/**
 	 * This will be used from the template.
@@ -46,7 +62,7 @@ export class NrInputController {
 
 
 	/**
-	 * Returns true if we already have AngularJS ngModel.NgModelController registered.
+	 * Returns true if we already have AngularJS angular.INgModelController registered.
 	 *
 	 * @returns {boolean}
 	 * @abstract
@@ -54,11 +70,31 @@ export class NrInputController {
 	hasNgModelController () {}
 
 	/**
-	 * Returns AngularJS ngModel.NgModelController of this element, if one exists.
+	 * Returns AngularJS angular.INgModelController of this element, if one exists.
 	 *
-	 * @returns {ngModel.NgModelController|undefined}
+	 * @returns {angular.INgModelController|undefined}
 	 * @abstract
 	 */
 	getNgModelController () {}
 
+
+	/**
+	 *
+	 * @param $element {JQLite}
+	 * @param name {NrStyleClass}
+	 * @param value {boolean}
+	 */
+	static toggleClass ($element, name, value) {
+
+		if ($element) {
+			$element.toggleClass(name, value);
+		} else {
+			nrLog.warn(`${this.nrName}: Warning: No $element detected`);
+		}
+
+	}
+
 }
+
+// noinspection JSUnusedGlobalSymbols
+export default NrInputController;

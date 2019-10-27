@@ -1,16 +1,17 @@
 import template from './nav-template.html';
 import './nav-styles.css';
 import NavController from './NavController';
+import NrAttribute from "../NrAttribute";
 
 /**
  *
- * @type {{template, controller: NavController}}
+ * @type {angular.IComponentOptions}
  */
-let navComponent = {
+export const navComponent = {
   template
   , bindings: {
-    __collection: "<?nrCollection"
-    , __options: "<?nrOptions"
+    __collection: `<?${NrAttribute.COLLECTION}`
+    , __options: `<?${NrAttribute.OPTIONS}`
   }
   , controller: NavController
 };

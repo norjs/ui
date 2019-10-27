@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import angular from "angular";
 
+/**
+ *
+ * @enum {Symbol}
+ * @readonly
+ */
 const PRIVATE = {
   $compile: Symbol('$compile'),
   $document: Symbol('$document'),
@@ -16,29 +21,62 @@ const PRIVATE = {
  */
 export class WindowService {
 
+  /**
+   *
+   * @returns {NrServiceName|string}
+   */
   static get nrName () {
-    return "WindowService";
+    return NrServiceName.WINDOW;
   }
 
+  /**
+   *
+   * @returns {typeof WindowService}
+   */
   get Class () {
     return WindowService;
   }
 
+  /**
+   *
+   * @returns {NrServiceName|string}
+   */
   get nrName () {
     return this.Class.nrName;
   }
 
   /**
    *
-   * @param $injector {$injector}
-   * @param $document {$document}
-   * @param $rootScope {$rootScope}
+   * @param $compile {angular.ICompileService}
+   * @param $document {angular.IDocumentService}
+   * @param $rootScope {angular.IRootScopeService}
    * @ngInject
    */
-  constructor ($injector, $document, $rootScope) {
+  constructor (
+      $compile,
+      $document,
+      $rootScope
+  ) {
 
-    this[PRIVATE.$compile] = $injector.get('$compile');
+    /**
+     *
+     * @member {angular.ICompileService}
+     * @private
+     */
+    this[PRIVATE.$compile] = $compile;
+
+    /**
+     *
+     * @member {angular.IDocumentService}
+     * @private
+     */
     this[PRIVATE.$document] = $document;
+
+    /**
+     *
+     * @member {angular.IRootScopeService}
+     * @private
+     */
     this[PRIVATE.$rootScope] = $rootScope;
 
     /**
@@ -109,6 +147,7 @@ export class WindowService {
 
     const scope = this[PRIVATE.$rootScope].$new();
 
+    // noinspection JSUnusedGlobalSymbols
     scope.window = {
       title,
       onClose: () => {
@@ -121,12 +160,11 @@ export class WindowService {
       }
     };
 
+    // FIXME: These nr-attributes should be converted from `NrAttribute`
     const html = `<nr-window 
         nr-title="{{::window.title}}" 
         nr-close="window.onClose()"
-        ><nr-compile 
-            nr-options="window.options"
-            ></nr-compile></nr-window>`;
+        ><nr-compile nr-options="window.options"></nr-compile></nr-window>`;
     const template = angular.element(html);
     const linkFn = this[PRIVATE.$compile](template);
     element = linkFn(scope);

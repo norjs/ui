@@ -1,9 +1,18 @@
 import _ from 'lodash';
-import {NrInputController} from '../NrInputController.js';
+import NrInputController from '../NrInputController.js';
+import NrStyleClass from "../../NrStyleClass";
+import NrTag from "../../NrTag";
+import LogUtils from "@norjs/utils/Log";
+import NrAttribute from "../../NrAttribute";
+import NgAttribute from "../../NgAttribute";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.TEXT_INPUT);
 
 /**
  *
- * @type {{useLabel: *, ngModel: *, innerViewValue: *, ngModelController: *}}
+ * @enum {Symbol}
+ * @readonly
  */
 const PRIVATE = {
 	useLabel: Symbol('useLabel'),
@@ -23,15 +32,39 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
+	 * @returns {typeof NrTextInputController}
+	 */
+	get Class () {
+		return NrTextInputController;
+	}
+
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	static get nrName () {
+		return NrTag.TEXT_INPUT;
+	}
+
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	get nrName () {
+		return this.Class.nrName;
+	}
+
+	/**
+	 *
 	 * @returns {{__name: string, __ngModel: string, __type: string, __id: string, __label: string}}
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?nrType" // FIXME: This is not used?
-			, __id: "@?nrId" // FIXME: This is not used?
-			, __name: "@?nrName" // FIXME: This is not used?
-			, __label: "@?nrLabel"
-			, __ngModel: "=?ngModel"
+			__type: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
+			, __id: `@?${NrAttribute.ID}` // FIXME: This is not used?
+			, __name: `@?${NrAttribute.NAME}` // FIXME: This is not used?
+			, __label: `@?${NrAttribute.LABEL}`
+			, __ngModel: `=?${NgAttribute.MODEL}`
 		};
 	}
 
@@ -41,18 +74,18 @@ export class NrTextInputController extends NrInputController {
 	 */
 	static getComponentRequire () {
 		return {
-			__nrForm: '?^^nrForm',
-			__ngModelController: "?^ngModel"
+			__nrForm: `?^^${NrTag.FORM}`,
+			__ngModelController: `?^${NgAttribute.MODEL}`
 		};
 	}
 
 	/**
 	 *
 	 * @param template {string}
-	 * @returns {{template: string, controller: NrTextInputController, bindings: {__name: string, __ngModel: string, __type: string, __id: string, __label:
-	 *     string}, require: {__nrForm: string, __ngModelController: string}}}
+	 * @returns {angular.IComponentOptions}
 	 */
 	static getComponentConfig (template) {
+		// noinspection JSValidateTypes
 		return {
 			template
 			, bindings: this.getComponentBindings()
@@ -61,6 +94,7 @@ export class NrTextInputController extends NrInputController {
 		};
 	}
 
+	// noinspection DuplicatedCode
 	/**
 	 *
 	 * @param $attrs {angular.IAttributes}
@@ -74,14 +108,46 @@ export class NrTextInputController extends NrInputController {
 		/**
 		 *
 		 * @member {JQLite}
+		 * @private
 		 */
 		this.$element = $element;
 
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__type = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__id = undefined;
+
+		// noinspection JSUnusedGlobalSymbols
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__name = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__label = undefined;
 
+
+		// noinspection JSUnusedGlobalSymbols
+		/**
+		 *
+		 * @member {angular.IFormController|undefined}
+		 * @private
+		 */
 		this.__nrForm = undefined;
 
 		/**
@@ -89,12 +155,12 @@ export class NrTextInputController extends NrInputController {
 		 *
 		 * @type {boolean}
 		 */
-		this[PRIVATE.useLabel] = !!_.has($attrs, 'label');
+		this[PRIVATE.useLabel] = !!_.has($attrs, NgAttribute.LABEL);
 
 		/**
 		 * The
 		 *
-		 * @type {ngModel.NgModelController}
+		 * @type {angular.INgModelController}
 		 */
 		this[PRIVATE.ngModelController] = undefined;
 
@@ -121,7 +187,7 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {boolean}
+	 * @returns {boolean|undefined}
 	 */
 	useLabel () {
 		return this[PRIVATE.useLabel];
@@ -137,6 +203,7 @@ export class NrTextInputController extends NrInputController {
 	}
 
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller getter for AngularJS required feature.
 	 *
@@ -147,6 +214,7 @@ export class NrTextInputController extends NrInputController {
 		return this[PRIVATE.ngModelController];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller setter for AngularJS required feature.
 	 *
@@ -166,7 +234,7 @@ export class NrTextInputController extends NrInputController {
 	}
 
 	/**
-	 * Returns true if we already have AngularJS ngModel.NgModelController registered to this component.
+	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child input element which is in the template.
 	 *
@@ -177,11 +245,11 @@ export class NrTextInputController extends NrInputController {
 	}
 
 	/**
-	 * Returns AngularJS ngModel.NgModelController of this component, if one exists.
+	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child input element in the template.
 	 *
-	 * @returns {ngModel.NgModelController|undefined}
+	 * @returns {angular.INgModelController|undefined}
 	 */
 	getNgModelController () {
 		return this[PRIVATE.ngModelController];
@@ -223,6 +291,7 @@ export class NrTextInputController extends NrInputController {
 	}
 
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the getter for component attribute binding of the ng-model attribute given to this component.
 	 *
@@ -233,6 +302,7 @@ export class NrTextInputController extends NrInputController {
 		return this[PRIVATE.ngModel];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the setter for component attribute binding of the ng-model attribute given to this component.
 	 *
@@ -309,12 +379,11 @@ export class NrTextInputController extends NrInputController {
 	 */
 	_updateFocusStyles () {
 
-		if (this.$element) {
-			this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
-		} else {
-			console.warn(`${this.nrName}: Warning: No $element detected`);
-		}
+		this.Class.toggleClass(this.$element, NrStyleClass.FOCUS, this[PRIVATE.focus]);
 
 	}
 
 }
+
+// noinspection JSUnusedGlobalSymbols
+export default NrTextInputController;

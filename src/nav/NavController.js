@@ -1,4 +1,9 @@
 import _ from 'lodash';
+import NrTag from "../NrTag";
+import LogUtils from "@norjs/utils/Log";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.NAV);
 
 /**
  *
@@ -6,28 +11,41 @@ import _ from 'lodash';
  */
 class NavController {
 
+  /**
+   *
+   * @returns {NrTag|string}
+   */
   static get nrName () {
-    return "nrNavController";
+    return NrTag.NAV;
   }
 
+  /**
+   *
+   * @returns {typeof NavController}
+   */
   get Class () {
     return NavController;
   }
 
+  /**
+   *
+   * @returns {NrTag|string}
+   */
   get nrName () {
     return this.Class.nrName;
   }
 
   /**
    *
-   * @param $state {$state}
+   * @param $state {angular.ui.IState}
    * @ngInject
    */
   constructor ($state) {
 
     /**
      *
-     * @member {$state}
+     * @member {angular.ui.IState}
+     * @private
      */
     this.$state = $state;
 
@@ -38,8 +56,18 @@ class NavController {
    */
   $onInit () {
 
+    /**
+     *
+     * @member {Array}
+     * @private
+     */
     this.__collection = this.__collection || [];
 
+    /**
+     *
+     * @member {{}}
+     * @private
+     */
     this.__options = this.__options || {};
 
   }

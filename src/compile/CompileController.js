@@ -1,5 +1,6 @@
 import angular from 'angular';
 import _ from 'lodash';
+import NrTag from "../NrTag";
 
 /**
  * This object contains symbols for private members of CompileController.
@@ -107,7 +108,15 @@ const NG_ATTRIBUTE_REGEXP = /^([=<@&])[?]?(.*)/;
 class CompileController {
 
   static get nrName () {
-    return "nrCompileController";
+    return NrTag.COMPILE;
+  }
+
+  get Class () {
+    return CompileController;
+  }
+
+  get nrName () {
+    return this.Class.nrName;
   }
 
   /**
@@ -169,7 +178,7 @@ class CompileController {
 
     /**
      *
-     * @member {$element}
+     * @member {JQLite}
      */
     this[PRIVATE.$element] = $element;
 

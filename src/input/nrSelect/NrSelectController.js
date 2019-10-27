@@ -1,9 +1,18 @@
 import _ from 'lodash';
-import {NrInputController} from '../NrInputController.js';
+import NrInputController from '../NrInputController.js';
+import LogUtils from "@norjs/utils/Log";
+import NrAttribute from "../../NrAttribute";
+import NrTag from "../../NrTag";
+import NgAttribute from "../../NgAttribute";
+import NrStyleClass from "../../NrStyleClass";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.PASSWORD_INPUT);
 
 /**
  *
- * @type {{useLabel: *, ngModel: *, innerViewValue: *, ngModelController: *}}
+ * @enum {Symbol}
+ * @readonly
  */
 const PRIVATE = {
 	useLabel: Symbol('useLabel'),
@@ -23,40 +32,64 @@ export class NrSelectController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {{__name: string, __ngModel: string, __type: string, __id: string, __label: string}}
+	 * @returns {typeof NrSelectController}
+	 */
+	get Class () {
+		return NrSelectController;
+	}
+
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	static get nrName () {
+		return NrTag.SELECT;
+	}
+
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	get nrName () {
+		return this.Class.nrName;
+	}
+
+	/**
+	 *
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?nrType"
-			, __id: "@?nrId"
-			, __name: "@?nrName"
-			, __label: "@?nrLabel"
-			, __ngModel: "=?ngModel"
-			, __getList: '&?getList'
-			, __getItemId: '&?getItemId'
-			, __getItemValue: '&?getItemValue'
-			, __getItemLabel: '&?getItemLabel'
+			__type: `@?${NrAttribute.TYPE}`
+			, __id: `@?${NrAttribute.ID}`
+			, __name: `@?${NrAttribute.NAME}`
+			, __label: `@?${NrAttribute.LABEL}`
+			, __ngModel: `=?${NgAttribute.MODEL}`
+			, __getList: `&?${NrAttribute.SELECT_GET_LIST}`
+			, __getItemId: `&?${NrAttribute.SELECT_GET_ITEM_ID}`
+			, __getItemValue: `&?${NrAttribute.SELECT_GET_ITEM_VALUE}`
+			, __getItemLabel: `&?${NrAttribute.SELECT_GET_ITEM_LABEL}`
 		};
 	}
 
 	/**
 	 *
-	 * @returns {{__nrForm: string, __ngModelController: string}}
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentRequire () {
 		return {
-			__nrForm: '?^^nrForm',
-			__ngModelController: "?^ngModel"
+			__nrForm: `?^^${NrTag.FORM}`
+			, __ngModelController: `?^${NgAttribute.MODEL}`
 		};
 	}
 
 	/**
 	 *
 	 * @param template {string}
-	 * @returns {{template: string, controller: NrSelectController, bindings: {__name: string, __ngModel: string, __type: string, __id: string, __label:
-	 *     string}, require: {__nrForm: string, __ngModelController: string}}}
+	 * @returns {angular.IComponentOptions}
 	 */
 	static getComponentConfig (template) {
+		// noinspection JSValidateTypes
 		return {
 			template
 			, bindings: this.getComponentBindings()
@@ -65,26 +98,88 @@ export class NrSelectController extends NrInputController {
 		};
 	}
 
+	// noinspection DuplicatedCode
 	/**
 	 *
+	 * @param $attrs {angular.IAttributes}
+	 * @param $element {JQLite}
 	 * @ngInject
-	 * @param $attrs {$attrs}
-	 * @param $element {$element}
 	 */
 	constructor ($attrs, $element) {
+
 		super();
 
+		/**
+		 *
+		 * @member {JQLite}
+		 * @private
+		 */
 		this.$element = $element;
 
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__type = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__id = undefined;
+
+		// noinspection JSUnusedGlobalSymbols
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__name = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__label = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getList = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getItemId = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getItemValue = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getItemLabel = undefined;
 
+		// noinspection JSUnusedGlobalSymbols
+		/**
+		 * The AngularJS's form controller
+		 *
+		 * @member {angular.IFormController|undefined}
+		 * @private
+		 */
 		this.__nrForm = undefined;
 
 		/**
@@ -92,12 +187,12 @@ export class NrSelectController extends NrInputController {
 		 *
 		 * @type {boolean}
 		 */
-		this[PRIVATE.useLabel] = !!_.has($attrs, 'label');
+		this[PRIVATE.useLabel] = !!_.has($attrs, NrAttribute.LABEL);
 
 		/**
-		 * The
+		 * The ng-model controller.
 		 *
-		 * @type {ngModel.NgModelController}
+		 * @type {angular.INgModelController}
 		 */
 		this[PRIVATE.ngModelController] = undefined;
 
@@ -122,7 +217,6 @@ export class NrSelectController extends NrInputController {
 
 	}
 
-
 	/**
 	 *
 	 * @returns {boolean}
@@ -140,7 +234,7 @@ export class NrSelectController extends NrInputController {
 		return this.__label;
 	}
 
-
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller getter for AngularJS required feature.
 	 *
@@ -151,6 +245,7 @@ export class NrSelectController extends NrInputController {
 		return this[PRIVATE.ngModelController];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller setter for AngularJS required feature.
 	 *
@@ -170,7 +265,7 @@ export class NrSelectController extends NrInputController {
 	}
 
 	/**
-	 * Returns true if we already have AngularJS ngModel.NgModelController registered to this component.
+	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child input element which is in the template.
 	 *
@@ -181,11 +276,11 @@ export class NrSelectController extends NrInputController {
 	}
 
 	/**
-	 * Returns AngularJS ngModel.NgModelController of this component, if one exists.
+	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child input element in the template.
 	 *
-	 * @returns {ngModel.NgModelController|undefined}
+	 * @returns {angular.INgModelController|undefined}
 	 */
 	getNgModelController () {
 		return this[PRIVATE.ngModelController];
@@ -223,23 +318,25 @@ export class NrSelectController extends NrInputController {
 		this.innerViewValue = this.getViewValue();
 	}
 
-
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the getter for component attribute binding of the ng-model attribute given to this component.
 	 *
 	 * AngularJS will call this method from ngModel controller.
 	 *
+	 * @returns {string}
 	 */
 	get __ngModel () {
 		return this._getModelValue();
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the setter for component attribute binding of the ng-model attribute given to this component.
 	 *
 	 * AngularJS will call this method from ngModel controller.
 	 *
-	 * @param value
+	 * @param value {string}
 	 * @private
 	 */
 	set __ngModel (value) {
@@ -261,10 +358,10 @@ export class NrSelectController extends NrInputController {
 	 * @private
 	 */
 	_setModelValue (value) {
+
 		this[PRIVATE.ngModel] = value;
+
 	}
-
-
 
 	/**
 	 * Called from the template when inner input element changes model value, eg. our inner view value.
@@ -388,7 +485,12 @@ export class NrSelectController extends NrInputController {
 	 * @private
 	 */
 	_updateFocusStyles () {
-		this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
+
+		this.Class.toggleClass(this.$element, NrStyleClass.FOCUS, this[PRIVATE.focus]);
+
 	}
 
 }
+
+// noinspection JSUnusedGlobalSymbols
+export default NrSelectController;

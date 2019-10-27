@@ -1,9 +1,14 @@
 import angular from 'angular';
-import { nrTextInputComponent } from './nrTextInputComponent.js';
+import nrTextInputComponent from './nrTextInputComponent.js';
+import NrModuleName from "../../NrModuleName";
+import NrTag from "../../NrTag";
 
 export const nrTextInputModule = angular.module(
-	"norjs.ui.input.nrTextInput"
+	NrModuleName.TEXT_INPUT
 	, [
 	])
-    .component('nrTextInput', nrTextInputComponent)
+    .component(NrTag.TEXT_INPUT, nrTextInputComponent)
 	.name;
+
+// noinspection JSUnusedGlobalSymbols
+export default nrTextInputModule;

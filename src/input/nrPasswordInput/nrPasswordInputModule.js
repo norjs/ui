@@ -1,11 +1,14 @@
 import angular from 'angular';
-import { nrPasswordInputComponent } from './nrPasswordInputComponent.js';
+import nrPasswordInputComponent from './nrPasswordInputComponent.js';
+import NrTag from "../../NrTag";
+import NrModuleName from "../../NrModuleName";
 
 export const nrPasswordInputModule = angular.module(
-	"norjs.ui.input.nrPasswordInput"
+	NrModuleName.PASSWORD_INPUT
 	, [
 	])
-    .component('nrPasswordInput', nrPasswordInputComponent)
+    .component(NrTag.PASSWORD_INPUT, nrPasswordInputComponent)
 	.name;
 
+// noinspection JSUnusedGlobalSymbols
 export default nrPasswordInputModule;

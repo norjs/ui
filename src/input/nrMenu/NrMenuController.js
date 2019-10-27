@@ -1,9 +1,18 @@
 import _ from 'lodash';
-import {NrInputController} from '../NrInputController.js';
+import NrAttribute from "../../NrAttribute";
+import NrTag from "../../NrTag";
+import LogUtils from "@norjs/utils/Log";
+import angular from "angular";
+import NrStyleClass from "../../NrStyleClass";
+import NrIcon from "../../icon/NrIcon";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.MENU);
 
 /**
  *
- * @type {{focus: *}}
+ * @enum {Symbol}
+ * @readonly
  */
 const PRIVATE = {
 	open: Symbol('_open'),
@@ -16,28 +25,52 @@ const PRIVATE = {
  *
  * @ngInject
  */
-export class NrMenuController extends NrInputController {
+export class NrMenuController {
 
 	/**
 	 *
-	 * @returns {{__getItemId: string, __getList: string, __type: string, __id: string, __itemClick: string, __getItemValue: string, __getItemLabel: string}}
+	 * @returns {NrTag|string}
+	 */
+	static get nrName () {
+		return NrTag.MENU;
+	}
+
+	/**
+	 *
+	 * @returns {typeof NrMenuController}
+	 */
+	get Class () {
+		return NrMenuController;
+	}
+
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	get nrName () {
+		return this.Class.nrName;
+	}
+
+	/**
+	 *
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentBindings () {
 		return {
-			__type: "@?nrType"
-			, __id: "@?nrId"
-			, __getList: '&?getList'
-			, __getItemId: '&?getItemId'
-			, __getItemValue: '&?getItemValue'
-			, __getItemLabel: '&?getItemLabel'
-			, __isItemVisible: '&?isItemVisible'
-			, __itemClick: '&?itemClick'
+			__type: `@?${NrAttribute.TYPE}`
+			, __id: `@?${NrAttribute.ID}`
+			, __getList: `&?${NrAttribute.MENU_GET_LIST}`
+			, __getItemId: `&?${NrAttribute.MENU_GET_ITEM_ID}`
+			, __getItemValue: `&?${NrAttribute.MENU_GET_ITEM_VALUE}`
+			, __getItemLabel: `&?${NrAttribute.MENU_GET_ITEM_LABEL}`
+			, __isItemVisible: `&?${NrAttribute.MENU_IS_ITEM_VISIBLE}`
+			, __itemClick: `&?${NrAttribute.MENU_ITEM_CLICK}`
 		};
 	}
 
 	/**
 	 *
-	 * @returns {{}}
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentRequire () {
 		return {};
@@ -46,10 +79,10 @@ export class NrMenuController extends NrInputController {
 	/**
 	 *
 	 * @param template {string}
-	 * @returns {{template: string, controller: NrMenuController, bindings: {__getItemId: string, __getList: string, __type: string, __id: string, __itemClick:
-	 *     string, __getItemValue: string, __getItemLabel: string}, require: {}}}
+	 * @returns {angular.IComponentOptions}
 	 */
 	static getComponentConfig (template) {
+		// noinspection JSValidateTypes
 		return {
 			template
 			, bindings: this.getComponentBindings()
@@ -60,34 +93,84 @@ export class NrMenuController extends NrInputController {
 
 	/**
 	 *
+	 * @param $attrs {angular.IAttributes}
+	 * @param $element {JQLite}
+	 * @param $scope {angular.IScope}
 	 * @ngInject
-	 * @param $attrs {$attrs}
-	 * @param $element {$element}
 	 */
 	constructor ($attrs, $element, $scope) {
-		super();
 
+		/**
+		 *
+		 * @member {JQLite}
+		 */
 		this.$element = $element;
+
+		/**
+		 *
+		 * @member {angular.IScope}
+		 */
 		this.$scope = $scope;
 
 		/**
 		 *
-		 * @type {string}
+		 * @member {NrIcon|string|undefined}
 		 * @private
 		 */
 		this.__type = undefined;
 
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
 		this.__id = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getList = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getItemId = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getItemValue = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__getItemLabel = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__isItemVisible = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
 		this.__itemClick = undefined;
 
 		/**
 		 *
-		 * @type {boolean}
+		 * @member {boolean}
 		 * @private
 		 */
 		this[PRIVATE.open] = false;
@@ -95,22 +178,35 @@ export class NrMenuController extends NrInputController {
 		/**
 		 * If `true`, this controller has focus.
 		 *
-		 * @type {boolean}
+		 * @member {boolean}
 		 */
 		this[PRIVATE.focus] = false;
 
+		// noinspection JSUnusedLocalSymbols
+		/**
+		 *
+		 * @param item {*}
+		 * @param index {number}
+		 * @param array {Array}
+		 * @returns {boolean}
+		 */
 		this.filterFunc = (item, index, array) => this.isItemVisible(item, this.getItemValue(item));
 
 	}
 
 	$postLink () {
+
 		this._updatePosition();
+
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	$doCheck () {
+
 		if (!angular.equals(this._position, this._getPosition())) {
 			this.$scope.$evalAsync(() => this._updatePosition());
 		}
+
 	}
 
 	/**
@@ -119,10 +215,13 @@ export class NrMenuController extends NrInputController {
 	 * @private
 	 */
 	_getElementDimensions () {
+
 		const element = this.$element[0];
 		const offsetLeft = element ? element.offsetLeft : undefined;
 		const offsetTop = element ? element.offsetTop : undefined;
+
 		return {offsetLeft, offsetTop};
+
 	}
 
 	/**
@@ -333,16 +432,20 @@ export class NrMenuController extends NrInputController {
 	 * @private
 	 */
 	_updateFocusStyles () {
-		this.$element.toggleClass('nr-focus', this[PRIVATE.focus]);
-	}
 
+		this.Class.toggleClass(this.$element, NrStyleClass.FOCUS, this[PRIVATE.focus]);
+
+	}
 
 	/**
 	 *
-	 * @returns {string}
+	 * @returns {NrIcon|string}
 	 */
 	get type () {
-		return this.__type ? this.__type : 'bars';
+		return this.__type ? this.__type : NrIcon.BARS;
 	}
 
 }
+
+// noinspection JSUnusedGlobalSymbols
+export default NrMenuController;

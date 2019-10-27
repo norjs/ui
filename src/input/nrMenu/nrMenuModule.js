@@ -1,9 +1,14 @@
 import angular from 'angular';
-import { nrMenuComponent } from './nrMenuComponent.js';
+import nrMenuComponent from './nrMenuComponent.js';
+import NrModuleName from "../../NrModuleName";
+import NrTag from "../../NrTag";
 
 export const nrMenuModule = angular.module(
-	"norjs.ui.input.nrMenu"
+	NrModuleName.MENU
 	, [
 	])
-    .component('nrMenu', nrMenuComponent)
+    .component(NrTag.MENU, nrMenuComponent)
 	.name;
+
+// noinspection JSUnusedGlobalSymbols
+export default nrMenuModule;
