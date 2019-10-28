@@ -17,7 +17,9 @@ export const NrModuleName = {
     TEXTAREA       : "norjs.ui.input.textarea",
     TEXT_INPUT     : "norjs.ui.input.text",
     NAV            : "norjs.ui.nav",
-    WINDOW         : "norjs.ui.window"
+    WINDOW         : "norjs.ui.window",
+    DIALOG         : "norjs.ui.dialog",
+    CONFIRM_DIALOG : "norjs.ui.dialog.confirm"
 };
 
 // noinspection JSUnusedGlobalSymbols

@@ -14,7 +14,8 @@ export const NrTag = {
     TEXTAREA       : "nrTextarea",
     TEXT_INPUT     : "nrTextInput",
     NAV            : "nrNav",
-    WINDOW         : "nrWindow"
+    WINDOW         : "nrWindow",
+    CONFIRM_DIALOG : "nrConfirmDialog"
 };
 
 // noinspection JSUnusedGlobalSymbols
