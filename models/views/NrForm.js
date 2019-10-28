@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import NrObjectType from "../NrObjectType";
 import NrView from "./NrView";
+import NrModelUtils from "../../utils/NrModelUtils";
 
 /**
  *
@@ -155,7 +156,27 @@ export class NrForm extends NrView {
      * @returns {NrForm}
      */
     static parseValue (value) {
-        // @TODO
+
+        if ( !value ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        }
+
+        if ( value.type !== NrObjectType.FORM ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        }
+
+        // FIXME: This should check value.content items NrView interface
+        if ( value.content !== undefined && !_.isArray(value.content) ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's content is not correct: "${value.content}"`);
+        }
+
+        return new NrForm({
+            target: value.target,
+            payloadType: value.payloadType,
+            label: value.label,
+            content: value.content ? _.map(_.value.content, item => NrModelUtils.parseValue(item)) : undefined
+        });
+
     }
 
 }

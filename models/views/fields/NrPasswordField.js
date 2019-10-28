@@ -109,7 +109,20 @@ export class NrPasswordField extends NrView {
      * @returns {NrPasswordField}
      */
     static parseValue (value) {
-        // @TODO
+
+        if ( !value ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        }
+
+        if ( value.type !== NrObjectType.PASSWORD_FIELD ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        }
+
+        return new NrPasswordField({
+            name: value.name,
+            label: value.label
+        });
+
     }
 
 }

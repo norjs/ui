@@ -161,6 +161,14 @@ export class NrSession {
 
     /**
      *
+     * @returns {{created: string, authToken: string, id: string, type: (NrObjectType|string), user: null}}
+     */
+    toJSON () {
+        return this.valueOf();
+    }
+
+    /**
+     *
      * @param value {*}
      * @returns {NrSession}
      */
@@ -181,14 +189,6 @@ export class NrSession {
             user: value.user ? NrUser.parseValue(value.user) : undefined
         });
 
-    }
-
-    /**
-     *
-     * @returns {{created: string, authToken: string, id: string, type: (NrObjectType|string), user: null}}
-     */
-    toJSON () {
-        return this.valueOf();
     }
 
 }

@@ -110,7 +110,18 @@ export class NrTextField extends NrView {
      */
     static parseValue (value) {
 
-        // @TODO
+        if ( !value ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        }
+
+        if ( value.type !== NrObjectType.TEXT_FIELD ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        }
+
+        return new NrTextField({
+            name: value.name,
+            label: value.label
+        });
 
     }
 

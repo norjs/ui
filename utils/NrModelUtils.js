@@ -1,5 +1,12 @@
 import NrObjectType from "../models/NrObjectType";
 import NrResponse from "../models/NrResponse";
+import NrRequest from "../models/NrRequest";
+import NrSession from "../models/NrSession";
+import NrConfirmDialog from "../models/views/NrConfirmDialog";
+import NrInfoMessage from "../models/views/NrInfoMessage";
+import NrForm from "../models/views/NrForm";
+import NrTextField from "../models/views/fields/NrTextField";
+import NrPasswordField from "../models/views/fields/NrPasswordField";
 
 export class NrModelUtils {
 
@@ -35,22 +42,47 @@ export class NrModelUtils {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined: ${value}`);
         }
 
-        if (!value.type) {
+        if (!(value.type && _.isString(value.type))) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
         const typeParts = value.type.split(":");
         const typeFirstPart = typeParts[0];
-        const typeSecondPart = typeParts[1];
 
         switch (typeFirstPart) {
+
             case NrObjectType.REQUEST:
                 return NrRequest.parseValue(value);
+
             case NrObjectType.RESPONSE:
                 return NrResponse.parseValue(value);
+
+            case NrObjectType.USER:
+                return NrRequest.parseValue(value);
+
+            case NrObjectType.SESSION:
+                return NrSession.parseValue(value);
+
             case NrObjectType.CONFIRM_DIALOG:
                 return NrConfirmDialog.parseValue(value);
+
+            case NrObjectType.FORM:
+                return NrForm.parseValue(value);
+
+            case NrObjectType.INFO_MESSAGE:
+                return NrInfoMessage.parseValue(value);
+
+            case NrObjectType.PASSWORD_FIELD:
+                return NrPasswordField.parseValue(value);
+
+            case NrObjectType.TEXT_FIELD:
+                return NrTextField.parseValue(value);
+
+            default:
+                throw new TypeError(`${this.nrName}.parseValue(): value's type is unsupported: "${value.type}"`);
+
         }
+
     }
 
 }

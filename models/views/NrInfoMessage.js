@@ -88,7 +88,19 @@ export class NrInfoMessage extends NrView {
      * @returns {NrInfoMessage}
      */
     static parseValue (value) {
-        // @TODO
+
+        if ( !value ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        }
+
+        if ( value.type !== NrObjectType.INFO_MESSAGE ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        }
+
+        return new NrInfoMessage({
+            label: value.label
+        });
+
     }
 
 }

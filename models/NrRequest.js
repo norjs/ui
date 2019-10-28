@@ -211,16 +211,22 @@ export class NrRequest {
      */
     static parseValue (value) {
 
-        // FIXME: Implement type checks
+        if ( !value ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        }
+
+        if ( value.type !== NrObjectType.REQUEST ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        }
 
         const {href, method, session, params, payload} = value;
 
         return new NrRequest({
             href,
             method,
-            session: NrSession.parseValue(session),
+            session: session ? NrSession.parseValue(session) : undefined,
             params,
-            payload: NrModelUtils.parseValue(payload)
+            payload: payload ? NrModelUtils.parseValue(payload) : undefined
         });
 
     }

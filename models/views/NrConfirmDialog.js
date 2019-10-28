@@ -111,7 +111,13 @@ export class NrConfirmDialog extends NrView {
      */
     static parseValue (value) {
 
-        // TODO: Implement type checks
+        if ( !value ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        }
+
+        if ( value.type !== NrObjectType.CONFIRM_DIALOG ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        }
 
         return new NrConfirmDialog({
             label: value.label,
