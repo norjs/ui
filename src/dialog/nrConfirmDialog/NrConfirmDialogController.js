@@ -1,23 +1,36 @@
 import _ from 'lodash';
-import Request from "../../../../work-assistant/backend/src/models/Request";
+import Request from "../../../../work-assistant/models/models/Request";
+import LogUtils from "@norjs/utils/Log";
 
+const nrLog = LogUtils.getLogger('nrConfirmDialogController');
+
+/**
+ *
+ * @enum {Symbol}
+ * @readonly
+ */
 const PRIVATE = {
+	MODEL: Symbol('_model')
 };
-
 
 export class NrConfirmDialogController {
 
 	static getBindings () {
 		return {
-			model: "<nrModel",
-			action: "<nraAtion"
+			model: "<nrModel"
 		};
 	}
 
-
 	constructor () {
-		this._model = undefined;
+
+		/**
+		 *
+		 * @member {undefined}
+		 */
+		this[PRIVATE.MODEL] = undefined;
+
 		console.log('confirm dialog constructed')
+
 	}
 
 	set model (value) {
