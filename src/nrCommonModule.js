@@ -1,21 +1,23 @@
 import angular from 'angular';
-import compileModule from './compile/compileModule.js';
-import iconModule from './icon/iconModule.js';
+import nrCompileModule from './compile/compileModule.js';
+import nrIconModule from './icon/iconModule.js';
 import nrCommonInputModule from './input/nrCommonInputModule.js';
-import navModule from './nav/navModule.js';
-import windowModule from './window/windowModule.js';
+import nrNavModule from './nav/navModule.js';
+import nrWindowModule from './window/windowModule.js';
 import NrModuleName from "./NrModuleName";
-import nrCommonDialogModule from "./dialog/nrCommonDialogModule";
+import nrDialogModule from "./dialog/nrDialogModule";
+import nrServicesModule from "./services/nrServicesModule";
 
 export const nrCommonModule = angular.module(
 	NrModuleName.UI
 	, [
-		compileModule
-		, iconModule
+		nrServicesModule
+		, nrCompileModule
+		, nrIconModule
 		, nrCommonInputModule
-		, navModule
-		, windowModule
-		, nrCommonDialogModule
+		, nrNavModule
+		, nrWindowModule
+		, nrDialogModule
 		// Keep in the same format, it helps with git merges
 	])
 	.name;

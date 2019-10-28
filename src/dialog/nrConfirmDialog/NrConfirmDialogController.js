@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Request from "../../../../work-assistant/models/models/Request";
 import LogUtils from "@norjs/utils/Log";
 
 const nrLog = LogUtils.getLogger('nrConfirmDialogController');
@@ -10,7 +9,8 @@ const nrLog = LogUtils.getLogger('nrConfirmDialogController');
  * @readonly
  */
 const PRIVATE = {
-	MODEL: Symbol('_model')
+	model: Symbol('_model'),
+	nrRequestService: Symbol('_nrRequestService')
 };
 
 export class NrConfirmDialogController {
@@ -21,32 +21,54 @@ export class NrConfirmDialogController {
 		};
 	}
 
-	constructor () {
+	/**
+	 * @param nrRequestService {NrRequestService}
+	 * @ngInject
+	 */
+	constructor (nrRequestService) {
+
+		/**
+		 *
+		 * @member {NrRequestService}
+		 */
+		this[PRIVATE.nrRequestService] = nrRequestService;
 
 		/**
 		 *
 		 * @member {undefined}
 		 */
-		this[PRIVATE.MODEL] = undefined;
-
-		console.log('confirm dialog constructed')
+		this[PRIVATE.model] = undefined;
 
 	}
 
+	/**
+	 *
+	 * @param value {NrConfirmDialog | undefined}
+	 */
 	set model (value) {
-		this._model = value;
+
+		this[PRIVATE.model] = value;
+
 	}
 
+	/**
+	 *
+	 * @returns {NrConfirmDialog|undefined}
+	 */
 	get model () {
-		return this._model;
+
+		return this[PRIVATE.model];
+
 	}
 
-	set action (value) {
-		this._action = value;
-	}
-
+	/**
+	 *
+	 * @returns {angular.IPromise}
+	 */
 	executeAction () {
-		this._action(this.model.action);
+
+		return this[PRIVATE.nrRequestService].executeRequest( this[PRIVATE.model].action );
+
 	}
 
 }
