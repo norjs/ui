@@ -17,6 +17,7 @@ export const NrModuleName = {
     SELECT         : "norjs.ui.input.select",
     TEXTAREA       : "norjs.ui.input.textarea",
     TEXT_INPUT     : "norjs.ui.input.text",
+    BUTTON         : "norjs.ui.input.button",
     NAV            : "norjs.ui.nav",
     WINDOW         : "norjs.ui.window",
     DIALOG         : "norjs.ui.dialog",

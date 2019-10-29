@@ -3,12 +3,14 @@
 </header>
 <section class="confirm-dialog-body"></section>
 <footer class="confirm-dialog-footer">
-    <button ng-click="$ctrl.cancel()"
-            class="btn-confirm-dialog-cancel"
-            translate="nrConfirmDialog.cancelButton.label"
-    ></button>
-    <button ng-click="$ctrl.ok()"
-            class="btn-confirm-dialog-confirm"
-            translate="nrConfirmDialog.okButton.label"
-    ></button>
+    <nr-button
+            class="nr-cancel"
+            nr-click="$ctrl.cancel()"
+            nr-label="nrConfirmDialog.cancelButton.label"
+    ></nr-button>
+    <nr-button
+            class="nr-ok"
+            nr-click="$ctrl.ok()"
+            nr-label="nrConfirmDialog.okButton.label"
+    ></nr-button>
 </footer>

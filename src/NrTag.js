@@ -13,6 +13,7 @@ export const NrTag = {
     SELECT         : "nrSelect",
     TEXTAREA       : "nrTextarea",
     TEXT_INPUT     : "nrTextInput",
+    BUTTON         : "nrButton",
     NAV            : "nrNav",
     WINDOW         : "nrWindow",
     CONFIRM_DIALOG : "nrConfirmDialog"

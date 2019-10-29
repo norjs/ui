@@ -8,6 +8,7 @@ export const NrAttribute = {
     , TYPE: "nrType"
     , LABEL: "nrLabel"
     , NAME: "nrName"
+    , ICON: "nrIcon"
     , COLLECTION: "nrCollection"
     , COMPONENT: "nrComponent"
     , CONTENT: "nrContent"
@@ -28,6 +29,8 @@ export const NrAttribute = {
 
     , WINDOW_TITLE: 'nrTitle'
     , WINDOW_CLOSE: 'nrClose'
+
+    , BUTTON_CLICK: 'nrClick'
 
 };
 

@@ -6,6 +6,7 @@ import {nrTextareaModule} from './nrTextarea/nrTextareaModule.js';
 import {nrDateInputModule} from './nrDateInput/nrDateInputModule.js';
 import {nrSelectModule} from './nrSelect/nrSelectModule.js';
 import {nrMenuModule} from './nrMenu/nrMenuModule.js';
+import {nrButtonModule} from './nrButton/nrButtonModule.js';
 
 export const nrCommonInputModule = angular.module(
 	NrModuleName.INPUT
@@ -16,6 +17,7 @@ export const nrCommonInputModule = angular.module(
 		, nrDateInputModule
 		, nrSelectModule
 		, nrMenuModule
+		, nrButtonModule
 		// Keep in the same format, it helps with git merges
 	])
 	.name;
