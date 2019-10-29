@@ -1,4 +1,5 @@
-<button ng-class="$ctrl.getClasses()">
+<button ng-click="$ctrl.onClick($event)"
+        ng-class="$ctrl.getClasses()">
     <nr-icon ng-if="$ctrl.icon" nr-type="$ctrl.icon"></nr-icon>
     <span class="label" translate="{{$ctrl.label}}"></span>
 </button>

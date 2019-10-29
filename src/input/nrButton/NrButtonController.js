@@ -58,7 +58,7 @@ export class NrButtonController {
 			, __id: `@?${NrAttribute.ID}`
 			, __label: `@?${NrAttribute.LABEL}`
 			, __icon: `@?${NrAttribute.ICON}`
-			, __click: `@?${NrAttribute.BUTTON_CLICK}`
+			, __click: `&?${NrAttribute.BUTTON_CLICK}`
 		};
 	}
 
