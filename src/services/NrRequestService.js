@@ -1,10 +1,13 @@
 import LogUtils from "@norjs/utils/Log";
 import NrServiceName from "../NrServiceName";
+import NrModelUtils from "../../utils/NrModelUtils";
+import {API_PATH_PREFIX} from "../../../work-assistant/client/src/constants";
 
 const nrLog = LogUtils.getLogger("NrRequestService");
 
 const PRIVATE = {
-
+    http: Symbol('_http')
+    , q: Symbol('_q')
 };
 
 export class NrRequestService {
@@ -28,10 +31,12 @@ export class NrRequestService {
     /**
      *
      * @param $http {angular.IHttpService}
+     * @param $q {angular.IQService}
      * @ngInject
      */
     constructor (
         $http
+        , $q
     ) {
 
         /**
@@ -39,6 +44,12 @@ export class NrRequestService {
          * @member {angular.IHttpService}
          */
         this[PRIVATE.http] = $http;
+
+        /**
+         *
+         * @member {angular.IQService}
+         */
+        this[PRIVATE.q] = $q;
 
     }
 
@@ -48,14 +59,41 @@ export class NrRequestService {
      * @returns {angular.IPromise}
      */
     executeRequest (request) {
-        return this[PRIVATE.http]({
-            method: request.method,
-            data: request.payload,
-            url: request.href
-        }).then(
-            (response) => response ? response.data : response
-        ).catch(err => {
-            nrLog.error(`${this.nrName}: Error: `, err);
+
+        const {method, href, payload} = request;
+
+        nrLog.trace(`Executing request ${method} ${href}`);
+
+        const options = {
+            method: method,
+            data: payload,
+            url: `${API_PATH_PREFIX}${href}`
+        };
+
+        nrLog.trace(`Executing request ${LogUtils.getAsString(request)} with options ${LogUtils.getAsString(options)}`);
+
+        return this[PRIVATE.http](options).then( (response) => {
+
+            if (!response) {
+                nrLog.debug(`response = `, response);
+                throw new TypeError(`${this.nrName}.executeRequest: response was not defined`);
+            }
+
+            if (!response.data) {
+                nrLog.debug(`response = `, response);
+                throw new TypeError(`${this.nrName}.executeRequest: response.data was not defined`);
+            }
+
+            nrLog.trace(`response = `, response);
+
+            return NrModelUtils.parseModel(response.data);
+
+        }).catch(err => {
+
+            nrLog.error(`Request failed: `, err);
+
+            return this[PRIVATE.q].reject(err);
+
         });
     }
 

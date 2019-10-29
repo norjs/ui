@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import LogUtils from "@norjs/utils/Log";
 
+// noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger('nrConfirmDialogController');
 
 /**
@@ -9,8 +10,9 @@ const nrLog = LogUtils.getLogger('nrConfirmDialogController');
  * @readonly
  */
 const PRIVATE = {
-	model: Symbol('_model'),
-	nrRequestService: Symbol('_nrRequestService')
+	model: Symbol('_model')
+	, okAction: Symbol('_okAction')
+	, cancelAction: Symbol('_cancelAction')
 };
 
 export class NrConfirmDialogController {
@@ -18,26 +20,41 @@ export class NrConfirmDialogController {
 	static getBindings () {
 		return {
 			model: "<nrModel"
+			, okAction: "&?nrOkAction"
+			, cancelAction: "&?nrCancelAction"
 		};
 	}
 
 	/**
-	 * @param nrRequestService {NrRequestService}
 	 * @ngInject
 	 */
-	constructor (nrRequestService) {
+	constructor () {
 
 		/**
 		 *
-		 * @member {NrRequestService}
-		 */
-		this[PRIVATE.nrRequestService] = nrRequestService;
-
-		/**
-		 *
-		 * @member {undefined}
+		 * @member {NrConfirmDialog | undefined}
 		 */
 		this[PRIVATE.model] = undefined;
+
+		/**
+		 *
+		 * @member {Function|undefined}
+		 */
+		this[PRIVATE.okAction] = undefined;
+
+		/**
+		 *
+		 * @member {Function|undefined}
+		 */
+		this[PRIVATE.cancelAction] = undefined;
+
+	}
+
+	$onDestroy () {
+
+		this[PRIVATE.model] = undefined;
+		this[PRIVATE.okAction] = undefined;
+		this[PRIVATE.cancelAction] = undefined;
 
 	}
 
@@ -47,7 +64,13 @@ export class NrConfirmDialogController {
 	 */
 	set model (value) {
 
-		this[PRIVATE.model] = value;
+		if (this[PRIVATE.model] !== value) {
+
+			this[PRIVATE.model] = value;
+
+			nrLog.trace(`Model changed as: `, value);
+
+		}
 
 	}
 
@@ -61,13 +84,94 @@ export class NrConfirmDialogController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS binding uses this.
+	 *
+	 * @param value {Function | undefined}
+	 */
+	set okAction (value) {
+
+		this[PRIVATE.okAction] = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS binding uses this.
+	 *
+	 * @returns {Function|undefined}
+	 */
+	get okAction () {
+
+		return this[PRIVATE.okAction];
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS binding uses this.
+	 *
+	 * @param value {Function | undefined}
+	 */
+	set cancelAction (value) {
+
+		this[PRIVATE.cancelAction] = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS binding uses this.
+	 *
+	 * @returns {Function|undefined}
+	 */
+	get cancelAction () {
+
+		return this[PRIVATE.cancelAction];
+
+	}
+
 	/**
 	 *
-	 * @returns {angular.IPromise}
 	 */
-	executeAction () {
+	ok () {
 
-		return this[PRIVATE.nrRequestService].executeRequest( this[PRIVATE.model].action );
+		if (_.isFunction(this[PRIVATE.okAction])) {
+
+			nrLog.trace(`OK clicked`);
+
+			this[PRIVATE.okAction]({
+				nrModel: this[PRIVATE.model],
+				nrAction: this[PRIVATE.model] && this[PRIVATE.model].action ? this[PRIVATE.model].action : undefined
+			});
+
+		} else {
+
+			nrLog.warn(`No OK callback.`);
+
+		}
+
+	}
+
+	/**
+	 *
+	 */
+	cancel () {
+
+		nrLog.trace(`Cancel clicked`);
+
+		if (_.isFunction(this[PRIVATE.cancelAction])) {
+
+			this[PRIVATE.cancelAction]({
+				nrModel  : this[PRIVATE.model]
+			});
+
+		} else {
+
+			nrLog.warn(`No cancel callback.`);
+
+		}
 
 	}
 

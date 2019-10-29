@@ -1,10 +1,14 @@
 <header class="confirm-dialog-header">
-    <h3>Otsikko</h3>
+    <h3 translate="{{$ctrl.model.label}}"></h3>
 </header>
-<section class="confirm-dialog-body">
-    Lorem ipsumia Lorem ipsumiaLorem ipsumiaLorem ipsumiaLorem ipsumiaLorem ipsumiaLorem ipsumiaLorem ipsumia
-</section>
+<section class="confirm-dialog-body"></section>
 <footer class="confirm-dialog-footer">
-    <button class="btn-confirm-dialog-cancel">Cancel</button>
-    <button ng-click="$ctrl.executeAction()"  class="btn-confirm-dialog-confirm">Confirm</button>
+    <button ng-click="$ctrl.cancel()"
+            class="btn-confirm-dialog-cancel"
+            translate="nrConfirmDialog.cancelButton.label"
+    ></button>
+    <button ng-click="$ctrl.ok()"
+            class="btn-confirm-dialog-confirm"
+            translate="nrConfirmDialog.okButton.label"
+    ></button>
 </footer>
