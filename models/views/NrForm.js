@@ -161,20 +161,26 @@ export class NrForm extends NrView {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value.type !== NrObjectType.FORM ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        if ( value instanceof NrForm) {
+            return value;
+        }
+
+        const { type, target, payloadType, label, content } = value;
+
+        if ( type !== NrObjectType.FORM ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         // FIXME: This should check value.content items NrView interface
-        if ( value.content !== undefined && !_.isArray(value.content) ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value's content is not correct: "${value.content}"`);
+        if ( !_.isNil(content) && !_.isArray(content) ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's content is not correct: "${content}"`);
         }
 
         return new NrForm({
-            target: value.target,
-            payloadType: value.payloadType,
-            label: value.label,
-            content: value.content ? _.map(_.value.content, item => NrModelUtils.parseValue(item)) : undefined
+            target      : !_.isNil(target)      ? target      : undefined,
+            payloadType : !_.isNil(payloadType) ? payloadType : undefined,
+            label       : !_.isNil(label)       ? label       : undefined,
+            content     : !_.isNil(content)     ? _.map(_.value.content, item => NrModelUtils.parseValue(item)) : undefined
         });
 
     }

@@ -93,12 +93,18 @@ export class NrInfoMessage extends NrView {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value.type !== NrObjectType.INFO_MESSAGE ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        if ( value instanceof NrInfoMessage) {
+            return value;
+        }
+
+        const { type, label } = value;
+
+        if ( type !== NrObjectType.INFO_MESSAGE ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrInfoMessage({
-            label: value.label
+            label: !_.isNil(label) ? label : undefined
         });
 
     }

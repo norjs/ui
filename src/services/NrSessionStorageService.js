@@ -1,4 +1,5 @@
 import LogUtils from "@norjs/utils/Log";
+import NrServiceName from "../NrServiceName";
 
 const nrLog = LogUtils.getLogger("NrSessionStorageService");
 
@@ -52,6 +53,30 @@ const PRIVATE = {
  * @see https://www.w3.org/TR/webstorage/
  */
 export class NrSessionStorageService {
+
+  /**
+   *
+   * @returns {NrServiceName|string}
+   */
+  static get nrName () {
+    return NrServiceName.SESSION_STORAGE;
+  }
+
+  /**
+   *
+   * @returns {typeof NrLocalStorageService}
+   */
+  get Class () {
+    return NrSessionStorageService;
+  }
+
+  /**
+   *
+   * @returns {NrServiceName|string}
+   */
+  get nrName () {
+    return this.Class.nrName;
+  }
 
   /**
    *

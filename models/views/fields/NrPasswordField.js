@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NrView from "../NrView";
 import NrObjectType from "../../NrObjectType";
 
@@ -114,13 +115,19 @@ export class NrPasswordField extends NrView {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value.type !== NrObjectType.PASSWORD_FIELD ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        if ( value instanceof NrPasswordField) {
+            return value;
+        }
+
+        const { type, name, label } = value;
+
+        if ( type !== NrObjectType.PASSWORD_FIELD ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrPasswordField({
-            name: value.name,
-            label: value.label
+            name  : !_.isNil(name)  ? name  : undefined,
+            label : !_.isNil(label) ? label : undefined
         });
 
     }

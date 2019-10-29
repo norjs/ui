@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NrObjectType from "./NrObjectType";
 import NrModelUtils from "../utils/NrModelUtils";
 
@@ -94,12 +95,16 @@ export class NrResponse {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value.type !== NrObjectType.RESPONSE ) {
+        if ( value instanceof NrResponse) {
+            return value;
+        }
+
+        if ( !_.startsWith(value.type, NrObjectType.RESPONSE) ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
         return new NrResponse({
-            payload: NrModelUtils.parseModel(value.payload)
+            payload: !_.isNil(value.payload) ? NrModelUtils.parseModel(value.payload) : undefined
         });
 
     }

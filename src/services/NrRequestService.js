@@ -1,4 +1,5 @@
 import LogUtils from "@norjs/utils/Log";
+import NrServiceName from "../NrServiceName";
 
 const nrLog = LogUtils.getLogger("NrRequestService");
 
@@ -9,9 +10,13 @@ const PRIVATE = {
 export class NrRequestService {
 
     static get nrName () {
-        return "NrRequestService";
+        return NrServiceName.REQUEST;
     }
 
+    /**
+     *
+     * @returns {typeof NrRequestService}
+     */
     get Class () {
         return NrRequestService;
     }

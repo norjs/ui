@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NrObjectType from "../NrObjectType";
 import NrView from "./NrView";
 import NrRequest from "../NrRequest";
@@ -115,13 +116,19 @@ export class NrConfirmDialog extends NrView {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value.type !== NrObjectType.CONFIRM_DIALOG ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
+        if ( value instanceof NrConfirmDialog) {
+            return value;
+        }
+
+        const { type, label, action } = value;
+
+        if ( type !== NrObjectType.CONFIRM_DIALOG ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrConfirmDialog({
-            label: value.label,
-            action: NrRequest.parseValue(value.action)
+            label  : !_.isNil(label)  ? label                        : undefined,
+            action : !_.isNil(action) ? NrRequest.parseValue(action) : undefined
         });
 
     }

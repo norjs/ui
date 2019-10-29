@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NrObjectType from "./NrObjectType";
 
 /**
@@ -97,12 +98,18 @@ export class NrUser {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
+        if ( value instanceof NrUser) {
+            return value;
+        }
+
         if ( value.type !== NrObjectType.USER ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
+        const { email } = value;
+
         return new NrUser({
-            email: value.email
+            email: !_.isNil(email) ? email : undefined
         });
 
     }

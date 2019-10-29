@@ -2,6 +2,7 @@ import _ from "lodash";
 import NrObjectType from "./NrObjectType";
 import NrModelUtils from "../utils/NrModelUtils";
 import NrSession from "./NrSession";
+import LogUtils from "@norjs/utils/src/LogUtils";
 
 /**
  * Available request methods
@@ -71,20 +72,20 @@ export class NrRequest {
     } = {}) {
 
         if ( href !== undefined && !_.isString(href) ) {
-            throw new TypeError(`new ${NrRequest.nrName}(): href invalid: "${href}"`);
+            throw new TypeError(`new ${NrRequest.nrName}(): href invalid: ${LogUtils.getAsString(href)}`);
         }
 
         // FIXME: This should test if method exists
         if ( method !== undefined && !_.isString(method) ) {
-            throw new TypeError(`new ${NrRequest.nrName}(): method invalid: "${method}"`);
+            throw new TypeError(`new ${NrRequest.nrName}(): method invalid: ${LogUtils.getAsString(method)}`);
         }
 
         if ( session !== undefined && !(session instanceof NrSession) ) {
-            throw new TypeError(`new ${NrRequest.nrName}(): session invalid: "${session}"`);
+            throw new TypeError(`new ${NrRequest.nrName}(): session invalid: ${LogUtils.getAsString(session)}`);
         }
 
         if ( params !== undefined && !_.isPlainObject(params) ) {
-            throw new TypeError(`new ${NrRequest.nrName}(): params not plain object: "${params}"`);
+            throw new TypeError(`new ${NrRequest.nrName}(): params not plain object: ${LogUtils.getAsString(params)}`);
         }
 
         /**
@@ -215,18 +216,22 @@ export class NrRequest {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value.type !== NrObjectType.REQUEST ) {
+        if ( value instanceof NrRequest) {
+            return value;
+        }
+
+        if ( !_.startsWith(value.type, NrObjectType.REQUEST) ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
         const {href, method, session, params, payload} = value;
 
         return new NrRequest({
-            href,
-            method,
-            session: session ? NrSession.parseValue(session) : undefined,
-            params,
-            payload: payload ? NrModelUtils.parseValue(payload) : undefined
+            href    : !_.isNil(href)    ? href     : undefined,
+            method  : !_.isNil(method)  ? method   : undefined,
+            params  : !_.isNil(params)  ? params   : undefined,
+            session : !_.isNil(session) ? NrSession.parseValue(session)    : undefined,
+            payload : !_.isNil(payload) ? NrModelUtils.parseValue(payload) : undefined
         });
 
     }

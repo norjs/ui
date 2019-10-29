@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NrObjectType from "./NrObjectType";
 import NrUser from "./NrUser";
 
@@ -178,15 +179,21 @@ export class NrSession {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
+        if ( value instanceof NrSession) {
+            return value;
+        }
+
         if ( value.type !== NrObjectType.SESSION ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
+        const {id, created, authToken, user} = value;
+
         return new NrSession({
-            id: value.id,
-            created: value.created,
-            authToken: value.authToken,
-            user: value.user ? NrUser.parseValue(value.user) : undefined
+            id        : !_.isNil(id)        ? id        : undefined,
+            created   : !_.isNil(created)   ? created   : undefined,
+            authToken : !_.isNil(authToken) ? authToken : undefined,
+            user      : !_.isNil(user)      ? NrUser.parseValue(user) : undefined
         });
 
     }

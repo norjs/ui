@@ -1,4 +1,6 @@
 import LogUtils from '@norjs/utils/Log';
+import WaServiceName from "../../../work-assistant/client/src/WaServiceName";
+import NrServiceName from "../NrServiceName";
 
 const nrLog = LogUtils.getLogger("NrLocalStorageService");
 
@@ -52,6 +54,30 @@ const PRIVATE = {
  * @see https://www.w3.org/TR/webstorage/
  */
 export class NrLocalStorageService {
+
+  /**
+   *
+   * @returns {NrServiceName|string}
+   */
+  static get nrName () {
+    return NrServiceName.LOCAL_STORAGE;
+  }
+
+  /**
+   *
+   * @returns {typeof NrLocalStorageService}
+   */
+  get Class () {
+    return NrLocalStorageService;
+  }
+
+  /**
+   *
+   * @returns {NrServiceName|string}
+   */
+  get nrName () {
+    return this.Class.nrName;
+  }
 
   /**
    *
