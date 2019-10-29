@@ -2,6 +2,7 @@ import LogUtils from "@norjs/utils/Log";
 import NrServiceName from "../NrServiceName";
 import NrModelUtils from "../../utils/NrModelUtils";
 import {API_PATH_PREFIX} from "../../../work-assistant/client/src/constants";
+import NrRequestHeader from "../NrRequestHeader";
 
 const nrLog = LogUtils.getLogger("NrRequestService");
 
@@ -60,13 +61,20 @@ export class NrRequestService {
      */
     executeRequest (request) {
 
-        const {method, href, payload} = request;
+        const {method, href, session, payload} = request;
 
         nrLog.trace(`Executing request ${method} ${href}`);
+
+        let headers = {};
+
+        if ( session && _.isString(session.id) ) {
+            headers[NrRequestHeader.SESSION_ID] = session.id;
+        }
 
         const options = {
             method: method,
             data: payload,
+            headers: headers,
             url: `${API_PATH_PREFIX}${href}`
         };
 
