@@ -1,7 +1,7 @@
 import _ from 'lodash';
+import NrModelUtils from "../../utils/NrModelUtils";
 import NrObjectType from "../NrObjectType";
 import NrView from "./NrView";
-import NrRequest from "../NrRequest";
 
 /**
  *
@@ -36,8 +36,8 @@ export class NrConfirmDialog extends NrView {
     /**
      *
      * @param label {string}
-     * @param accept {NrRequest}
-     * @param cancel {NrRequest}
+     * @param accept {NrModel}
+     * @param cancel {NrModel}
      */
     constructor ({
         label = undefined
@@ -49,11 +49,11 @@ export class NrConfirmDialog extends NrView {
             throw new TypeError(`new ${NrConfirmDialog.nrName}(): label invalid: "${label}"`);
         }
 
-        if ( accept !== undefined && !(accept instanceof NrRequest) ) {
+        if ( accept !== undefined && !NrModelUtils.isModel(accept) ) {
             throw new TypeError(`new ${NrConfirmDialog.nrName}(): accept invalid: "${accept}"`);
         }
 
-        if ( cancel !== undefined && !(cancel instanceof NrRequest) ) {
+        if ( cancel !== undefined && !NrModelUtils.isModel(cancel) ) {
             throw new TypeError(`new ${NrConfirmDialog.nrName}(): cancel invalid: "${cancel}"`);
         }
 
@@ -68,14 +68,14 @@ export class NrConfirmDialog extends NrView {
 
         /**
          *
-         * @member {NrRequest|undefined}
+         * @member {NrModel|undefined}
          * @protected
          */
         this._accept = accept;
 
         /**
          *
-         * @member {NrRequest|undefined}
+         * @member {NrModel|undefined}
          * @protected
          */
         this._cancel = cancel;
@@ -100,7 +100,7 @@ export class NrConfirmDialog extends NrView {
 
     /**
      *
-     * @returns {NrRequest}
+     * @returns {NrModel}
      */
     get accept () {
         return this._accept;
@@ -108,7 +108,7 @@ export class NrConfirmDialog extends NrView {
 
     /**
      *
-     * @returns {NrRequest}
+     * @returns {NrModel}
      */
     get cancel () {
         return this._cancel;
@@ -150,8 +150,8 @@ export class NrConfirmDialog extends NrView {
 
         return new NrConfirmDialog({
             label  : !_.isNil(label)  ? label                        : undefined
-            , accept : !_.isNil(accept) ? NrRequest.parseValue(accept) : undefined
-            , cancel : !_.isNil(cancel) ? NrRequest.parseValue(cancel) : undefined
+            , accept : !_.isNil(accept) ? NrModelUtils.parseModel(accept) : undefined
+            , cancel : !_.isNil(cancel) ? NrModelUtils.parseModel(cancel) : undefined
         });
 
     }

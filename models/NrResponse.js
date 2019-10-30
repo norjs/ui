@@ -1,9 +1,11 @@
 import _ from 'lodash';
+import "./NrModel";
 import NrObjectType from "./NrObjectType";
 import NrModelUtils from "../utils/NrModelUtils";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrResponse {
 

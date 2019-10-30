@@ -1,9 +1,11 @@
 import _ from 'lodash';
+import "./NrModel";
 import NrObjectType from "./NrObjectType";
 import NrUser from "./NrUser";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrSession {
 

@@ -1,4 +1,5 @@
 import _ from "lodash";
+import "./NrModel";
 import NrObjectType from "./NrObjectType";
 import NrModelUtils from "../utils/NrModelUtils";
 import NrSession from "./NrSession";
@@ -19,6 +20,7 @@ export const NrRequestMethod = {
 
 /**
  * This is a data model for a (HTTP) request.
+ * @implements {NrModel}
  */
 export class NrRequest {
 

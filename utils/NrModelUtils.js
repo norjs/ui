@@ -9,6 +9,8 @@ import NrForm from "../models/views/NrForm";
 import NrTextField from "../models/views/fields/NrTextField";
 import NrPasswordField from "../models/views/fields/NrPasswordField";
 import LogUtils from "@norjs/utils/Log";
+import NrView from "../models/views/NrView";
+import NrUser from "../models/NrUser";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -101,6 +103,19 @@ export class NrModelUtils {
     }
 
     /**
+     * Use .parseModel(value) instead.
+     *
+     * @deprecated
+     * @param value
+     * @returns {NrUser|NrSession|NrResponse|NrRequest|NrInfoMessage|NrForm|NrConfirmDialog|NrTextField|NrPasswordField}
+     */
+    static parseValue (value) {
+
+        return this.parseModel(value);
+
+    }
+
+    /**
      *
      * @param value {*}
      * @returns {boolean}
@@ -116,6 +131,31 @@ export class NrModelUtils {
      */
     static isInfoMessage (value) {
         return !!( value && value instanceof NrInfoMessage );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isMessage (value) {
+        return !!( value && value instanceof NrInfoMessage );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isModel (value) {
+
+        if (value instanceof NrView) return true;
+        if (value instanceof NrRequest) return true;
+        if (value instanceof NrResponse) return true;
+        if (value instanceof NrSession) return true;
+
+        return value instanceof NrUser;
+
     }
 
 }

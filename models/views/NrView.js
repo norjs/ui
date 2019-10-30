@@ -1,6 +1,7 @@
 /**
  *
  * @abstract
+ * @implements {NrModel}
  */
 export class NrView {
 
@@ -48,6 +49,14 @@ export class NrView {
     toJSON () {
         return this.valueOf();
     }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {NrView}
+     * @abstract
+     */
+    static parseValue (value) {}
 
 }
 
