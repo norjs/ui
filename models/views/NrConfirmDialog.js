@@ -36,19 +36,25 @@ export class NrConfirmDialog extends NrView {
     /**
      *
      * @param label {string}
-     * @param action {NrRequest}
+     * @param accept {NrRequest}
+     * @param cancel {NrRequest}
      */
     constructor ({
-        label = undefined,
-        action = undefined
+        label = undefined
+        , accept: accept = undefined
+        , cancel: cancel = undefined
     } = {}) {
 
         if ( label !== undefined && !_.isString(label) ) {
             throw new TypeError(`new ${NrConfirmDialog.nrName}(): label invalid: "${label}"`);
         }
 
-        if ( action !== undefined && !(action instanceof NrRequest) ) {
-            throw new TypeError(`new ${NrConfirmDialog.nrName}(): action invalid: "${action}"`);
+        if ( accept !== undefined && !(accept instanceof NrRequest) ) {
+            throw new TypeError(`new ${NrConfirmDialog.nrName}(): accept invalid: "${accept}"`);
+        }
+
+        if ( cancel !== undefined && !(cancel instanceof NrRequest) ) {
+            throw new TypeError(`new ${NrConfirmDialog.nrName}(): cancel invalid: "${cancel}"`);
         }
 
         super();
@@ -65,7 +71,14 @@ export class NrConfirmDialog extends NrView {
          * @member {NrRequest|undefined}
          * @protected
          */
-        this._action = action;
+        this._accept = accept;
+
+        /**
+         *
+         * @member {NrRequest|undefined}
+         * @protected
+         */
+        this._cancel = cancel;
 
     }
 
@@ -89,8 +102,16 @@ export class NrConfirmDialog extends NrView {
      *
      * @returns {NrRequest}
      */
-    get action () {
-        return this._action;
+    get accept () {
+        return this._accept;
+    }
+
+    /**
+     *
+     * @returns {NrRequest}
+     */
+    get cancel () {
+        return this._cancel;
     }
 
     /**
@@ -99,9 +120,10 @@ export class NrConfirmDialog extends NrView {
      */
     valueOf () {
         return {
-            type: this.type,
-            label: this._label,
-            action: this._action ? this._action : null
+            type: this.type
+            , label: this._label
+            , accept: this._accept ? this._accept : null
+            , cancel: this._cancel ? this._cancel : null
         };
     }
 
@@ -120,15 +142,16 @@ export class NrConfirmDialog extends NrView {
             return value;
         }
 
-        const { type, label, action } = value;
+        const { type, label, accept, cancel } = value;
 
         if ( type !== NrObjectType.CONFIRM_DIALOG ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrConfirmDialog({
-            label  : !_.isNil(label)  ? label                        : undefined,
-            action : !_.isNil(action) ? NrRequest.parseValue(action) : undefined
+            label  : !_.isNil(label)  ? label                        : undefined
+            , accept : !_.isNil(accept) ? NrRequest.parseValue(accept) : undefined
+            , cancel : !_.isNil(cancel) ? NrRequest.parseValue(cancel) : undefined
         });
 
     }

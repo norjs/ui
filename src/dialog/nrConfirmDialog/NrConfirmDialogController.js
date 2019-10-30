@@ -11,7 +11,7 @@ const nrLog = LogUtils.getLogger('nrConfirmDialogController');
  */
 const PRIVATE = {
 	model: Symbol('_model')
-	, okAction: Symbol('_okAction')
+	, acceptAction: Symbol('_acceptAction')
 	, cancelAction: Symbol('_cancelAction')
 };
 
@@ -20,8 +20,8 @@ export class NrConfirmDialogController {
 	static getBindings () {
 		return {
 			model: "<nrModel"
-			, okAction: "&?nrOkAction"
-			, cancelAction: "&?nrCancelAction"
+			, acceptAction: "&?nrAccept"
+			, cancelAction: "&?nrCancel"
 		};
 	}
 
@@ -40,7 +40,7 @@ export class NrConfirmDialogController {
 		 *
 		 * @member {Function|undefined}
 		 */
-		this[PRIVATE.okAction] = undefined;
+		this[PRIVATE.acceptAction] = undefined;
 
 		/**
 		 *
@@ -53,7 +53,7 @@ export class NrConfirmDialogController {
 	$onDestroy () {
 
 		this[PRIVATE.model] = undefined;
-		this[PRIVATE.okAction] = undefined;
+		this[PRIVATE.acceptAction] = undefined;
 		this[PRIVATE.cancelAction] = undefined;
 
 	}
@@ -90,9 +90,9 @@ export class NrConfirmDialogController {
 	 *
 	 * @param value {Function | undefined}
 	 */
-	set okAction (value) {
+	set acceptAction (value) {
 
-		this[PRIVATE.okAction] = value;
+		this[PRIVATE.acceptAction] = value;
 
 	}
 
@@ -102,9 +102,9 @@ export class NrConfirmDialogController {
 	 *
 	 * @returns {Function|undefined}
 	 */
-	get okAction () {
+	get acceptAction () {
 
-		return this[PRIVATE.okAction];
+		return this[PRIVATE.acceptAction];
 
 	}
 
@@ -134,21 +134,36 @@ export class NrConfirmDialogController {
 
 	/**
 	 *
+	 * @returns {boolean}
 	 */
-	ok () {
+	hasCancelAction () {
+		return _.isFunction(this[PRIVATE.cancelAction]);
+	}
 
-		if (_.isFunction(this[PRIVATE.okAction])) {
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	hasAcceptAction () {
+		return _.isFunction(this[PRIVATE.acceptAction]);
+	}
 
-			nrLog.trace(`OK clicked`);
+	/**
+	 *
+	 */
+	accept () {
 
-			this[PRIVATE.okAction]({
-				nrModel: this[PRIVATE.model],
-				nrAction: this[PRIVATE.model] && this[PRIVATE.model].action ? this[PRIVATE.model].action : undefined
+		if (_.isFunction(this[PRIVATE.acceptAction])) {
+
+			nrLog.trace(`Accept clicked`);
+
+			this[PRIVATE.acceptAction]({
+				nrModel: this[PRIVATE.model]
 			});
 
 		} else {
 
-			nrLog.warn(`No OK callback.`);
+			nrLog.warn(`No accept callback.`);
 
 		}
 

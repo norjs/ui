@@ -36,15 +36,20 @@ class IconController {
    * @returns {*}
    */
   getClasses () {
-    if (!this[PRIVATE.types]) return;
+
+    if (!this[PRIVATE.types]) {
+      return {};
+    }
+
     return _.reduce(
       this[PRIVATE.types],
       (obj, key) => {
-        obj['fa-' + key] = true;
+        obj[ `fa-${key}` ] = true;
         return obj;
       },
       {fa: true}
     );
+
   }
 
   /**

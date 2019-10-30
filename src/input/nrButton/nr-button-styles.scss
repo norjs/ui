@@ -2,6 +2,7 @@ nr-button {
   margin: 0.2em;
 
   & > button {
+
     display: inline-block;
     cursor: pointer;
     text-align: center;
@@ -22,7 +23,28 @@ nr-button {
   & > button:active {
 
     color: #dddddd;
-    background-color: #333333;
+
+  }
+
+}
+
+nr-button.nr-accept {
+
+  & > button {
+
+    color: #eeeeee;
+    background-color: #339933;
+
+  }
+
+}
+
+nr-button.nr-cancel {
+
+  & > button {
+
+    color: #eeeeee;
+    background-color: #999933;
 
   }
 

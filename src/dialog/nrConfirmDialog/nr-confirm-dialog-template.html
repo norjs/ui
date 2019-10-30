@@ -4,13 +4,17 @@
 <section class="confirm-dialog-body"></section>
 <footer class="confirm-dialog-footer">
     <nr-button
+            ng-if="$ctrl.hasCancelAction()"
             class="nr-cancel"
+            nr-icon="{{'nrConfirmDialog.cancel.icon'|translate}}"
             nr-click="$ctrl.cancel()"
-            nr-label="nrConfirmDialog.cancelButton.label"
+            nr-label="nrConfirmDialog.cancel.label"
     ></nr-button>
     <nr-button
-            class="nr-ok"
-            nr-click="$ctrl.ok()"
-            nr-label="nrConfirmDialog.okButton.label"
+            ng-if="$ctrl.hasAcceptAction()"
+            class="nr-accept"
+            nr-icon="{{'nrConfirmDialog.accept.icon'|translate}}"
+            nr-click="$ctrl.accept()"
+            nr-label="nrConfirmDialog.accept.label"
     ></nr-button>
 </footer>

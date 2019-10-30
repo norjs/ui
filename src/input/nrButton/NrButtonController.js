@@ -162,6 +162,14 @@ export class NrButtonController {
 
 	/**
 	 *
+	 * @returns {boolean}
+	 */
+	hasIcon () {
+		return this.__icon !== undefined;
+	}
+
+	/**
+	 *
 	 * @returns {NrIcon|string}
 	 */
 	get icon () {
