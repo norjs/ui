@@ -5,6 +5,17 @@ import NrModelUtils from "../../utils/NrModelUtils";
 
 /**
  *
+ * @enum {string}
+ * @readonly
+ */
+const NrFormPayloadType = {
+
+    JSON: "json"
+
+};
+
+/**
+ *
  */
 export class NrForm extends NrView {
 
@@ -14,6 +25,14 @@ export class NrForm extends NrView {
      */
     static get nrName () {
         return NrObjectType.FORM;
+    }
+
+    /**
+     *
+     * @returns {typeof NrFormPayloadType}
+     */
+    static get PayloadType () {
+        return NrFormPayloadType;
     }
 
     /**

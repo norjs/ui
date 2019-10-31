@@ -5,9 +5,31 @@ import NrUser from "./NrUser";
 
 /**
  *
+ * @enum {string}
+ * @readonly
+ */
+export const NrSessionId = {
+
+    /**
+     * This is a special ID value which means the backend will create a new session.
+     */
+    NEW: 'new'
+
+};
+
+/**
+ *
  * @implements {NrModel}
  */
 export class NrSession {
+
+    /**
+     *
+     * @returns {typeof NrSessionId}
+     */
+    static get ID () {
+        return NrSessionId;
+    }
 
     /**
      *

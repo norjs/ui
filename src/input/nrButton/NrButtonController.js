@@ -3,7 +3,7 @@ import NrAttribute from "../../NrAttribute";
 import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
 import angular from "angular";
-import NrIcon from "../../icon/NrIcon";
+import NrIconValue from "../../../models/NrIconValue";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.BUTTON);
@@ -102,7 +102,7 @@ export class NrButtonController {
 
 		/**
 		 *
-		 * @member {NrIcon|string|undefined}
+		 * @member {NrIconValue|string|undefined}
 		 * @private
 		 */
 		this.__type = undefined;
@@ -170,7 +170,7 @@ export class NrButtonController {
 
 	/**
 	 *
-	 * @returns {NrIcon|string}
+	 * @returns {NrIconValue|string}
 	 */
 	get icon () {
 		return this.__icon;

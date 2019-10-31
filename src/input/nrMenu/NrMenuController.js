@@ -4,7 +4,7 @@ import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
 import angular from "angular";
 import NrStyleClass from "../../NrStyleClass";
-import NrIcon from "../../icon/NrIcon";
+import NrIconValue from "../../../models/NrIconValue";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.MENU);
@@ -114,7 +114,7 @@ export class NrMenuController {
 
 		/**
 		 *
-		 * @member {NrIcon|string|undefined}
+		 * @member {NrIconValue|string|undefined}
 		 * @private
 		 */
 		this.__type = undefined;
@@ -439,10 +439,10 @@ export class NrMenuController {
 
 	/**
 	 *
-	 * @returns {NrIcon|string}
+	 * @returns {NrIconValue|string}
 	 */
 	get type () {
-		return this.__type ? this.__type : NrIcon.BARS;
+		return this.__type ? this.__type : NrIconValue.BARS;
 	}
 
 }

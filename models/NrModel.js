@@ -7,33 +7,25 @@ export class NrModel {
      *
      * @returns {string}
      */
-    static get nrName () {
-        return "";
-    }
+    static get nrName () {}
 
     /**
      *
      * @returns {typeof NrModel}
      */
-    get Class () {
-        return NrModel;
-    }
+    get Class () {}
 
     /**
      *
      * @returns {string}
      */
-    get nrName () {
-        return this.Class.nrName;
-    }
+    get nrName () {}
 
     /**
      *
      * @returns {Object}
      */
-    valueOf () {
-        return {};
-    }
+    valueOf () {}
 
     /**
      *

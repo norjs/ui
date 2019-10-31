@@ -1,6 +1,7 @@
 import _ from "lodash";
 import NrView from "./NrView";
 import NrObjectType from "../NrObjectType";
+import NrIcon from "../NrIcon";
 
 /**
  *
@@ -35,13 +36,19 @@ export class NrInfoMessage extends NrView {
     /**
      *
      * @param label {string}
+     * @param icon {NrIcon}
      */
     constructor ({
         label = undefined
+        , icon = undefined
     } = {}) {
 
         if ( label !== undefined && !_.isString(label) ) {
             throw new TypeError(`new ${NrInfoMessage.nrName}(): label invalid: "${label}"`);
+        }
+
+        if ( icon !== undefined && !(icon instanceof NrIcon) ) {
+            throw new TypeError(`new ${NrInfoMessage.nrName}(): icon invalid: "${icon}"`);
         }
 
         super();
@@ -52,6 +59,13 @@ export class NrInfoMessage extends NrView {
          * @protected
          */
         this._label = label;
+
+        /**
+         *
+         * @member {NrIcon|undefined}
+         * @protected
+         */
+        this._icon = icon ? Object.freeze(icon) : undefined;
 
     }
 
@@ -73,12 +87,21 @@ export class NrInfoMessage extends NrView {
 
     /**
      *
+     * @returns {NrIcon}
+     */
+    get icon () {
+        return this._icon;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
         return {
-            type: this.type,
-            label: this._label
+            type: this.type
+            , label: this._label
+            , icon: this._icon.valueOf()
         };
     }
 
@@ -97,7 +120,7 @@ export class NrInfoMessage extends NrView {
             return value;
         }
 
-        const { type, label } = value;
+        const { type, label, icon } = value;
 
         if ( type !== NrObjectType.INFO_MESSAGE ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
@@ -105,6 +128,7 @@ export class NrInfoMessage extends NrView {
 
         return new NrInfoMessage({
             label: !_.isNil(label) ? label : undefined
+            , icon: !_.isNil(icon) ? NrIcon.parseValue(icon) : undefined
         });
 
     }
