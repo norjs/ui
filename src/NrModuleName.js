@@ -7,7 +7,6 @@ export const NrModuleName = {
     NORJS            : "norjs"
     , UI             : "norjs.ui"
     , UI_SERVICES    : "norjs.ui.services"
-    , FORM           : "norjs.ui.form"
     , COMPILE        : "norjs.ui.compile"
     , ICON           : "norjs.ui.icon"
     , INPUT          : "norjs.ui.input"
