@@ -39,12 +39,34 @@ nr-button.nr-accept {
 
 }
 
+nr-button.nr-submit {
+
+  & > button {
+
+    color: #eeeeee;
+    background-color: #339933;
+
+  }
+
+}
+
 nr-button.nr-cancel {
 
   & > button {
 
     color: #eeeeee;
     background-color: #999933;
+
+  }
+
+}
+
+nr-button.nr-disabled {
+
+  & > button {
+
+    color: #cccccc;
+    background-color: #333333;
 
   }
 

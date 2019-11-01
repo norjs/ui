@@ -135,6 +135,15 @@ export class NrModelUtils {
      * @param value {*}
      * @returns {boolean}
      */
+    static isForm (value) {
+        return !!( value && value instanceof NrForm );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
     static isInfoMessage (value) {
         return !!( value && value instanceof NrInfoMessage );
     }

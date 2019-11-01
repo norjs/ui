@@ -8,7 +8,7 @@ import NrModelUtils from "../../utils/NrModelUtils";
  * @enum {string}
  * @readonly
  */
-const NrFormPayloadType = {
+export const NrFormPayloadType = {
 
     JSON: "json"
 
@@ -25,14 +25,6 @@ export class NrForm extends NrView {
      */
     static get nrName () {
         return NrObjectType.FORM;
-    }
-
-    /**
-     *
-     * @returns {typeof NrFormPayloadType}
-     */
-    static get PayloadType () {
-        return NrFormPayloadType;
     }
 
     /**
@@ -54,24 +46,24 @@ export class NrForm extends NrView {
 
     /**
      *
-     * @param target {string}
-     * @param payloadType {string}
+     * @param submit {NrModel}
+     * @param cancel {NrModel}
      * @param label {string}
      * @param content {Array.<NrView>}
      */
     constructor ({
-        target = undefined,
-        payloadType = undefined,
-        label = undefined,
-        content = []
+        submit = undefined
+        , cancel = undefined
+        , label = undefined
+        , content = []
     } = {}) {
 
-        if ( target !== undefined && !_.isString(target) ) {
-            throw new TypeError(`new ${NrForm.nrName}(): target invalid: "${target}"`);
+        if ( submit !== undefined && !NrModelUtils.isModel(submit) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): submit invalid: "${submit}"`);
         }
 
-        if ( payloadType !== undefined && !_.isString(payloadType) ) {
-            throw new TypeError(`new ${NrForm.nrName}(): payloadType invalid: "${payloadType}"`);
+        if ( cancel !== undefined && !NrModelUtils.isModel(cancel) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): cancel invalid: "${cancel}"`);
         }
 
         if ( label !== undefined && !_.isString(label) ) {
@@ -87,17 +79,17 @@ export class NrForm extends NrView {
 
         /**
          *
-         * @member {string|undefined}
+         * @member {NrModel|undefined}
          * @protected
          */
-        this._target = target;
+        this._submit = submit;
 
         /**
          *
-         * @member {string|undefined}
+         * @member {NrModel|undefined}
          * @protected
          */
-        this._payloadType = payloadType;
+        this._cancel = cancel;
 
         /**
          *
@@ -125,18 +117,18 @@ export class NrForm extends NrView {
 
     /**
      *
-     * @returns {string}
+     * @returns {NrModel}
      */
-    get target () {
-        return this._target;
+    get submit () {
+        return this._submit;
     }
 
     /**
      *
-     * @returns {string}
+     * @returns {NrModel}
      */
-    get payloadType () {
-        return this._payloadType;
+    get cancel () {
+        return this._cancel;
     }
 
     /**
@@ -161,11 +153,11 @@ export class NrForm extends NrView {
      */
     valueOf () {
         return {
-            type: this.type,
-            target: this._target,
-            payloadType: this._payloadType,
-            label: this._label,
-            content: _.map(this._content, item => item.valueOf())
+            type: this.type
+            , submit: this._submit
+            , cancel: this._cancel
+            , label: this._label
+            , content: _.map(this._content, item => item.valueOf())
         };
     }
 
@@ -184,7 +176,13 @@ export class NrForm extends NrView {
             return value;
         }
 
-        const { type, target, payloadType, label, content } = value;
+        const {
+            type
+            , submit
+            , cancel
+            , label
+            , content
+        } = value;
 
         if ( type !== NrObjectType.FORM ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
@@ -196,10 +194,10 @@ export class NrForm extends NrView {
         }
 
         return new NrForm({
-            target      : !_.isNil(target)      ? target      : undefined,
-            payloadType : !_.isNil(payloadType) ? payloadType : undefined,
-            label       : !_.isNil(label)       ? label       : undefined,
-            content     : !_.isNil(content)     ? _.map(_.value.content, item => NrModelUtils.parseValue(item)) : undefined
+            submit    : !_.isNil(submit)   ? NrModelUtils.parseModel(submit)  : undefined
+            , cancel  : !_.isNil(cancel)   ? NrModelUtils.parseModel(cancel)  : undefined
+            , label   : !_.isNil(label)    ? label                            : undefined
+            , content : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseModel(item)) : undefined
         });
 
     }

@@ -4,8 +4,8 @@
  * @readonly
  */
 export const NrRequestHeader = {
-    SESSION_ID          : "nr-session-id"
-    , AUTH_TOKEN        : "nr-auth-token"
+    SESSION_ID          : "Nr-Session-Id"
+    , AUTH_TOKEN        : "Nr-Auth-Token"
 };
 
 // noinspection JSUnusedGlobalSymbols

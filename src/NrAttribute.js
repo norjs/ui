@@ -8,6 +8,7 @@ export const NrAttribute = {
     , TYPE: "nrType"
     , LABEL: "nrLabel"
     , NAME: "nrName"
+    , ENABLED: "nrEnabled"
     , ICON: "nrIcon"
     , COLLECTION: "nrCollection"
     , COMPONENT: "nrComponent"

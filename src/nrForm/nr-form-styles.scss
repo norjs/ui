@@ -1,0 +1,24 @@
+nr-form {
+
+  display: block;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  padding: 1em;
+
+  & > header {
+  }
+
+  & > section {
+  }
+
+  & > footer {
+    display: flex;
+    justify-content: flex-end;
+
+    & > button {
+      margin: 8px;
+    }
+
+  }
+
+}

@@ -59,6 +59,7 @@ export class NrButtonController {
 			, __label: `@?${NrAttribute.LABEL}`
 			, __icon: `@?${NrAttribute.ICON}`
 			, __click: `&?${NrAttribute.BUTTON_CLICK}`
+			, __enabled: `&?${NrAttribute.ENABLED}`
 		};
 	}
 
@@ -116,6 +117,13 @@ export class NrButtonController {
 
 		/**
 		 *
+		 * @member {boolean|undefined}
+		 * @private
+		 */
+		this.__enabled = undefined;
+
+		/**
+		 *
 		 * @member {string|undefined}
 		 * @private
 		 */
@@ -142,7 +150,9 @@ export class NrButtonController {
 	 * @returns {{top: boolean, left: boolean, bottom: boolean, right: boolean}}
 	 */
 	getClasses () {
-		return {};
+		return {
+			nrDisabled: !this.enabled
+		};
 	}
 
 	/**
@@ -166,6 +176,14 @@ export class NrButtonController {
 	 */
 	hasIcon () {
 		return this.__icon !== undefined;
+	}
+
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	get enabled () {
+		return this.__enabled !== false;
 	}
 
 	/**

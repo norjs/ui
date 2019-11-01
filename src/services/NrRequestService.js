@@ -2,7 +2,7 @@ import LogUtils from "@norjs/utils/Log";
 import NrServiceName from "../NrServiceName";
 import NrModelUtils from "../../utils/NrModelUtils";
 import {API_PATH_PREFIX} from "../../../work-assistant/client/src/constants";
-import NrRequestHeader from "../NrRequestHeader";
+import NrRequestHeader from "../../models/NrRequestHeader";
 
 const nrLog = LogUtils.getLogger("NrRequestService");
 

@@ -101,7 +101,7 @@ export class NrErrorMessage extends NrMessage {
         return {
             type: this.type
             , label: this._label
-            , icon: this._icon.valueOf()
+            , icon: this._icon ? this._icon.valueOf() : null
         };
     }
 
