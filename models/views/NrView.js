@@ -1,3 +1,5 @@
+import "../NrModel.js";
+
 /**
  *
  * @abstract

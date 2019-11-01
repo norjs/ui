@@ -6,22 +6,22 @@ import NrIcon from "../NrIcon";
 /**
  *
  */
-export class NrInfoMessage extends NrMessage {
+export class NrErrorMessage extends NrMessage {
 
     /**
      *
      * @returns {string}
      */
     static get nrName () {
-        return NrObjectType.INFO_MESSAGE;
+        return NrObjectType.ERROR_MESSAGE;
     }
 
     /**
      *
-     * @returns {typeof NrInfoMessage}
+     * @returns {typeof NrErrorMessage}
      */
     get Class () {
-        return NrInfoMessage;
+        return NrErrorMessage;
     }
 
     // noinspection JSUnusedGlobalSymbols
@@ -44,11 +44,11 @@ export class NrInfoMessage extends NrMessage {
     } = {}) {
 
         if ( label !== undefined && !_.isString(label) ) {
-            throw new TypeError(`new ${NrInfoMessage.nrName}(): label invalid: "${label}"`);
+            throw new TypeError(`new ${NrErrorMessage.nrName}(): label invalid: "${label}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
-            throw new TypeError(`new ${NrInfoMessage.nrName}(): icon invalid: "${icon}"`);
+            throw new TypeError(`new ${NrErrorMessage.nrName}(): icon invalid: "${icon}"`);
         }
 
         super();
@@ -74,7 +74,7 @@ export class NrInfoMessage extends NrMessage {
      * @returns {string}
      */
     get type () {
-        return NrObjectType.INFO_MESSAGE;
+        return NrObjectType.ERROR_MESSAGE;
     }
 
     /**
@@ -108,7 +108,7 @@ export class NrInfoMessage extends NrMessage {
     /**
      *
      * @param value {*}
-     * @returns {NrInfoMessage}
+     * @returns {NrErrorMessage}
      */
     static parseValue (value) {
 
@@ -116,17 +116,17 @@ export class NrInfoMessage extends NrMessage {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value instanceof NrInfoMessage) {
+        if ( value instanceof NrErrorMessage) {
             return value;
         }
 
         const { type, label, icon } = value;
 
-        if ( type !== NrObjectType.INFO_MESSAGE ) {
+        if ( type !== NrObjectType.ERROR_MESSAGE ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
-        return new NrInfoMessage({
+        return new NrErrorMessage({
             label: !_.isNil(label) ? label : undefined
             , icon: !_.isNil(icon) ? NrIcon.parseValue(icon) : undefined
         });
@@ -136,4 +136,4 @@ export class NrInfoMessage extends NrMessage {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrInfoMessage;
+export default NrErrorMessage;

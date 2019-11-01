@@ -7,6 +7,7 @@ export const NrObjectType = {
     REQUEST: 'NrRequest',
     RESPONSE: 'NrResponse',
     INFO_MESSAGE: 'NrInfoMessage',
+    ERROR_MESSAGE: 'NrErrorMessage',
     CONFIRM_DIALOG: 'NrConfirmDialog',
     ICON: 'NrIcon',
     FORM: 'NrForm',

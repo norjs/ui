@@ -11,6 +11,8 @@ import NrPasswordField from "../models/views/fields/NrPasswordField";
 import LogUtils from "@norjs/utils/Log";
 import NrView from "../models/views/NrView";
 import NrUser from "../models/NrUser";
+import NrMessage from "../models/views/NrMessage";
+import NrErrorMessage from "../models/views/NrErrorMessage";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -40,7 +42,7 @@ export class NrModelUtils {
      * Parses a variable as a model instance.
      *
      * @param value {*}
-     * @returns {NrUser|NrSession|NrResponse|NrRequest|NrInfoMessage|NrForm|NrConfirmDialog|NrTextField|NrPasswordField}
+     * @returns {NrUser|NrSession|NrResponse|NrRequest|NrMessage|NrForm|NrConfirmDialog|NrTextField|NrPasswordField}
      */
     static parseModel (value) {
 
@@ -86,6 +88,10 @@ export class NrModelUtils {
             case NrObjectType.INFO_MESSAGE:
                 nrLog.trace(`parseModel: type "${type}" ==> INFO_MESSAGE`);
                 return NrInfoMessage.parseValue(value);
+
+            case NrObjectType.ERROR_MESSAGE:
+                nrLog.trace(`parseModel: type "${type}" ==> ERROR_MESSAGE`);
+                return NrErrorMessage.parseValue(value);
 
             case NrObjectType.PASSWORD_FIELD:
                 nrLog.trace(`parseModel: type "${type}" ==> PASSWORD_FIELD`);
@@ -138,8 +144,17 @@ export class NrModelUtils {
      * @param value {*}
      * @returns {boolean}
      */
+    static isErrorMessage (value) {
+        return !!( value && value instanceof NrErrorMessage );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
     static isMessage (value) {
-        return !!( value && value instanceof NrInfoMessage );
+        return !!( value && value instanceof NrMessage );
     }
 
     /**
