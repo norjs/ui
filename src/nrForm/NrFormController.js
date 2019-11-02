@@ -26,9 +26,17 @@ export class NrFormController {
 	}
 
 	/**
+	 * @param nrModelComponentService {NrModelComponentService}
 	 * @ngInject
 	 */
-	constructor () {
+	constructor (nrModelComponentService) {
+
+		/**
+		 *
+		 * @member {NrModelComponentService}
+		 * @private
+		 */
+		this._nrModelComponentService = nrModelComponentService;
 
 		/**
 		 *
@@ -81,6 +89,31 @@ export class NrFormController {
 	get model () {
 
 		return this[PRIVATE.model];
+
+	}
+
+	getItems () {
+		return this[PRIVATE.model].content;
+	}
+
+	getItemId (item) {
+
+		if (item.id) return `id-${item.id}`;
+
+		if (item.name) return `name-${item.name}`;
+
+		return item;
+
+	}
+
+	/**
+	 *
+	 * @param item {NrModel}
+	 * @returns {{component: string, resolve: Object}}
+	 */
+	getItemCompileConfig (item) {
+
+		return this._nrModelComponentService.getComponentConfig(item);
 
 	}
 

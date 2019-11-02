@@ -1,7 +1,14 @@
 <header class="form-header">
     <h3 translate="{{$ctrl.model.label}}"></h3>
 </header>
-<section class="form-body"></section>
+<section class="form-body">
+
+    <nr-compile
+        ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
+        options="$ctrl.getItemCompileConfig(item)"
+    ></nr-compile>
+
+</section>
 <footer class="form-footer">
     <nr-button
             ng-if="$ctrl.hasCancelAction()"

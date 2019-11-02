@@ -137,42 +137,43 @@ class CompileController {
 
   /**
    *
-   * @param $scope {$scope}
-   * @param $compile {$compile}
-   * @param $parse
-   * @param $transclude
-   * @param nrCompileUtils
+   * @param $injector {angular.auto.IInjectorService}
+   * @param $scope {angular.IScope}
+   * @param $compile {angular.ICompileService}
+   * @param $parse {angular.IParseService}
+   * @param $transclude {angular.ITranscludeFunction}
+   * @param nrCompileUtils {NrCompileUtils}
    * @ngInject
    */
-  constructor ($scope, $compile, $parse, $transclude, nrCompileUtils) {
+  constructor ($injector, $scope, $compile, $parse, $transclude, nrCompileUtils) {
 
     /**
      *
-     * @member {$parse}
+     * @member {angular.auto.IInjectorService}
      */
     this[PRIVATE.$injector] = $injector;
 
     /**
      *
-     * @member {$parse}
+     * @member {angular.IParseService}
      */
     this[PRIVATE.$parse] = $parse;
 
     /**
      *
-     * @member {$transclude}
+     * @member {angular.ITranscludeFunction}
      */
     this[PRIVATE.$transclude] = $transclude;
 
     /**
      *
-     * @member {$compile}
+     * @member {angular.ICompileService}
      */
     this[PRIVATE.$compile] = $compile;
 
     /**
      *
-     * @member {$scope}
+     * @member {angular.IScope}
      */
     this[PRIVATE.$scope] = $scope;
 

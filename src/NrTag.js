@@ -17,6 +17,7 @@ export const NrTag = {
     , WINDOW         : "nrWindow"
     , CONFIRM_DIALOG : "nrConfirmDialog"
     , FORM           : "nrForm"
+    , MESSAGE        : "nrMessage"
 };
 
 // noinspection JSUnusedGlobalSymbols

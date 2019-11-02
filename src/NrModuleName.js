@@ -21,6 +21,7 @@ export const NrModuleName = {
     , WINDOW         : "norjs.ui.window"
     , DIALOG         : "norjs.ui.dialog"
     , CONFIRM_DIALOG : "norjs.ui.dialog.confirm"
+    , MESSAGE        : "norjs.ui.message"
     , FORM           : "norjs.ui.form"
 };
 

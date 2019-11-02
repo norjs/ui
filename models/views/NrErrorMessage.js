@@ -5,6 +5,7 @@ import NrIcon from "../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrErrorMessage extends NrMessage {
 

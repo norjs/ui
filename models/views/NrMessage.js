@@ -3,6 +3,7 @@ import NrView from "./NrView.js";
 /**
  *
  * @abstract
+ * @implements {NrModel}
  */
 export class NrMessage extends NrView {
 
@@ -32,6 +33,20 @@ export class NrMessage extends NrView {
      * @abstract
      */
     static parseValue (value) {}
+
+    /**
+     *
+     * @returns {string}
+     * @abstract
+     */
+    get type () {}
+
+    /**
+     *
+     * @returns {Object}
+     * @abstract
+     */
+    valueOf () {}
 
 }
 
