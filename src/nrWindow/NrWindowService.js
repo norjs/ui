@@ -19,7 +19,7 @@ const PRIVATE = {
 /**
  * @ngInject
  */
-export class WindowService {
+export class NrWindowService {
 
   /**
    *
@@ -31,10 +31,10 @@ export class WindowService {
 
   /**
    *
-   * @returns {typeof WindowService}
+   * @returns {typeof NrWindowService}
    */
   get Class () {
-    return WindowService;
+    return NrWindowService;
   }
 
   /**
@@ -87,7 +87,7 @@ export class WindowService {
     this[PRIVATE.windows] = [];
 
     /**
-     * The base for window z indexes.
+     * The base for nrWindow z indexes.
      *
      * @type {number}
      * @private
@@ -135,7 +135,7 @@ export class WindowService {
   }
 
   /**
-   * Create a new nr-window element with nr-compile inside it and place it on the document body.
+   * Create a new nr-nrWindow element with nr-nrCompile inside it and place it on the document body.
    *
    * @param title {string}
    * @param component {string}
@@ -200,7 +200,7 @@ export class WindowService {
   }
 
   /**
-   * This call moves the window on the front.
+   * This call moves the nrWindow on the front.
    */
   setFocusOnWindow (window) {
     if (this[PRIVATE.moveToFront](window)) {
@@ -210,4 +210,4 @@ export class WindowService {
 
 }
 
-export default WindowService;
+export default NrWindowService;

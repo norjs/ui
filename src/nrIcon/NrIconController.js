@@ -10,14 +10,14 @@ const PRIVATE = {
  *
  * @ngInject
  */
-class IconController {
+class NrIconController {
 
   static get nrName () {
     return NrTag.ICON;
   }
 
   get Class () {
-    return IconController;
+    return NrIconController;
   }
 
   get nrName () {
@@ -73,4 +73,4 @@ class IconController {
 
 }
 
-export default IconController;
+export default NrIconController;

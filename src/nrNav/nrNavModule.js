@@ -1,15 +1,15 @@
 import angular from 'angular';
-import navComponent from './navComponent';
+import nrNavComponent from './nrNavComponent';
 import NrModuleName from "../NrModuleName";
 import NrTag from "../NrTag";
 
-export const navModule = angular.module(
+export const nrNavModule = angular.module(
   NrModuleName.NAV
   , [
 
   ])
-  .component(NrTag.NAV, navComponent)
+  .component(NrTag.NAV, nrNavComponent)
   .name;
 
 // noinspection JSUnusedGlobalSymbols
-export default navModule;
+export default nrNavModule;

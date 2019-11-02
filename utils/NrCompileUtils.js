@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 /**
- * This service provides helper functions to compile elements dynamically.
+ * This service provides helper functions to nrCompile elements dynamically.
  */
 export class NrCompileUtils {
 

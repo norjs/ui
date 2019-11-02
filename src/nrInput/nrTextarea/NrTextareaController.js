@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import NrInputController from '../NrInputController.js';
-import NrAttribute from "../../NrAttribute";
+import NrStyleClass from "../../NrStyleClass";
 import NrTag from "../../NrTag";
 import NgAttribute from "../../NgAttribute";
+import NrAttribute from "../../NrAttribute";
 import LogUtils from "@norjs/utils/Log";
-import NrStyleClass from "../../NrStyleClass";
 
 // noinspection JSUnusedLocalSymbols
-const nrLog = LogUtils.getLogger(NrTag.PASSWORD_INPUT);
+const nrLog = LogUtils.getLogger(NrTag.TEXTAREA);
 
 /**
  *
@@ -28,14 +28,14 @@ const PRIVATE = {
  *
  * @ngInject
  */
-export class NrPasswordInputController extends NrInputController {
+export class NrTextareaController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {typeof NrPasswordInputController}
+	 * @returns {typeof NrTextareaController}
 	 */
 	get Class () {
-		return NrPasswordInputController;
+		return NrTextareaController;
 	}
 
 	/**
@@ -43,7 +43,7 @@ export class NrPasswordInputController extends NrInputController {
 	 * @returns {NrTag|string}
 	 */
 	static get nrName () {
-		return NrTag.PASSWORD_INPUT;
+		return NrTag.TEXTAREA;
 	}
 
 	/**
@@ -56,7 +56,7 @@ export class NrPasswordInputController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {Object.<string, string>}
+	 * @returns {{__name: string, __ngModel: string, __type: string, __id: string, __label: string}}
 	 */
 	static getComponentBindings () {
 		return {
@@ -70,7 +70,7 @@ export class NrPasswordInputController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {Object.<string, string>}
+	 * @returns {{__nrForm: string, __ngModelController: string}}
 	 */
 	static getComponentRequire () {
 		return {
@@ -97,9 +97,9 @@ export class NrPasswordInputController extends NrInputController {
 	// noinspection DuplicatedCode
 	/**
 	 *
+	 * @ngInject
 	 * @param $attrs {angular.IAttributes}
 	 * @param $element {JQLite}
-	 * @ngInject
 	 */
 	constructor ($attrs, $element) {
 
@@ -108,6 +108,7 @@ export class NrPasswordInputController extends NrInputController {
 		/**
 		 *
 		 * @member {JQLite}
+		 * @private
 		 */
 		this.$element = $element;
 
@@ -156,21 +157,21 @@ export class NrPasswordInputController extends NrInputController {
 		this[PRIVATE.useLabel] = !!_.has($attrs, NrAttribute.LABEL);
 
 		/**
-		 * The ng-model controller
+		 * The
 		 *
-		 * @member {angular.INgModelController|undefined}
+		 * @member {angular.INgModelController}
 		 */
 		this[PRIVATE.ngModelController] = undefined;
 
 		/**
 		 *
-		 * @member {angular.INgModelController|undefined}
+		 * @member {string}
 		 */
 		this[PRIVATE.ngModel] = undefined;
 
 		/**
 		 *
-		 * @member {string|undefined}
+		 * @member {string}
 		 */
 		this[PRIVATE.innerViewValue] = undefined;
 
@@ -182,6 +183,7 @@ export class NrPasswordInputController extends NrInputController {
 		this[PRIVATE.focus] = false;
 
 	}
+
 
 	/**
 	 *
@@ -199,6 +201,7 @@ export class NrPasswordInputController extends NrInputController {
 	getLabel () {
 		return this.__label;
 	}
+
 
 	// noinspection JSUnusedGlobalSymbols
 	/**
@@ -233,7 +236,7 @@ export class NrPasswordInputController extends NrInputController {
 	/**
 	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child input element which is in the template.
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
 	 *
 	 * @returns {boolean}
 	 */
@@ -244,7 +247,7 @@ export class NrPasswordInputController extends NrInputController {
 	/**
 	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child input element in the template.
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element in the template.
 	 *
 	 * @returns {angular.INgModelController|undefined}
 	 */
@@ -284,6 +287,7 @@ export class NrPasswordInputController extends NrInputController {
 		this.innerViewValue = this.getViewValue();
 	}
 
+
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the getter for component attribute binding of the ng-model attribute given to this component.
@@ -308,15 +312,16 @@ export class NrPasswordInputController extends NrInputController {
 		this[PRIVATE.ngModel] = value;
 	}
 
+
 	/**
-	 * Called from the template when inner input element changes model value, eg. our inner view value.
+	 * Called from the template when inner nrInput element changes model value, eg. our inner view value.
 	 */
 	onChange () {
 		this.setViewValue(this.innerViewValue, undefined);
 	}
 
 	/**
-	 * Get internal input element's model value; eg. it is our view value.
+	 * Get internal nrInput element's model value; eg. it is our view value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
@@ -327,7 +332,7 @@ export class NrPasswordInputController extends NrInputController {
 	}
 
 	/**
-	 * Sets internal input element's model value; eg. it is our view value.
+	 * Sets internal nrInput element's model value; eg. it is our view value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
@@ -336,7 +341,6 @@ export class NrPasswordInputController extends NrInputController {
 	set innerViewValue (value) {
 		this[PRIVATE.innerViewValue] = value;
 	}
-
 
 	/**
 	 * Returns `true` if this element has focus.
@@ -378,4 +382,4 @@ export class NrPasswordInputController extends NrInputController {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrPasswordInputController;
+export default NrTextareaController;

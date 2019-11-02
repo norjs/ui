@@ -68,11 +68,11 @@ const PRIVATE = {
 };
 
 /**
- * Simple floating window element
+ * Simple floating nrWindow element
  *
  * @ngInject
  */
-export class WindowController {
+export class NrWindowController {
 
   /**
    *
@@ -84,10 +84,10 @@ export class WindowController {
 
   /**
    *
-   * @returns {typeof WindowController}
+   * @returns {typeof NrWindowController}
    */
   get Class () {
-    return WindowController;
+    return NrWindowController;
   }
 
   /**
@@ -185,7 +185,7 @@ export class WindowController {
     this[PRIVATE.contentMouseDown] = ($event) => this[PRIVATE.onContentMouseDown]($event);
 
     /**
-     * The window position.
+     * The nrWindow position.
      *
      * @type {{x: undefined|number, y: undefined|number}}
      * @private
@@ -249,11 +249,11 @@ export class WindowController {
     this[PRIVATE.options] = this[PRIVATE.windowService].register(this);
 
     /**
-     * Event broadcasted to child components when window changes size.
+     * Event broadcasted to child components when nrWindow changes size.
      *
      * @member {string}
      */
-    this.RESIZE_EVENT = 'nr-window:resize';
+    this.RESIZE_EVENT = 'nr-nrWindow:resize';
 
     this.$element.css({
       position: 'absolute'
@@ -291,7 +291,7 @@ export class WindowController {
    */
   [PRIVATE.unregisterFromWindowService] () {
 
-    nrLog.trace('Unregistering from window service...');
+    nrLog.trace('Unregistering from nrWindow service...');
 
     this[PRIVATE.windowService].unregister(this);
 
@@ -352,7 +352,7 @@ export class WindowController {
 
   // noinspection JSUnusedGlobalSymbols
   /**
-   * Set window title.
+   * Set nrWindow title.
    *
    * @param value {string}
    */
@@ -370,7 +370,7 @@ export class WindowController {
   }
 
   /**
-   * Returns the title of the window.
+   * Returns the title of the nrWindow.
    *
    * @returns {string}
    */
@@ -418,7 +418,7 @@ export class WindowController {
   }
 
   /**
-   * Set window CSS z index
+   * Set nrWindow CSS z index
    *
    * @param zIndex
    */
@@ -644,7 +644,7 @@ export class WindowController {
   }
 
   /**
-   * Set the window position using CSS.
+   * Set the nrWindow position using CSS.
    *
    * @param x
    * @param y
@@ -732,18 +732,18 @@ export class WindowController {
   }
 
   /**
-   * Close this window.
+   * Close this nrWindow.
    */
   close () {
 
     if (_.isFunction(this.__onClose)) {
       this.__onClose({nrWindow:this});
     } else {
-      nrLog.warn("No on-close handler implemented. Cannot close the window.");
+      nrLog.warn("No on-close handler implemented. Cannot close the nrWindow.");
     }
 
   }
 
 }
 
-export default WindowController;
+export default NrWindowController;

@@ -1,4 +1,4 @@
-import template from "./nr-message.html";
+import template from "./nr-message-template.html";
 import { NrMessageController } from "./nrMessageController.js";
 import "./nr-message-styles.scss";
 

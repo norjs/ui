@@ -315,7 +315,7 @@ export class NrDateInputController extends NrInputController {
 
 	/**
 	 * This function will be called whenever the control updates the ngModelController with a new $viewValue,
-	 * usually via user input.
+	 * usually via user nrInput.
 	 *
 	 * This function should return the parsed value which will end up as a model value (if valid).
 	 *
@@ -471,7 +471,7 @@ export class NrDateInputController extends NrInputController {
 	/**
 	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child input element which is in the template.
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
 	 *
 	 * @returns {boolean}
 	 */
@@ -482,7 +482,7 @@ export class NrDateInputController extends NrInputController {
 	/**
 	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child input element in the template.
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element in the template.
 	 *
 	 * @returns {angular.INgModelController|undefined}
 	 */
@@ -564,14 +564,14 @@ export class NrDateInputController extends NrInputController {
 	}
 
 	/**
-	 * Called from the template when inner input element changes model value, eg. our inner view value.
+	 * Called from the template when inner nrInput element changes model value, eg. our inner view value.
 	 */
 	onChange () {
 		this.setViewValue(this.innerViewValue, undefined);
 	}
 
 	/**
-	 * Get internal input element's model value; eg. it is our view value.
+	 * Get internal nrInput element's model value; eg. it is our view value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
@@ -582,7 +582,7 @@ export class NrDateInputController extends NrInputController {
 	}
 
 	/**
-	 * Sets internal input element's model value; eg. it is our view value.
+	 * Sets internal nrInput element's model value; eg. it is our view value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *

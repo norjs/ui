@@ -4,7 +4,7 @@ import "./NrModel";
 import NrIconValue from "./NrIconValue";
 
 /**
- * This is a data model for an icon.
+ * This is a data model for an nrIcon.
  *
  * @implements {NrModel}
  */

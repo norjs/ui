@@ -8,7 +8,7 @@ import LogUtils from "@norjs/utils/Log";
 const nrLog = LogUtils.getLogger(NrTag.COMPILE);
 
 /**
- * This object contains symbols for private members of CompileController.
+ * This object contains symbols for private members of NrCompileController.
  *
  * @enum {Symbol}
  * @readonly
@@ -22,7 +22,7 @@ const PRIVATE = {
   $injector: Symbol('$injector'),
 
   /**
-   * Symbol for a property containing AngularJS $compile
+   * Symbol for a property containing AngularJS $nrCompile
    */
   $compile: Symbol('$compile'),
 
@@ -104,14 +104,14 @@ const NG_ATTRIBUTE_REGEXP = /^([=<@&])[?]?(.*)/;
  *
  * @ngInject
  */
-class CompileController {
+class NrCompileController {
 
   static get nrName () {
     return NrTag.COMPILE;
   }
 
   get Class () {
-    return CompileController;
+    return NrCompileController;
   }
 
   get nrName () {
@@ -357,10 +357,10 @@ class CompileController {
 
     // noinspection UnnecessaryLocalVariableJS
     const result = _.keys(bindings)
-            // { key: 'input', bindings: [ '=foo', '=', 'foo' ] }
+            // { key: 'nrInput', bindings: [ '=foo', '=', 'foo' ] }
             .map(key => ({key, bindings: NG_ATTRIBUTE_REGEXP.exec(bindings[key])}))
             .filter(binding => binding && _.isArray(binding.bindings))
-            // { name: ('foo' || 'input'), type: '=' }
+            // { name: ('foo' || 'nrInput'), type: '=' }
             .map(binding => ({ name: binding.bindings[2] || binding.key, type: binding.bindings[1] }));
 
     nrLog.trace(`getComponentBindings: Result for "${name}Directive" is: `, result);
@@ -399,7 +399,7 @@ class CompileController {
     const { scope } = opts;
     const prefix = '';
     const { name, type } = binding;
-    const attributeName = CompileController.snakeCase(name);
+    const attributeName = NrCompileController.snakeCase(name);
     const resolveName = name;
     switch (type) {
 
@@ -449,7 +449,7 @@ class CompileController {
 
     nrLog.trace('compileElement: componentBindings: ', componentBindings);
 
-    const tagName = CompileController.snakeCase(componentName);
+    const tagName = NrCompileController.snakeCase(componentName);
 
     let attrs = _.map(
       _.filter(
@@ -491,4 +491,4 @@ class CompileController {
 
 }
 
-export default CompileController;
+export default NrCompileController;

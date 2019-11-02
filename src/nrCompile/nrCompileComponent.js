@@ -1,11 +1,11 @@
-import CompileController from './CompileController';
+import NrCompileController from './NrCompileController';
 import NrAttribute from "../NrAttribute";
 
 /**
  *
- * @type {{controller: CompileController}}
+ * @type {{controller: NrCompileController}}
  */
-let compileComponent = {
+let nrCompileComponent = {
   transclude: true
   , bindings: {
     "__options"   : `<?${NrAttribute.OPTIONS}`,
@@ -13,7 +13,7 @@ let compileComponent = {
     "__resolve"   : `<?${NrAttribute.RESOLVE}`,
     "__content"   : `@?${NrAttribute.CONTENT}`
   }
-  , controller: CompileController
+  , controller: NrCompileController
 };
 
-export default compileComponent;
+export default nrCompileComponent;

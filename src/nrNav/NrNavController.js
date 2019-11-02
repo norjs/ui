@@ -9,7 +9,7 @@ const nrLog = LogUtils.getLogger(NrTag.NAV);
  *
  * @ngInject
  */
-class NavController {
+class NrNavController {
 
   /**
    *
@@ -21,10 +21,10 @@ class NavController {
 
   /**
    *
-   * @returns {typeof NavController}
+   * @returns {typeof NrNavController}
    */
   get Class () {
-    return NavController;
+    return NrNavController;
   }
 
   /**
@@ -134,4 +134,4 @@ class NavController {
 
 }
 
-export default NavController;
+export default NrNavController;

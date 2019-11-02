@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import NrInputController from '../NrInputController.js';
-import NrStyleClass from "../../NrStyleClass";
-import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
 import NrAttribute from "../../NrAttribute";
+import NrTag from "../../NrTag";
 import NgAttribute from "../../NgAttribute";
+import NrStyleClass from "../../NrStyleClass";
 
 // noinspection JSUnusedLocalSymbols
-const nrLog = LogUtils.getLogger(NrTag.TEXT_INPUT);
+const nrLog = LogUtils.getLogger(NrTag.PASSWORD_INPUT);
 
 /**
  *
@@ -28,14 +28,14 @@ const PRIVATE = {
  *
  * @ngInject
  */
-export class NrTextInputController extends NrInputController {
+export class NrSelectController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {typeof NrTextInputController}
+	 * @returns {typeof NrSelectController}
 	 */
 	get Class () {
-		return NrTextInputController;
+		return NrSelectController;
 	}
 
 	/**
@@ -43,7 +43,7 @@ export class NrTextInputController extends NrInputController {
 	 * @returns {NrTag|string}
 	 */
 	static get nrName () {
-		return NrTag.TEXT_INPUT;
+		return NrTag.SELECT;
 	}
 
 	/**
@@ -56,26 +56,30 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {{__name: string, __ngModel: string, __type: string, __id: string, __label: string}}
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentBindings () {
 		return {
-			__type: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
-			, __id: `@?${NrAttribute.ID}` // FIXME: This is not used?
-			, __name: `@?${NrAttribute.NAME}` // FIXME: This is not used?
+			__type: `@?${NrAttribute.TYPE}`
+			, __id: `@?${NrAttribute.ID}`
+			, __name: `@?${NrAttribute.NAME}`
 			, __label: `@?${NrAttribute.LABEL}`
 			, __ngModel: `=?${NgAttribute.MODEL}`
+			, __getList: `&?${NrAttribute.SELECT_GET_LIST}`
+			, __getItemId: `&?${NrAttribute.SELECT_GET_ITEM_ID}`
+			, __getItemValue: `&?${NrAttribute.SELECT_GET_ITEM_VALUE}`
+			, __getItemLabel: `&?${NrAttribute.SELECT_GET_ITEM_LABEL}`
 		};
 	}
 
 	/**
 	 *
-	 * @returns {{__nrForm: string, __ngModelController: string}}
+	 * @returns {Object.<string, string>}
 	 */
 	static getComponentRequire () {
 		return {
-			__nrForm: `?^^${NrTag.FORM}`,
-			__ngModelController: `?^${NgAttribute.MODEL}`
+			__nrForm: `?^^${NrTag.FORM}`
+			, __ngModelController: `?^${NgAttribute.MODEL}`
 		};
 	}
 
@@ -141,9 +145,37 @@ export class NrTextInputController extends NrInputController {
 		 */
 		this.__label = undefined;
 
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
+		this.__getList = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
+		this.__getItemId = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
+		this.__getItemValue = undefined;
+
+		/**
+		 *
+		 * @member {Function|function|undefined}
+		 * @private
+		 */
+		this.__getItemLabel = undefined;
 
 		// noinspection JSUnusedGlobalSymbols
 		/**
+		 * The AngularJS's form controller
 		 *
 		 * @member {angular.IFormController|undefined}
 		 * @private
@@ -155,10 +187,10 @@ export class NrTextInputController extends NrInputController {
 		 *
 		 * @type {boolean}
 		 */
-		this[PRIVATE.useLabel] = !!_.has($attrs, NgAttribute.LABEL);
+		this[PRIVATE.useLabel] = !!_.has($attrs, NrAttribute.LABEL);
 
 		/**
-		 * The
+		 * The ng-model controller.
 		 *
 		 * @type {angular.INgModelController}
 		 */
@@ -187,7 +219,7 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {boolean|undefined}
+	 * @returns {boolean}
 	 */
 	useLabel () {
 		return this[PRIVATE.useLabel];
@@ -201,7 +233,6 @@ export class NrTextInputController extends NrInputController {
 	getLabel () {
 		return this.__label;
 	}
-
 
 	// noinspection JSUnusedGlobalSymbols
 	/**
@@ -236,7 +267,7 @@ export class NrTextInputController extends NrInputController {
 	/**
 	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child input element which is in the template.
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
 	 *
 	 * @returns {boolean}
 	 */
@@ -247,13 +278,14 @@ export class NrTextInputController extends NrInputController {
 	/**
 	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child input element in the template.
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element in the template.
 	 *
 	 * @returns {angular.INgModelController|undefined}
 	 */
 	getNgModelController () {
 		return this[PRIVATE.ngModelController];
 	}
+
 
 	/**
 	 * Returns the view value.
@@ -271,13 +303,9 @@ export class NrTextInputController extends NrInputController {
 	 * @param trigger {string} Event that triggered the update.
 	 */
 	setViewValue (value, trigger) {
-
 		const ngModelController = this.getNgModelController();
-
 		ngModelController.$setViewValue(value, trigger);
-
 		ngModelController.$setDirty();
-
 	}
 
 
@@ -290,16 +318,16 @@ export class NrTextInputController extends NrInputController {
 		this.innerViewValue = this.getViewValue();
 	}
 
-
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * This is the getter for component attribute binding of the ng-model attribute given to this component.
 	 *
 	 * AngularJS will call this method from ngModel controller.
 	 *
+	 * @returns {string}
 	 */
 	get __ngModel () {
-		return this[PRIVATE.ngModel];
+		return this._getModelValue();
 	}
 
 	// noinspection JSUnusedGlobalSymbols
@@ -308,43 +336,122 @@ export class NrTextInputController extends NrInputController {
 	 *
 	 * AngularJS will call this method from ngModel controller.
 	 *
-	 * @param value
+	 * @param value {string}
 	 * @private
 	 */
 	set __ngModel (value) {
-		this[PRIVATE.ngModel] = value;
+		this._setModelValue(value);
 	}
 
+	/**
+	 *
+	 * @returns {string} Date as a string in format YYYY-MM-DD
+	 * @private
+	 */
+	_getModelValue () {
+		return this[PRIVATE.ngModel];
+	}
 
 	/**
-	 * Called from the template when inner input element changes model value, eg. our inner view value.
+	 *
+	 * @param value {string} Date as a string in format YYYY-MM-DD
+	 * @private
+	 */
+	_setModelValue (value) {
+
+		this[PRIVATE.ngModel] = value;
+
+	}
+
+	/**
+	 * Called from the template when inner nrInput element changes model value, eg. our inner view value.
 	 */
 	onChange () {
 		this.setViewValue(this.innerViewValue, undefined);
 	}
 
 	/**
-	 * Get internal input element's model value; eg. it is our view value.
+	 * Get internal nrInput element's model value; eg. it is our view value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
 	 * @returns {string}
 	 */
 	get innerViewValue () {
-		return this[PRIVATE.innerViewValue];
+		return this[PRIVATE.ngModel];
 	}
 
 	/**
-	 * Sets internal input element's model value; eg. it is our view value.
+	 * Sets internal nrInput element's model value; eg. it is our view value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
 	 * @param value {string}
 	 */
 	set innerViewValue (value) {
-		this[PRIVATE.innerViewValue] = value;
+		this[PRIVATE.ngModel] = value;
 	}
 
+
+	/**
+	 *
+	 * @returns {Array.<*>}
+	 */
+	getList () {
+		if (_.isFunction(this.__getList)) {
+			return this.__getList({nrSelect: this});
+		}
+		return [];
+	}
+
+	/**
+	 *
+	 * @param item
+	 * @returns {*}
+	 */
+	getItemId (item) {
+		if (_.isFunction(this.__getItemId)) {
+			return this.__getItemId({nrSelect: this, item});
+		}
+		if (_.isFunction(this.__getItemValue)) {
+			return this.__getItemValue({nrSelect: this, item});
+		}
+		return item;
+	}
+
+	/**
+	 *
+	 * @param item
+	 * @returns {*}
+	 */
+	getItemValue (item) {
+		if (_.isFunction(this.__getItemValue)) {
+			return this.__getItemValue({nrSelect: this, item});
+		}
+		return item;
+	}
+
+	/**
+	 *
+	 * @param item
+	 * @returns {*}
+	 */
+	getItemLabel (item) {
+		if (_.isFunction(this.__getItemLabel)) {
+			return this.__getItemLabel({nrSelect: this, item});
+		}
+		return this.getItemId(item);
+	}
+
+	/**
+	 *
+	 * @param item {*}
+	 * @returns {boolean}
+	 */
+	isItemSelected (item) {
+		const modelValue = this._getModelValue();
+		return !!(modelValue && this.getItemValue(item) === modelValue);
+	}
 
 	/**
 	 * Returns `true` if this element has focus.
@@ -386,4 +493,4 @@ export class NrTextInputController extends NrInputController {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrTextInputController;
+export default NrSelectController;
