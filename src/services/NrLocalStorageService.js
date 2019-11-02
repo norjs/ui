@@ -1,5 +1,4 @@
 import LogUtils from '@norjs/utils/Log';
-import WaServiceName from "../../../work-assistant/client/src/WaServiceName";
 import NrServiceName from "../NrServiceName";
 
 const nrLog = LogUtils.getLogger("NrLocalStorageService");
