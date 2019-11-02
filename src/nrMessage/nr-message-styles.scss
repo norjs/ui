@@ -1,6 +1,34 @@
+$message-border-size: 2px;
+$message-border-style: solid;
+$message-border-color: #f0f0f6;
+
 nr-message {
 
-  display: block;
-  padding: 1em;
+  display: flex;
+  border: $message-border-size $message-border-style $message-border-color;
+  border-radius: 4px;
+  background-color: #fbfbfd;
+  min-width: 20em;
+  max-width: 80em;
+  padding: 0;
+
+  & > nr-icon {
+
+    display: flex;
+    color: #707076;
+    background-color: #f0f0f6;
+    border-right: $message-border-size $message-border-style $message-border-color;
+    text-align: center;
+    padding: 0.5em 0.5em;
+    font-size: 1.5em;
+    vertical-align: middle;
+  }
+
+  & > .label {
+
+    flex: 1;
+    padding: 1em;
+
+  }
 
 }

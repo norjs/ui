@@ -1,19 +1,37 @@
+$dialog-border-size: 2px;
+$dialog-border-style: solid;
+$dialog-border-color: #f0f0f6;
+
 nr-confirm-dialog {
 
   display: block;
-  border: 1px solid #000000;
-  background-color: #ffffff;
-  padding: 1em;
+  border: $dialog-border-size $dialog-border-style $dialog-border-color;
+  border-radius: 4px;
+  background-color: #fbfbfd;
+  padding: 0;
+  max-width: 40em;
 
   & > header {
+
+    padding: 0.5em 1em;
+    border-bottom: $dialog-border-size $dialog-border-style $dialog-border-color;
+    color: #707076;
+    background-color: #f0f0f6;
+
+    & > h3 {
+
+    }
+
   }
 
   & > section {
   }
 
   & > footer {
+
     display: flex;
     justify-content: flex-end;
+    padding: 0.5em 1em;
 
     & > button {
       margin: 8px;

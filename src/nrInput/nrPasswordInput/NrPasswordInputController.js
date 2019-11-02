@@ -419,6 +419,16 @@ export class NrPasswordInputController extends NrTextInputController {
 
 	}
 
+	/**
+	 *
+	 * @param $event
+	 */
+	onLabelClick ($event) {
+
+		super.onLabelClick($event);
+
+	}
+
 }
 
 // noinspection JSUnusedGlobalSymbols

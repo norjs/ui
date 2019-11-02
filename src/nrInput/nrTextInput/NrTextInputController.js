@@ -553,6 +553,16 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	/**
+	 *
+	 * @param $event
+	 */
+	onLabelClick ($event) {
+
+		this[PRIVATE.$element][0].querySelector('input').focus();
+
+	}
+
 }
 
 // noinspection JSUnusedGlobalSymbols

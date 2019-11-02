@@ -1,15 +1,39 @@
+$button-min-width: 10em;
+$button-border-size: 2px;
+$button-border-type: solid;
+$button-border-radius: 4px;
+
+$default-button-border-color     : #e0e0e0;
+$default-button-text-color       : #333333;
+$default-button-background-color : #f0f0f6;
+
+$accept-button-border-color     : #c0ffc0;
+$accept-button-text-color       : #338844;
+$accept-button-background-color : #e0ffe6;
+
+$cancel-button-border-color     : #eeeec0;
+$cancel-button-text-color       : #888833;
+$cancel-button-background-color : #f9f9f0;
+
+$disabled-button-border-color     : #e0e0e0;
+$disabled-button-text-color       : #333333;
+$disabled-button-background-color : #f0f0f6;
+
 nr-button {
+
+  display: block;
   margin: 0.2em;
 
   & > button {
 
+    min-width: $button-min-width;
     display: inline-block;
     cursor: pointer;
     text-align: center;
-    border: 3px solid #000000;
-    border-radius: 6px;
-    color: #dddddd;
-    background-color: #333333;
+    border: $button-border-size $button-border-type $default-button-border-color;
+    border-radius: $button-border-radius;
+    color: $default-button-text-color;
+    background-color: $default-button-background-color;
     text-transform: uppercase;
     font-size: 0.7em;
     padding: 0.7em;
@@ -22,7 +46,10 @@ nr-button {
   & > button:focus,
   & > button:active {
 
-    color: #dddddd;
+    min-width: $button-min-width;
+    border: $button-border-size $button-border-type $default-button-border-color;
+    color: $default-button-text-color;
+    background-color: $default-button-background-color;
 
   }
 
@@ -32,8 +59,10 @@ nr-button.nr-accept {
 
   & > button {
 
-    color: #eeeeee;
-    background-color: #339933;
+    min-width: $button-min-width;
+    border: $button-border-size $button-border-type $accept-button-border-color;
+    color: $accept-button-text-color;
+    background-color: $accept-button-background-color;
 
   }
 
@@ -43,8 +72,10 @@ nr-button.nr-submit {
 
   & > button {
 
-    color: #eeeeee;
-    background-color: #339933;
+    min-width: $button-min-width;
+    border: $button-border-size $button-border-type $accept-button-border-color;
+    color: $accept-button-text-color;
+    background-color: $accept-button-background-color;
 
   }
 
@@ -54,8 +85,10 @@ nr-button.nr-cancel {
 
   & > button {
 
-    color: #eeeeee;
-    background-color: #999933;
+    min-width: $button-min-width;
+    border: $button-border-size $button-border-type $cancel-button-border-color;
+    color: $cancel-button-text-color;
+    background-color: $cancel-button-background-color;
 
   }
 
@@ -65,8 +98,10 @@ nr-button.nr-disabled {
 
   & > button {
 
-    color: #cccccc;
-    background-color: #333333;
+    min-width: $button-min-width;
+    border: $button-border-size $button-border-type $disabled-button-border-color;
+    color: $disabled-button-text-color;
+    background-color: $disabled-button-background-color;
 
   }
 
