@@ -1,13 +1,17 @@
 import angular from 'angular';
 import _ from 'lodash';
 import NrTag from "../NrTag";
+import NrCompileUtils from "../../utils/NrCompileUtils";
+import LogUtils from "@norjs/utils/Log";
+
+// noinspection JSUnusedLocalSymbols
+const nrLog = LogUtils.getLogger(NrTag.COMPILE);
 
 /**
  * This object contains symbols for private members of CompileController.
  *
- * @type {{$compile: Symbol, $parse: Symbol, $transclude: Symbol, $scope: Symbol, $element: Symbol, options: Symbol, component: Symbol, resolve: Symbol,
- *     content: Symbol, initialized: Symbol, compileElement: Symbol,
- Symbol     getComponentBindings: Symbol, getAttributeTemplate: Symbol}}
+ * @enum {Symbol}
+ * @readonly
  * @private
  */
 const PRIVATE = {
@@ -70,11 +74,6 @@ const PRIVATE = {
   /**
    * Symbol for a property containing a private method for compiling the element.
    */
-  nrCompileUtils: Symbol('nrCompileUtils'),
-
-  /**
-   * Symbol for a property containing a private method for compiling the element.
-   */
   compileElement: Symbol('compileElement'),
 
   /**
@@ -126,6 +125,15 @@ class CompileController {
    * @returns {*}
    */
   static snakeCase (name, separator = '-') {
+
+    if (!_.isString(name)) {
+      throw new TypeError(`${this.nrName}.snakeCase(): name not a string: ${LogUtils.getAsString(name)}`);
+    }
+
+    if (!_.isString(separator)) {
+      throw new TypeError(`${this.nrName}.snakeCase(): separator not a string: ${LogUtils.getAsString(separator)}`);
+    }
+
     name = name.replace(
       SNAKE_CASE_REGEXP,
       ( letter, pos ) => (pos ? separator : '' ) + letter.toLowerCase()
@@ -142,10 +150,10 @@ class CompileController {
    * @param $compile {angular.ICompileService}
    * @param $parse {angular.IParseService}
    * @param $transclude {angular.ITranscludeFunction}
-   * @param nrCompileUtils {NrCompileUtils}
+   * @param $element {JQLite}
    * @ngInject
    */
-  constructor ($injector, $scope, $compile, $parse, $transclude, nrCompileUtils) {
+  constructor ($injector, $scope, $compile, $parse, $transclude, $element) {
 
     /**
      *
@@ -185,12 +193,6 @@ class CompileController {
 
     /**
      *
-     * @member {nrCompileUtils}
-     */
-    this[PRIVATE.nrCompileUtils] = nrCompileUtils;
-
-    /**
-     *
      * @member {{component: string, bindings:{}}}
      */
     this[PRIVATE.options] = {};
@@ -203,6 +205,7 @@ class CompileController {
 
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @returns {{component: string, bindings:{}}}
@@ -212,15 +215,20 @@ class CompileController {
     return this[PRIVATE.options];
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @param options {{component: string, bindings:{}}}
    * @private
    */
   set __options (options) {
-    this[PRIVATE.options] = options;
+    if (options !== this[PRIVATE.options]) {
+      nrLog.trace(`set __options: options set as ${LogUtils.getAsString(options)}`);
+      this[PRIVATE.options] = options;
+    }
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @returns {string}
@@ -230,15 +238,22 @@ class CompileController {
     return this[PRIVATE.component];
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @param component {string}
    * @private
    */
   set __component (component) {
-    this[PRIVATE.component] = component;
+
+    if (this[PRIVATE.component] !== component) {
+      nrLog.trace(`set __component: component set as ${LogUtils.getAsString(component)}`);
+      this[PRIVATE.component] = component;
+    }
+
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @returns {string}
@@ -248,15 +263,22 @@ class CompileController {
     return this[PRIVATE.content];
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @param content {string}
    * @private
    */
   set __content (content) {
-    this[PRIVATE.content] = content;
+
+    if (this[PRIVATE.content] !== content) {
+      nrLog.trace(`set __content: content set as ${LogUtils.getAsString(content)}`);
+      this[PRIVATE.content] = content;
+    }
+
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @returns {{}}
@@ -266,6 +288,7 @@ class CompileController {
     return this[PRIVATE.resolve];
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    *
    * @param resolve {{}}
@@ -275,22 +298,26 @@ class CompileController {
     this[PRIVATE.resolve] = resolve;
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
-   * @fixme: Use .registerLifeCycleMethods
+   * @fixme: Change to use .registerLifeCycleMethods (however it must be implemented first)
    */
   $onInit () {
 
     this[PRIVATE.initialized] = true;
 
     if (this[PRIVATE.component] === undefined && this[PRIVATE.options] && this[PRIVATE.options].component) {
+      nrLog.trace(`$onInit(): component set as "${LogUtils.getAsString(this[PRIVATE.options].component)}"`)
       this[PRIVATE.component] = this[PRIVATE.options].component;
     }
 
     if (this[PRIVATE.content] === undefined && this[PRIVATE.options] && this[PRIVATE.options].content) {
+      nrLog.trace(`$onInit(): content set as "${LogUtils.getAsString(this[PRIVATE.options].content)}"`)
       this[PRIVATE.content] = this[PRIVATE.options].content;
     }
 
     if (this[PRIVATE.resolve] === undefined && this[PRIVATE.options] && this[PRIVATE.options].resolve) {
+      nrLog.trace(`$onInit(): resolve set as "${LogUtils.getAsString(this[PRIVATE.options].resolve)}"`)
       this[PRIVATE.resolve] = this[PRIVATE.options].resolve;
     }
 
@@ -308,26 +335,27 @@ class CompileController {
   [PRIVATE.getComponentBindings] (name) {
 
     if (!this[PRIVATE.$injector].has(name + 'Directive')) {
-      //this.$log.log(`Injector did not know about "${name}Directive".`);
+      nrLog.error(`getComponentBindings: Injector did not know about "${name}Directive".`);
       return [];
     }
 
     const definations = this[PRIVATE.$injector].get(name + 'Directive');
     if (!definations) {
-      //this.$log.log(`Result from injector for "${name}Directive" was non-true: "${definations}"`);
+      nrLog.error(`getComponentBindings: Result from injector for "${name}Directive" was non-true: "${definations}"`);
       return [];
     }
 
     const bindToControllers = _.map(_.filter(definations, d => d && d.bindToController), d => d.bindToController);
 
     //if (bindToControllers.length <= 0) {
-      //this.$log.debug(`Defination for "${name}Directive" did not have .bindToController properties: `, definations);
+      //nrLog.trace(`Defination for "${name}Directive" did not have .bindToController properties: `, definations);
     //}
 
     const bindings = _.reduce(bindToControllers, (ret, binds) => _.merge(ret, binds), {});
 
-    //this.$log.debug(`Bindings for "${name}Directive" are: `, bindings);
+    nrLog.trace(`getComponentBindings: Bindings for "${name}Directive" are: `, bindings);
 
+    // noinspection UnnecessaryLocalVariableJS
     const result = _.keys(bindings)
             // { key: 'input', bindings: [ '=foo', '=', 'foo' ] }
             .map(key => ({key, bindings: NG_ATTRIBUTE_REGEXP.exec(bindings[key])}))
@@ -335,7 +363,7 @@ class CompileController {
             // { name: ('foo' || 'input'), type: '=' }
             .map(binding => ({ name: binding.bindings[2] || binding.key, type: binding.bindings[1] }));
 
-    //this.$log.debug(`Result for "${name}Directive" is: `, result);
+    nrLog.trace(`getComponentBindings: Result for "${name}Directive" is: `, result);
 
     return result;
   }
@@ -356,7 +384,7 @@ class CompileController {
           values[index] = this[PRIVATE.$injector].get(arg);
         }
       });
-      return scope.$eval(this[PRIVATE.nrCompileUtils].stringifyExpression(expression), _.zipObject(args, values))
+      return scope.$eval(NrCompileUtils.stringifyExpression(expression), _.zipObject(args, values))
     };
   }
 
@@ -405,17 +433,21 @@ class CompileController {
    */
   [PRIVATE.compileElement] () {
 
+    const componentName = this[PRIVATE.component];
+
+    if (!_.isString(componentName)) {
+      throw new TypeError(`${this.nrName}[PRIVATE.compileElement](): componentName was not a string: ${LogUtils.getAsString(componentName)}`);
+    }
+
+    nrLog.trace('compileElement: componentName: ', componentName);
+
     const scope = this[PRIVATE.$scope].$new();
 
     scope.$resolve = this[PRIVATE.resolve];
 
-    const componentName = this[PRIVATE.component];
-
-    //this.$log.debug('componentName: ', componentName);
-
     const componentBindings = this[PRIVATE.getComponentBindings](componentName);
 
-    //this.$log.debug('componentBindings: ', componentBindings);
+    nrLog.trace('compileElement: componentBindings: ', componentBindings);
 
     const tagName = CompileController.snakeCase(componentName);
 
@@ -444,6 +476,7 @@ class CompileController {
     //  transclude = this[PRIVATE.$transclude]();
     //}
 
+    // noinspection JSUnusedLocalSymbols
     const element = linkFn(scope);
 
     //if (transclude && transclude.length >= 1) {

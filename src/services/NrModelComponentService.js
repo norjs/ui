@@ -53,6 +53,20 @@ export class NrModelComponentService {
             };
         }
 
+        if (NrModelUtils.isTextField(model)) {
+            return {
+                component: NrTag.TEXT_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isPasswordField(model)) {
+            return {
+                component: NrTag.PASSWORD_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
         if (NrModelUtils.isForm(model)) {
             return {
                 component: NrTag.FORM,

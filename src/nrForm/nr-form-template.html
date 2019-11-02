@@ -5,7 +5,7 @@
 
     <nr-compile
         ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
-        options="$ctrl.getItemCompileConfig(item)"
+        nr-options="$ctrl.getItemCompileConfig(item)"
     ></nr-compile>
 
 </section>

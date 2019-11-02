@@ -171,6 +171,24 @@ export class NrModelUtils {
      * @param value {*}
      * @returns {boolean}
      */
+    static isTextField (value) {
+        return !!( value && value instanceof NrTextField );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isPasswordField (value) {
+        return !!( value && value instanceof NrPasswordField );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
     static isModel (value) {
 
         if (value instanceof NrView) return true;
