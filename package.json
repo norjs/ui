@@ -4,7 +4,8 @@
   "description": "Common NorJS frontend components",
   "main": "./src/nrCommonModule.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start",
+    "test-watch": "karma start --auto-watch --no-single-run"
   },
   "repository": {
     "type": "git",
