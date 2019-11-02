@@ -13,8 +13,27 @@ const PRIVATE = {
 	model: Symbol('_model')
 	, submitAction: Symbol('_submitAction')
 	, cancelAction: Symbol('_cancelAction')
+	, items: Symbol('_items')
+	, updateItems: Symbol('_updateItems')
+	, ngForm: Symbol('_ngForm')
 };
 
+/**
+ * @typedef {Object} NrComponentConfigObject
+ * @property {string} component - The component name
+ * @property {Object} resolve - Resolve values
+ */
+
+/**
+ * @typedef {Object} NrFormItemObject
+ * @property {string} id - Unique item id
+ * @property {NrModel} model - The model object
+ * @property {NrComponentConfigObject} config - The nr-component configuration object
+ */
+
+/**
+ *
+ */
 export class NrFormController {
 
 	static getBindings () {
@@ -56,6 +75,19 @@ export class NrFormController {
 		 */
 		this[PRIVATE.cancelAction] = undefined;
 
+		/**
+		 *
+		 * @member {Array.<NrFormItemObject>}
+		 */
+		this[PRIVATE.items] = [];
+
+		/**
+		 *
+		 * @member {angular.IFormController|undefined}
+		 * @private
+		 */
+		this[PRIVATE.ngForm] = undefined;
+
 	}
 
 	$onDestroy () {
@@ -63,6 +95,7 @@ export class NrFormController {
 		this[PRIVATE.model] = undefined;
 		this[PRIVATE.submitAction] = undefined;
 		this[PRIVATE.cancelAction] = undefined;
+		this[PRIVATE.items] = undefined;
 
 	}
 
@@ -77,6 +110,8 @@ export class NrFormController {
 			this[PRIVATE.model] = value;
 
 			nrLog.trace(`Model changed as: `, value);
+
+			this[PRIVATE.updateItems]();
 
 		}
 
@@ -93,27 +128,70 @@ export class NrFormController {
 	}
 
 	getItems () {
-		return this[PRIVATE.model].content;
+		return this[PRIVATE.items];
 	}
 
+	/**
+	 *
+	 * @param item {NrFormItemObject}
+	 * @returns {string}
+	 * @private
+	 */
 	getItemId (item) {
+		return item.id;
+	}
 
-		if (item.id) return `id-${item.id}`;
+	/**
+	 *
+	 * @param item {NrFormItemObject}
+	 * @returns {NrModel}
+	 * @private
+	 */
+	getItemModel (item) {
+		return item.model;
+	}
 
-		if (item.name) return `name-${item.name}`;
+	/**
+	 *
+	 * @param item {NrFormItemObject}
+	 * @returns {NrComponentConfigObject}
+	 */
+	getItemCompileConfig (item) {
 
-		return item;
+		return item.config;
+
+	}
+
+	/**
+	 *
+	 */
+	[PRIVATE.updateItems]() {
+
+		this[PRIVATE.items] = _.map(this[PRIVATE.model].content, item => {
+
+			const config = this._nrModelComponentService.getComponentConfig(item);
+
+			return {
+				id: this._getItemId(item)
+				, model: item
+				, config
+			};
+
+		});
+
+		nrLog.trace(`Internal items array updated: `, this[PRIVATE.items]);
 
 	}
 
 	/**
 	 *
 	 * @param item {NrModel}
-	 * @returns {{component: string, resolve: Object}}
+	 * @private
 	 */
-	getItemCompileConfig (item) {
+	_getItemId (item) {
 
-		return this._nrModelComponentService.getComponentConfig(item);
+		// FIXME: We need an interface for unique id in NrModel
+		return item.id || item.name;
 
 	}
 
@@ -218,6 +296,30 @@ export class NrFormController {
 		} else {
 
 			nrLog.warn(`No cancel callback.`);
+
+		}
+
+	}
+
+	/**
+	 *
+	 * @returns {angular.IFormController|undefined}
+	 */
+	get ngForm () {
+		return this[PRIVATE.ngForm];
+	}
+
+	/**
+	 *
+	 * @param value {angular.IFormController}
+	 */
+	set ngForm (value) {
+
+		if (value !== this[PRIVATE.ngForm]) {
+
+			this[PRIVATE.ngForm] = value;
+
+			nrLog.trace(`AngularJS FormController registered as: `, value);
 
 		}
 

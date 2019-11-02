@@ -5,6 +5,12 @@
  */
 export const NrModuleName = {
     NORJS            : "norjs"
+
+    , APP            : "norjs.app"
+    , APP_VIEWS      : "norjs.app.views"
+    , APP_NAV_VIEW   : "norjs.app.views.nav"
+    , APP_MAIN_VIEW  : "norjs.app.views.main"
+
     , UI             : "norjs.ui"
     , UI_SERVICES    : "norjs.ui.nrServices"
     , COMPILE        : "norjs.ui.nrCompile"

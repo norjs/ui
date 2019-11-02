@@ -4,7 +4,11 @@
  * @readonly
  */
 export const NrTag = {
-    COMPILE        : "nrCompile"
+
+    NAV_VIEW         : "nrNavView"
+    , MAIN_VIEW      : "nrMainView"
+
+    , COMPILE        : "nrCompile"
     , ICON           : "nrIcon"
     , DATE_INPUT     : "nrDateInput"
     , MENU           : "nrMenu"

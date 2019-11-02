@@ -1,27 +1,27 @@
-<header class="form-header">
-    <h3 translate="{{$ctrl.model.label}}"></h3>
-</header>
-<section class="form-body">
-
-    <nr-compile
-        ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
-        nr-options="$ctrl.getItemCompileConfig(item)"
-    ></nr-compile>
-
-</section>
-<footer class="form-footer">
-    <nr-button
-            ng-if="$ctrl.hasCancelAction()"
-            class="nr-cancel"
-            nr-icon="{{'nrForm.cancel.icon'|translate}}"
-            nr-click="$ctrl.cancel()"
-            nr-label="nrForm.cancel.label"
-    ></nr-button>
-    <nr-button
-            nr-enabled="$ctrl.isSubmitEnabled()"
-            class="nr-submit"
-            nr-icon="{{'nrForm.submit.icon'|translate}}"
-            nr-click="$ctrl.submit()"
-            nr-label="nrForm.submit.label"
-    ></nr-button>
-</footer>
+<form name="$ctrl.ngForm">
+    <header class="form-header">
+        <h3 translate="{{$ctrl.model.label}}"></h3>
+    </header>
+    <section class="form-body">
+            <nr-compile
+                ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
+                nr-options="$ctrl.getItemCompileConfig(item)"
+            ></nr-compile>
+    </section>
+    <footer class="form-footer">
+        <nr-button
+                ng-if="$ctrl.hasCancelAction()"
+                class="nr-cancel"
+                nr-icon="{{'nrForm.cancel.icon'|translate}}"
+                nr-click="$ctrl.cancel()"
+                nr-label="nrForm.cancel.label"
+        ></nr-button>
+        <nr-button
+                nr-enabled="$ctrl.isSubmitEnabled()"
+                class="nr-submit"
+                nr-icon="{{'nrForm.submit.icon'|translate}}"
+                nr-click="$ctrl.submit()"
+                nr-label="nrForm.submit.label"
+        ></nr-button>
+    </footer>
+</form>
