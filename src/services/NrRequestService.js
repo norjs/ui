@@ -1,7 +1,6 @@
 import LogUtils from "@norjs/utils/Log";
 import NrServiceName from "../NrServiceName";
 import NrModelUtils from "../../utils/NrModelUtils";
-import {API_PATH_PREFIX} from "../../../work-assistant/client/src/constants";
 import NrRequestHeader from "../../models/NrRequestHeader";
 
 const nrLog = LogUtils.getLogger("NrRequestService");
@@ -11,7 +10,43 @@ const PRIVATE = {
     , q: Symbol('_q')
 };
 
+/**
+ *
+ * @type {string}
+ */
+let API_PATH_PREFIX = '/';
+
 export class NrRequestService {
+
+    /**
+     *
+     * @returns {string}
+     */
+    static get API_PATH_PREFIX () {
+        return API_PATH_PREFIX;
+    }
+
+    /**
+     *
+     * @param value {string}
+     */
+    static set API_PATH_PREFIX (value) {
+
+        if (!_.isString(value)) {
+            throw new TypeError(`set ${this.nrName}.API_PATH_PREFIX: value not a string: ${LogUtils.getAsString(value)}`)
+        }
+
+        API_PATH_PREFIX = value;
+
+    }
+
+    get API_PATH_PREFIX () {
+        return this.Class.API_PATH_PREFIX;
+    }
+
+    set API_PATH_PREFIX (value) {
+        this.Class.API_PATH_PREFIX = value;
+    }
 
     static get nrName () {
         return NrServiceName.REQUEST;
