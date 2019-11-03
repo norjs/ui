@@ -134,15 +134,13 @@ export class NrPasswordInputController extends NrTextInputController {
 
 	}
 
-	// noinspection JSUnusedGlobalSymbols
 	/**
-	 * Handles ngModel controller getter for AngularJS required feature.
 	 *
-	 * @returns {ngModel.ngModelController}
+	 * @returns {string|undefined}
 	 */
-	get ngModelController () {
+	getName () {
 
-		return super.ngModelController;
+		return super.getName();
 
 	}
 
@@ -152,9 +150,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param controller {ngModel.ngModelController}
 	 */
-	set ngModelController (controller) {
+	setNgModelController (controller) {
 
-		super.ngModelController = controller;
+		super.setNgModelController(controller);
 
 	}
 
@@ -290,9 +288,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {string|undefined}
 	 */
-	get nrType () {
+	get bindNrType () {
 
-		return super.nrType;
+		return super.bindNrType;
 
 	}
 
@@ -301,9 +299,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrType (value) {
+	set bindNrType (value) {
 
-		super.nrType = value;
+		super.bindNrType = value;
 
 	}
 
@@ -312,9 +310,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {string|undefined}
 	 */
-	get nrId () {
+	get bindNrId () {
 
-		return super.nrId;
+		return super.bindNrId;
 
 	}
 
@@ -323,9 +321,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrId (value) {
+	set bindNrId (value) {
 
-		super.nrId = value;
+		super.bindNrId = value;
 
 	}
 
@@ -334,9 +332,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {string|undefined}
 	 */
-	get name () {
+	get bindNrName () {
 
-		return super.name;
+		return super.bindNrName;
 
 	}
 
@@ -345,9 +343,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrName (value) {
+	set bindNrName (value) {
 
-		super.nrName = value;
+		super.bindNrName = value;
 
 	}
 
@@ -356,9 +354,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {NrTextField|undefined}
 	 */
-	get nrModel () {
+	get bindNrModel () {
 
-		return super.nrModel;
+		return super.bindNrModel;
 
 	}
 
@@ -367,31 +365,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {NrTextField|undefined}
 	 */
-	set nrModel (value) {
+	set bindNrModel (value) {
 
-		super.nrModel = value;
-
-	}
-
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @returns {string|undefined}
-	 */
-	get nrLabel () {
-
-		return super.nrLabel;
-
-	}
-
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @param value {string|undefined}
-	 */
-	set nrLabel (value) {
-
-		super.nrLabel = value;
+		super.bindNrModel = value;
 
 	}
 
@@ -400,9 +376,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {string|undefined}
 	 */
-	get ngModel () {
+	get bindNrLabel () {
 
-		return super.ngModel;
+		return super.bindNrLabel;
 
 	}
 
@@ -411,9 +387,31 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {string|undefined}
 	 */
-	set ngModel (value) {
+	set bindNrLabel (value) {
 
-		super.ngModel = value;
+		super.bindNrLabel = value;
+
+	}
+
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {string|undefined}
+	 */
+	get bindNgModel () {
+
+		return super.bindNgModel;
+
+	}
+
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {string|undefined}
+	 */
+	set bindNgModel (value) {
+
+		super.bindNgModel = value;
 
 	}
 
@@ -422,9 +420,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {NrFormController|undefined}
 	 */
-	get nrFormController () {
+	get bindNrFormController () {
 
-		return super.nrFormController;
+		return super.bindNrFormController;
 
 	}
 
@@ -433,9 +431,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {NrFormController|undefined}
 	 */
-	set nrFormController (value) {
+	set bindNrFormController (value) {
 
-		super.nrFormController = value;
+		super.bindNrFormController = value;
 
 	}
 

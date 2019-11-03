@@ -9,11 +9,13 @@ import nrDialogModule from "./nrDialog/nrDialogModule";
 import nrFormModule from "./nrForm/nrFormModule";
 import nrMessageModule from "./nrMessage/nrMessageModule";
 import nrServicesModule from "./services/nrServicesModule";
+import nrDirectivesModule from "./nrDirectives/nrDirectivesModule";
 
 export const nrCommonModule = angular.module(
 	NrModuleName.UI
 	, [
 		nrServicesModule
+		, nrDirectivesModule
 		, nrCompileModule
 		, nrIconModule
 		, nrCommonInputModule

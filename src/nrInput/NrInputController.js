@@ -22,6 +22,14 @@ export class NrInputController {
 	get nrName () {}
 
 	/**
+	 *
+	 * @returns {string}
+	 */
+	toString () {
+		return `${this.nrName}[name=${LogUtils.getAsString(this.getName())}]`;
+	}
+
+	/**
 	 * This will be used from the template.
 	 *
 	 * Defaults to `true`. You can override this.
@@ -38,6 +46,16 @@ export class NrInputController {
 	 * @abstract
 	 */
 	getLabel () {}
+
+	/**
+	 * Returns the name of the form field.
+	 *
+	 * This is also used as the keyword path to the payload in form's payload object.
+	 *
+	 * @returns {string|undefined}
+	 * @abstract
+	 */
+	getName () {}
 
 	/**
 	 * @returns {boolean}
@@ -71,6 +89,15 @@ export class NrInputController {
 	 */
 	onNgModelRender () {}
 
+	/**
+	 * Sets NgModelController
+	 *
+	 * See also nrRegisterNgModelDirective
+	 *
+	 * @param controller {ngModel.ngModelController}
+	 * @abstract
+	 */
+	setNgModelController (controller) {}
 
 	/**
 	 * Returns true if we already have AngularJS angular.INgModelController registered.
@@ -87,6 +114,24 @@ export class NrInputController {
 	 * @abstract
 	 */
 	getNgModelController () {}
+
+	/**
+	 *
+	 * @returns {*|undefined}
+	 */
+	getModelValue () {
+
+		const ngModelController = this.getNgModelController();
+
+		if (!ngModelController) {
+			nrLog.warn(`${this.nrName}.getModelValue(): No ngModelController detected.`);
+			return undefined;
+
+		}
+
+		return ngModelController.$modelValue;
+
+	}
 
 	/**
 	 *

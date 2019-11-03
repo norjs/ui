@@ -47,15 +47,17 @@ export class NrForm extends NrView {
 
     /**
      *
-     * @param label {string}
-     * @param icon {NrIcon}
-     * @param submit {NrModel}
-     * @param cancel {NrModel}
-     * @param content {Array.<NrView>}
+     * @param label {string}  The label of the form
+     * @param icon {NrIcon} Icon for form
+     * @param payload {Object} The payload object (eg. form field data object)
+     * @param submit {NrModel} The submit action
+     * @param cancel {NrModel} The cancel action
+     * @param content {Array.<NrView>} Form fields
      */
     constructor ({
         label = undefined
         , icon = undefined
+        , payload = undefined
         , submit = undefined
         , cancel = undefined
         , content = []
@@ -67,6 +69,10 @@ export class NrForm extends NrView {
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
             throw new TypeError(`new ${NrForm.nrName}(): icon invalid: "${icon}"`);
+        }
+
+        if ( payload !== undefined && !_.isObject(payload) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): payload invalid: "${payload}"`);
         }
 
         if ( submit !== undefined && !NrModelUtils.isModel(submit) ) {
@@ -90,6 +96,13 @@ export class NrForm extends NrView {
          * @protected
          */
         this._label = label;
+
+        /**
+         *
+         * @member {Object|undefined}
+         * @protected
+         */
+        this._payload = payload;
 
         /**
          *
@@ -139,6 +152,14 @@ export class NrForm extends NrView {
 
     /**
      *
+     * @returns {Object}
+     */
+    get payload () {
+        return this._payload;
+    }
+
+    /**
+     *
      * @returns {NrIcon}
      */
     get icon () {
@@ -180,6 +201,7 @@ export class NrForm extends NrView {
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
             , submit: this._submit
             , cancel: this._cancel
+            , payload: this._payload
             , content: _.map(this._content, item => item.valueOf())
         };
     }
@@ -206,6 +228,7 @@ export class NrForm extends NrView {
             , submit
             , cancel
             , content
+            , payload
         } = value;
 
         if ( type !== NrObjectType.FORM ) {
@@ -220,6 +243,7 @@ export class NrForm extends NrView {
         return new NrForm({
               label     : !_.isNil(label)    ? label                            : undefined
             , icon      : !_.isNil(icon)     ? NrIcon.parseValue(icon)          : undefined
+            , payload      : !_.isNil(payload)     ? payload                             : undefined
             , submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
             , cancel    : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
             , content   : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined

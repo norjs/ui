@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import LogUtils from "@norjs/utils/Log";
+import {NrInputController} from "../nrInput/NrInputController";
+import NrTag from "../NrTag";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger('nrFormController');
@@ -10,12 +12,16 @@ const nrLog = LogUtils.getLogger('nrFormController');
  * @readonly
  */
 const PRIVATE = {
-	nrModel: Symbol('_nrModel')
-	, submitAction: Symbol('_submitAction')
-	, cancelAction: Symbol('_cancelAction')
-	, items: Symbol('_items')
-	, updateItems: Symbol('_updateItems')
-	, ngForm: Symbol('_ngForm')
+	nrModel                   : Symbol('_nrModel')
+	, nrModelComponentService : Symbol('_nrModelComponentService')
+	, submitAction            : Symbol('_submitAction')
+	, cancelAction            : Symbol('_cancelAction')
+	, items                   : Symbol('_items')
+	, updateItems             : Symbol('_updateItems')
+	, ngFormController        : Symbol('_ngForm')
+	, fieldControllers        : Symbol('_fieldControllers')
+	, getFieldValues          : Symbol('_getFieldValues')
+	, getItemId               : Symbol('_getItemId')
 };
 
 /**
@@ -36,11 +42,39 @@ const PRIVATE = {
  */
 export class NrFormController {
 
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	static get nrName () {
+		return NrTag.FORM;
+	}
+
+	/**
+	 *
+	 * @returns {NrTag|string}
+	 */
+	get nrName () {
+		return this.Class.nrName;
+	}
+
+	/**
+	 *
+	 * @returns {typeof NrFormController}
+	 */
+	get Class () {
+		return NrFormController;
+	}
+
+	/**
+	 *
+	 * @returns {{bindNrModel: string, bindCancelAction: string, bindSubmitAction: string}}
+	 */
 	static getBindings () {
 		return {
-			model: "<nrModel"
-			, submitAction: "&?nrSubmit"
-			, cancelAction: "&?nrCancel"
+			bindNrModel: "<nrModel"
+			, bindSubmitAction: "&?nrSubmit"
+			, bindCancelAction: "&?nrCancel"
 		};
 	}
 
@@ -52,10 +86,10 @@ export class NrFormController {
 
 		/**
 		 *
-		 * @member {NrModelComponentService}
+		 * @member {NrModelComponentService|undefined}
 		 * @private
 		 */
-		this._nrModelComponentService = nrModelComponentService;
+		this[PRIVATE.nrModelComponentService] = nrModelComponentService;
 
 		/**
 		 *
@@ -83,27 +117,39 @@ export class NrFormController {
 
 		/**
 		 *
+		 * @member {Array<NrInputController>}
+		 */
+		this[PRIVATE.fieldControllers] = [];
+
+		/**
+		 *
 		 * @member {angular.IFormController|undefined}
 		 * @private
 		 */
-		this[PRIVATE.ngForm] = undefined;
+		this[PRIVATE.ngFormController] = undefined;
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	$onDestroy () {
 
+		this[PRIVATE.nrModelComponentService] = undefined;
 		this[PRIVATE.nrModel] = undefined;
 		this[PRIVATE.submitAction] = undefined;
 		this[PRIVATE.cancelAction] = undefined;
 		this[PRIVATE.items] = undefined;
+		this[PRIVATE.fieldControllers] = undefined;
+		this[PRIVATE.ngFormController] = undefined;
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
+	 * AngularJS binds to this through bindings.
 	 *
 	 * @param value {NrForm | undefined}
 	 */
-	set model (value) {
+	set bindNrModel (value) {
 
 		if (this[PRIVATE.nrModel] !== value) {
 
@@ -117,11 +163,13 @@ export class NrFormController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
+	 * AngularJS binds to this through bindings.
 	 *
 	 * @returns {NrForm|undefined}
 	 */
-	get model () {
+	get bindNrModel () {
 
 		return this[PRIVATE.nrModel];
 
@@ -147,6 +195,18 @@ export class NrFormController {
 
 	}
 
+	/**
+	 *
+	 * @returns {string|undefined}
+	 */
+	getLabel () {
+		return this[PRIVATE.nrModel] ? this[PRIVATE.nrModel].label : undefined;
+	}
+
+	/**
+	 *
+	 * @returns {Array.<NrFormItemObject>}
+	 */
 	getItems () {
 		return this[PRIVATE.items];
 	}
@@ -158,7 +218,9 @@ export class NrFormController {
 	 * @private
 	 */
 	getItemId (item) {
+
 		return item.id;
+
 	}
 
 	/**
@@ -168,10 +230,14 @@ export class NrFormController {
 	 * @private
 	 */
 	getItemModel (item) {
+
 		return item.model;
+
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
+	 * Called from the template
 	 *
 	 * @param item {NrFormItemObject}
 	 * @returns {NrComponentConfigObject}
@@ -182,46 +248,13 @@ export class NrFormController {
 
 	}
 
-	/**
-	 *
-	 */
-	[PRIVATE.updateItems]() {
-
-		this[PRIVATE.items] = _.map(this[PRIVATE.nrModel].content, item => {
-
-			const config = this._nrModelComponentService.getComponentConfig(item);
-
-			return {
-				id: this._getItemId(item)
-				, model: item
-				, config
-			};
-
-		});
-
-		nrLog.trace(`Internal items array updated: `, this[PRIVATE.items]);
-
-	}
-
-	/**
-	 *
-	 * @param item {NrModel}
-	 * @private
-	 */
-	_getItemId (item) {
-
-		// FIXME: We need an interface for unique id in NrModel
-		return item.id || item.name;
-
-	}
-
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS binding uses this.
 	 *
 	 * @param value {Function | undefined}
 	 */
-	set submitAction (value) {
+	set bindSubmitAction (value) {
 
 		this[PRIVATE.submitAction] = value;
 
@@ -233,7 +266,7 @@ export class NrFormController {
 	 *
 	 * @returns {Function|undefined}
 	 */
-	get submitAction () {
+	get bindSubmitAction () {
 
 		return this[PRIVATE.submitAction];
 
@@ -245,7 +278,7 @@ export class NrFormController {
 	 *
 	 * @param value {Function | undefined}
 	 */
-	set cancelAction (value) {
+	set bindCancelAction (value) {
 
 		this[PRIVATE.cancelAction] = value;
 
@@ -257,7 +290,7 @@ export class NrFormController {
 	 *
 	 * @returns {Function|undefined}
 	 */
-	get cancelAction () {
+	get bindCancelAction () {
 
 		return this[PRIVATE.cancelAction];
 
@@ -271,12 +304,16 @@ export class NrFormController {
 		return _.isFunction(this[PRIVATE.cancelAction]);
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
+	 * Called from the template
 	 *
 	 * @returns {boolean}
 	 */
 	isSubmitEnabled () {
+
 		return _.isFunction(this[PRIVATE.submitAction]);
+
 	}
 
 	/**
@@ -290,6 +327,7 @@ export class NrFormController {
 
 			this[PRIVATE.submitAction]({
 				nrModel: this[PRIVATE.nrModel]
+				, payload: this.getModifiedPayload()
 			});
 
 		} else {
@@ -310,7 +348,8 @@ export class NrFormController {
 		if (_.isFunction(this[PRIVATE.cancelAction])) {
 
 			this[PRIVATE.cancelAction]({
-				nrModel  : this[PRIVATE.nrModel]
+				nrModel : this[PRIVATE.nrModel]
+				, payload: this.getModifiedPayload()
 			});
 
 		} else {
@@ -322,26 +361,176 @@ export class NrFormController {
 	}
 
 	/**
+	 * AngularJS calls this from template (see `<form name="$ctrl.bindNgFormController">`).
 	 *
 	 * @returns {angular.IFormController|undefined}
 	 */
-	get ngForm () {
-		return this[PRIVATE.ngForm];
+	get bindNgFormController () {
+		return this[PRIVATE.ngFormController];
 	}
 
 	/**
+	 * AngularJS calls this from template (see `<form name="$ctrl.bindNgFormController">`).
 	 *
 	 * @param value {angular.IFormController}
 	 */
-	set ngForm (value) {
+	set bindNgFormController (value) {
 
-		if (value !== this[PRIVATE.ngForm]) {
+		if (value !== this[PRIVATE.ngFormController]) {
 
-			this[PRIVATE.ngForm] = value;
+			this[PRIVATE.ngFormController] = value;
 
 			nrLog.trace(`AngularJS FormController registered as: `, value);
 
 		}
+
+	}
+
+	/**
+	 *
+	 * @param fieldController {NrInputController}
+	 */
+	hasFieldController (fieldController) {
+
+		return _.some(this[PRIVATE.fieldControllers], c => c === fieldController);
+
+	}
+
+	/**
+	 *
+	 * @param fieldController {NrInputController}
+	 */
+	registerFieldController (fieldController) {
+
+		if (fieldController instanceof NrInputController) {
+
+			if (this.hasFieldController(fieldController)) {
+				throw new TypeError(`${this.nrName}.registerFieldController(): Field controller already registered: ${fieldController}`);
+			}
+
+			this[PRIVATE.fieldControllers].push(fieldController);
+
+			nrLog.trace(`.unregisterFieldController(): Registered field controller "${fieldController}"`)
+
+		} else {
+
+			nrLog.warn(`.registerFieldController(): Not a field controller: `, fieldController);
+
+		}
+
+	}
+
+	/**
+	 *
+	 * @param fieldController {NrInputController}
+	 */
+	unregisterFieldController (fieldController) {
+
+		if (fieldController instanceof NrInputController) {
+
+			_.remove(this[PRIVATE.fieldControllers], c => c === fieldController);
+
+			nrLog.trace(`.unregisterFieldController(): Unregistered field controller "${fieldController}"`)
+
+		} else {
+
+			nrLog.warn(`.unregisterFieldController(): Not a field controller: `, fieldController);
+
+		}
+
+	}
+
+	/**
+	 *
+	 * @returns {Object}
+	 */
+	getOriginalPayload () {
+
+		return this[PRIVATE.nrModel].payload;
+
+	}
+
+	/**
+	 * Returns an object with original payload and changes merged as one.
+	 *
+	 * @returns {Object}
+	 */
+	getModifiedPayload () {
+
+		const originalPayload = this[PRIVATE.nrModel].payload || {};
+
+		const modifiedValues = this[PRIVATE.getFieldValues]();
+
+		return _.merge({}, originalPayload, modifiedValues);
+
+	}
+
+	/**
+	 *
+	 * @private
+	 */
+	[PRIVATE.updateItems]() {
+
+		this[PRIVATE.items] = _.map(
+			this[PRIVATE.nrModel].content,
+			item => {
+
+				const config = this[PRIVATE.nrModelComponentService].getComponentConfig(item);
+
+				return {
+					id: this[PRIVATE.getItemId](item)
+					, model: item
+					, config
+				};
+
+			});
+
+		nrLog.trace(`Internal items array updated: `, this[PRIVATE.items]);
+
+	}
+
+	/**
+	 *
+	 * @param item {NrModel}
+	 * @private
+	 */
+	[PRIVATE.getItemId] (item) {
+
+		// FIXME: We need an interface for unique id in NrModel
+		return item.id || item.name;
+
+	}
+
+	/**
+	 *
+	 * @returns {Object}
+	 * @private
+	 */
+	[PRIVATE.getFieldValues] (item) {
+
+		const values = {};
+
+		_.each(
+
+			this[PRIVATE.fieldControllers],
+
+			/**
+			 *
+			 * @param fieldController {NrInputController}
+			 */
+			fieldController => {
+
+				const name = fieldController.getName();
+
+				const value = fieldController.getModelValue();
+
+				_.set(values, name, value);
+
+			}
+
+		);
+
+		return values;
 
 	}
 

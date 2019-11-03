@@ -67,12 +67,11 @@ export class NrTextInputController extends NrInputController {
 	 */
 	static getComponentBindings () {
 		return {
-			nrType: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
-			, nrId: `@?${NrAttribute.ID}` // FIXME: This is not used?
-			, nrName: `@?${NrAttribute.NAME}` // FIXME: This is not used?
-			, nrModel: `<?${NrAttribute.MODEL}`
-			, nrLabel: `@?${NrAttribute.LABEL}`
-			, ngModel: `=?${NgAttribute.MODEL}`
+			bindNrType: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
+			, bindNrId: `@?${NrAttribute.ID}` // FIXME: This is not used?
+			, bindNrName: `@?${NrAttribute.NAME}`
+			, bindNrModel: `<?${NrAttribute.MODEL}`
+			, bindNrLabel: `@?${NrAttribute.LABEL}`
 		};
 	}
 
@@ -82,8 +81,7 @@ export class NrTextInputController extends NrInputController {
 	 */
 	static getComponentRequire () {
 		return {
-			nrFormController: `?^^${NrTag.FORM}`,
-			ngModelController: `?^${NgAttribute.MODEL}`
+			bindNrFormController: `?^^${NrTag.FORM}`
 		};
 	}
 
@@ -203,8 +201,13 @@ export class NrTextInputController extends NrInputController {
 
 	$onDestroy () {
 
+		if (this[PRIVATE.nrFormController]) {
+			this[PRIVATE.nrFormController].unregisterFieldController(this);
+			this[PRIVATE.nrFormController] = undefined;
+		}
+
 		this[PRIVATE.$element] = undefined;
-		this[PRIVATE.nrFormController] = undefined;
+
 		this[PRIVATE.ngModelController] = undefined;
 
 	}
@@ -258,14 +261,18 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
-	// noinspection JSUnusedGlobalSymbols
 	/**
-	 * Handles ngModel controller getter for AngularJS required feature.
 	 *
-	 * @returns {ngModel.ngModelController}
+	 * @returns {string|undefined}
 	 */
-	get ngModelController () {
-		return this[PRIVATE.ngModelController];
+	getName () {
+
+		if (this[PRIVATE.name]) {
+			return this[PRIVATE.name];
+		}
+
+		return this[PRIVATE.nrModel] ? this[PRIVATE.nrModel].name : undefined;
+
 	}
 
 	// noinspection JSUnusedGlobalSymbols
@@ -274,16 +281,30 @@ export class NrTextInputController extends NrInputController {
 	 *
 	 * @param controller {ngModel.ngModelController}
 	 */
-	set ngModelController (controller) {
+	setNgModelController (controller) {
+
+		nrLog.trace(`${this.nrName}: setNgModelController(): controller = `, controller);
+
 		if (controller) {
 
 			this[PRIVATE.ngModelController] = controller;
 
 			this[PRIVATE.ngModelController].$render = () => this.onNgModelRender();
 
+			nrLog.trace(`${this.nrName}: setNgModelController(): Installed ngModelController: `, controller);
+
 		} else if (this[PRIVATE.ngModelController]) {
+
 			this[PRIVATE.ngModelController] = undefined;
+
+			nrLog.trace(`${this.nrName}: setNgModelController(): Removed ngModelController`);
+
+		} else {
+
+			nrLog.warn(`${this.nrName}: setNgModelController(): ngModelController was already removed`);
+
 		}
+
 	}
 
 	/**
@@ -327,9 +348,16 @@ export class NrTextInputController extends NrInputController {
 
 		const ngModelController = this.getNgModelController();
 
-		ngModelController.$setViewValue(value, trigger);
+		if (ngModelController) {
 
-		ngModelController.$setDirty();
+			ngModelController.$setViewValue(value, trigger);
+			ngModelController.$setDirty();
+
+		} else {
+
+			nrLog.warn(`${this.nrName}.setViewValue(): No ngModelController found!`);
+
+		}
 
 	}
 
@@ -348,7 +376,9 @@ export class NrTextInputController extends NrInputController {
 	 * Called from the template when inner nrInput element changes model value, eg. our inner view value.
 	 */
 	onChange () {
+
 		this.setViewValue(this.innerViewValue, undefined);
+
 	}
 
 	/**
@@ -417,21 +447,23 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {string|undefined}
 	 */
-	get nrType () {
+	get bindNrType () {
 		return this[PRIVATE.type];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrType (value) {
+	set bindNrType (value) {
 
 		if (this[PRIVATE.type] !== value) {
 			this[PRIVATE.type] = value;
@@ -439,21 +471,23 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {string|undefined}
 	 */
-	get nrId () {
+	get bindNrId () {
 		return this[PRIVATE.id];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrId (value) {
+	set bindNrId (value) {
 
 		if (this[PRIVATE.id] !== value) {
 			this[PRIVATE.id] = value;
@@ -461,21 +495,25 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {string|undefined}
 	 */
-	get name () {
+	get bindNrName () {
+
 		return this[PRIVATE.name];
+
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrName (value) {
+	set bindNrName (value) {
 
 		if (this[PRIVATE.name] !== value) {
 			this[PRIVATE.name] = value;
@@ -483,49 +521,53 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {NrTextField|undefined}
 	 */
-	get nrModel () {
+	get bindNrModel () {
 
 		return this[PRIVATE.nrModel];
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {NrTextField|undefined}
 	 */
-	set nrModel (value) {
+	set bindNrModel (value) {
 
 		if (this[PRIVATE.nrModel] !== value) {
 
 			this[PRIVATE.nrModel] = value;
 
-			nrLog.trace(`${this.nrName}[set nrModel]: Model set as `, value);
+			nrLog.trace(`${this.nrName}[set bindNrModel]: Model set as `, value);
 
 		}
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {string|undefined}
 	 */
-	get nrLabel () {
+	get bindNrLabel () {
 		return this[PRIVATE.label];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {string|undefined}
 	 */
-	set nrLabel (value) {
+	set bindNrLabel (value) {
 
 		if (this[PRIVATE.label] !== value) {
 			this[PRIVATE.label] = value;
@@ -533,21 +575,23 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {string|undefined}
 	 */
-	get ngModel () {
+	get bindNgModel () {
 		return this[PRIVATE.ngModel];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {string|undefined}
 	 */
-	set ngModel (value) {
+	set bindNgModel (value) {
 
 		if (this[PRIVATE.ngModel] !== value) {
 
@@ -557,24 +601,37 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @returns {NrFormController|undefined}
 	 */
-	get nrFormController () {
+	get bindNrFormController () {
 		return this[PRIVATE.nrFormController];
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
 	 * @param value {NrFormController|undefined}
 	 */
-	set nrFormController (value) {
+	set bindNrFormController (value) {
 
 		if (this[PRIVATE.nrFormController] !== value) {
+
+			if (this[PRIVATE.nrFormController]) {
+				this[PRIVATE.nrFormController].unregisterFieldController(this);
+				this[PRIVATE.nrFormController] = undefined;
+			}
+
 			this[PRIVATE.nrFormController] = value;
+
+			nrLog.trace(`nrFormController set as: `, value);
+
+			this[PRIVATE.nrFormController].registerFieldController(this);
+
 		}
 
 	}

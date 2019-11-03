@@ -13,6 +13,7 @@ export const NrModuleName = {
 
     , UI             : "norjs.ui"
     , UI_SERVICES    : "norjs.ui.nrServices"
+    , UI_DIRECTIVES  : "norjs.ui.nrDirectives"
     , COMPILE        : "norjs.ui.nrCompile"
     , ICON           : "norjs.ui.nrIcon"
     , INPUT          : "norjs.ui.nrInput"

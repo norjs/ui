@@ -1,4 +1,4 @@
-<form name="$ctrl.ngForm">
+<form name="$ctrl.bindNgFormController">
     <header class="form-header">
 
         <nr-icon class="icon"
@@ -7,14 +7,14 @@
         ></nr-icon>
 
         <h3 class="label"
-            translate="{{$ctrl.model.label}}"></h3>
+            translate="{{$ctrl.getLabel()}}"></h3>
 
     </header>
     <section class="form-body">
-            <nr-compile
-                ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
-                nr-options="$ctrl.getItemCompileConfig(item)"
-            ></nr-compile>
+        <nr-compile
+            ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
+            nr-options="$ctrl.getItemCompileConfig(item)"
+        ></nr-compile>
     </section>
     <footer class="form-footer">
         <nr-button

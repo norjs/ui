@@ -195,7 +195,7 @@ export class NrRequest {
             method: this._method,
             session: this._session ? this._session.valueOf() : null,
             params: this._params ? this._params : null,
-            payload: this._payload ? NrModelUtils.valueOf(this._payload) : null
+            payload: this._payload ? (NrModelUtils.isModel(this._payload) ? NrModelUtils.valueOf(this._payload) : _.cloneDeep(this._payload)) : null
         };
     }
 
@@ -233,8 +233,24 @@ export class NrRequest {
             method  : !_.isNil(method)  ? method   : undefined,
             params  : !_.isNil(params)  ? params   : undefined,
             session : !_.isNil(session) ? NrSession.parseValue(session)    : undefined,
-            payload : !_.isNil(payload) ? NrModelUtils.parseValue(payload) : undefined
+            payload : !_.isNil(payload) ? (NrModelUtils.isModel(payload) ? NrModelUtils.parseValue(payload) : _.cloneDeep(payload)) : undefined
         });
+
+    }
+
+    /**
+     *
+     * @param model {NrRequest} The request model
+     * @param payload {Object} The new payload value
+     * @returns {NrRequest}
+     */
+    static copyWithModifiedPayload (model, payload) {
+
+        let modifiedModelValue = model.valueOf();
+
+        modifiedModelValue.payload = payload;
+
+        return NrRequest.parseValue(modifiedModelValue);
 
     }
 

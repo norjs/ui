@@ -272,9 +272,20 @@ export class NrTextareaController extends NrInputController {
 	 * @param trigger {string} Event that triggered the update.
 	 */
 	setViewValue (value, trigger) {
+
 		const ngModelController = this.getNgModelController();
-		ngModelController.$setViewValue(value, trigger);
-		ngModelController.$setDirty();
+
+		if (ngModelController) {
+
+			ngModelController.$setViewValue(value, trigger);
+			ngModelController.$setDirty();
+
+		} else {
+
+			nrLog.warn(`.setViewValue(): No ngModelController found!`);
+
+		}
+
 	}
 
 
