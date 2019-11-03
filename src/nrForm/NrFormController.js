@@ -10,7 +10,7 @@ const nrLog = LogUtils.getLogger('nrFormController');
  * @readonly
  */
 const PRIVATE = {
-	model: Symbol('_model')
+	nrModel: Symbol('_nrModel')
 	, submitAction: Symbol('_submitAction')
 	, cancelAction: Symbol('_cancelAction')
 	, items: Symbol('_items')
@@ -61,7 +61,7 @@ export class NrFormController {
 		 *
 		 * @member {NrForm | undefined}
 		 */
-		this[PRIVATE.model] = undefined;
+		this[PRIVATE.nrModel] = undefined;
 
 		/**
 		 *
@@ -92,7 +92,7 @@ export class NrFormController {
 
 	$onDestroy () {
 
-		this[PRIVATE.model] = undefined;
+		this[PRIVATE.nrModel] = undefined;
 		this[PRIVATE.submitAction] = undefined;
 		this[PRIVATE.cancelAction] = undefined;
 		this[PRIVATE.items] = undefined;
@@ -105,9 +105,9 @@ export class NrFormController {
 	 */
 	set model (value) {
 
-		if (this[PRIVATE.model] !== value) {
+		if (this[PRIVATE.nrModel] !== value) {
 
-			this[PRIVATE.model] = value;
+			this[PRIVATE.nrModel] = value;
 
 			nrLog.trace(`Model changed as: `, value);
 
@@ -123,7 +123,27 @@ export class NrFormController {
 	 */
 	get model () {
 
-		return this[PRIVATE.model];
+		return this[PRIVATE.nrModel];
+
+	}
+
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	hasIconValue () {
+
+		return !!(this[PRIVATE.nrModel] && this[PRIVATE.nrModel].icon && this[PRIVATE.nrModel].icon.value);
+
+	}
+
+	/**
+	 *
+	 * @returns {NrIconValue|string|undefined}
+	 */
+	getIconValue () {
+
+		return this[PRIVATE.nrModel] && this[PRIVATE.nrModel].icon ? this[PRIVATE.nrModel].icon.value : undefined;
 
 	}
 
@@ -167,7 +187,7 @@ export class NrFormController {
 	 */
 	[PRIVATE.updateItems]() {
 
-		this[PRIVATE.items] = _.map(this[PRIVATE.model].content, item => {
+		this[PRIVATE.items] = _.map(this[PRIVATE.nrModel].content, item => {
 
 			const config = this._nrModelComponentService.getComponentConfig(item);
 
@@ -269,7 +289,7 @@ export class NrFormController {
 			nrLog.trace(`Submit clicked`);
 
 			this[PRIVATE.submitAction]({
-				nrModel: this[PRIVATE.model]
+				nrModel: this[PRIVATE.nrModel]
 			});
 
 		} else {
@@ -290,7 +310,7 @@ export class NrFormController {
 		if (_.isFunction(this[PRIVATE.cancelAction])) {
 
 			this[PRIVATE.cancelAction]({
-				nrModel  : this[PRIVATE.model]
+				nrModel  : this[PRIVATE.nrModel]
 			});
 
 		} else {

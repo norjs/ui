@@ -1,3 +1,6 @@
+$dialog-label-color: #707076;
+$dialog-label-background-color: #f0f0f6;
+
 $dialog-border-size: 2px;
 $dialog-border-style: solid;
 $dialog-border-color: #f0f0f6;
@@ -11,14 +14,27 @@ nr-confirm-dialog {
   padding: 0;
   max-width: 40em;
 
-  & > header {
+  & > .confirm-dialog-header {
 
-    padding: 0.5em 1em;
+    display: flex;
     border-bottom: $dialog-border-size $dialog-border-style $dialog-border-color;
-    color: #333355;
-    background-color: #f0f0f6;
+    background-color: $dialog-label-background-color;
 
-    & > h3 {
+    & > .icon {
+
+      display: block;
+      color: $dialog-label-color;
+      border-right: $dialog-border-size $dialog-border-style $dialog-border-color;
+      font-size: 1.5em;
+      padding: 0.2em 0 0.2em 0.4em;
+
+    }
+
+    & > .label {
+
+      flex: 1;
+      color: $dialog-label-color;
+      padding: 0.5em;
 
     }
 

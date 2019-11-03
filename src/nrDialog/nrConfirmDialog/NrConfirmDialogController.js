@@ -10,7 +10,7 @@ const nrLog = LogUtils.getLogger('nrConfirmDialogController');
  * @readonly
  */
 const PRIVATE = {
-	model: Symbol('_model')
+	nrModel: Symbol('_nrModel')
 	, acceptAction: Symbol('_acceptAction')
 	, cancelAction: Symbol('_cancelAction')
 };
@@ -34,7 +34,7 @@ export class NrConfirmDialogController {
 		 *
 		 * @member {NrConfirmDialog | undefined}
 		 */
-		this[PRIVATE.model] = undefined;
+		this[PRIVATE.nrModel] = undefined;
 
 		/**
 		 *
@@ -50,9 +50,10 @@ export class NrConfirmDialogController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	$onDestroy () {
 
-		this[PRIVATE.model] = undefined;
+		this[PRIVATE.nrModel] = undefined;
 		this[PRIVATE.acceptAction] = undefined;
 		this[PRIVATE.cancelAction] = undefined;
 
@@ -64,9 +65,9 @@ export class NrConfirmDialogController {
 	 */
 	set model (value) {
 
-		if (this[PRIVATE.model] !== value) {
+		if (this[PRIVATE.nrModel] !== value) {
 
-			this[PRIVATE.model] = value;
+			this[PRIVATE.nrModel] = value;
 
 			nrLog.trace(`Model changed as: `, value);
 
@@ -80,7 +81,27 @@ export class NrConfirmDialogController {
 	 */
 	get model () {
 
-		return this[PRIVATE.model];
+		return this[PRIVATE.nrModel];
+
+	}
+
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	hasIconValue () {
+
+		return !!(this[PRIVATE.nrModel] && this[PRIVATE.nrModel].icon && this[PRIVATE.nrModel].icon.value);
+
+	}
+
+	/**
+	 *
+	 * @returns {NrIconValue|string|undefined}
+	 */
+	getIconValue () {
+
+		return this[PRIVATE.nrModel] && this[PRIVATE.nrModel].icon ? this[PRIVATE.nrModel].icon.value : undefined;
 
 	}
 
@@ -158,7 +179,7 @@ export class NrConfirmDialogController {
 			nrLog.trace(`Accept clicked`);
 
 			this[PRIVATE.acceptAction]({
-				nrModel: this[PRIVATE.model]
+				nrModel: this[PRIVATE.nrModel]
 			});
 
 		} else {
@@ -179,7 +200,7 @@ export class NrConfirmDialogController {
 		if (_.isFunction(this[PRIVATE.cancelAction])) {
 
 			this[PRIVATE.cancelAction]({
-				nrModel  : this[PRIVATE.model]
+				nrModel  : this[PRIVATE.nrModel]
 			});
 
 		} else {

@@ -120,7 +120,11 @@ export class NrInfoMessage extends NrMessage {
             return value;
         }
 
-        const { type, label, icon } = value;
+        const {
+            type
+            , label
+            , icon
+        } = value;
 
         if ( type !== NrObjectType.INFO_MESSAGE ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);

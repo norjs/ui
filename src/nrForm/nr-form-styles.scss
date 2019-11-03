@@ -1,3 +1,6 @@
+$form-label-color: #707076;
+$form-label-background-color: #f0f0f6;
+
 $form-border-size: 2px;
 $form-border-style: solid;
 $form-border-color: #f0f0f6;
@@ -16,10 +19,27 @@ nr-form {
 
     & > .form-header {
 
-      padding: 0.5em 1em;
+      display: flex;
       border-bottom: $form-border-size $form-border-style $form-border-color;
-      color: #707076;
-      background-color: #f0f0f6;
+      background-color: $form-label-background-color;
+
+      & > .icon {
+
+        display: block;
+        color: $form-label-color;
+        border-right: $form-border-size $form-border-style $form-border-color;
+        font-size: 1.5em;
+        padding: 0.2em 0 0.2em 0.4em;
+
+      }
+
+      & > .label {
+
+        flex: 1;
+        color: $form-label-color;
+        padding: 0.5em;
+
+      }
 
     }
 

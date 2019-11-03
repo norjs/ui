@@ -13,8 +13,11 @@ export const NrIconValue = {
     , EXCLAMATION_CIRCLE : "exclamation-circle"
     , USER               : "user"
     , KEY                : "key"
+    , TAGS               : "tags"
     , UNLOCK             : "unlock-alt"
     , PASSWORD           : "unlock-alt"
+    , LOGIN              : "sign-in"
+    , LOGOUT             : "sign-out"
 
 };
 

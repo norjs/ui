@@ -1,6 +1,14 @@
 <form name="$ctrl.ngForm">
     <header class="form-header">
-        <h3 translate="{{$ctrl.model.label}}"></h3>
+
+        <nr-icon class="icon"
+                 ng-if="$ctrl.hasIconValue()"
+                 nr-type="{{$ctrl.getIconValue()}}"
+        ></nr-icon>
+
+        <h3 class="label"
+            translate="{{$ctrl.model.label}}"></h3>
+
     </header>
     <section class="form-body">
             <nr-compile

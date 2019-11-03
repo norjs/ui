@@ -2,6 +2,7 @@ import _ from 'lodash';
 import NrObjectType from "../NrObjectType";
 import NrView from "./NrView";
 import NrModelUtils from "../../utils/NrModelUtils";
+import NrIcon from "../NrIcon";
 
 /**
  *
@@ -46,17 +47,27 @@ export class NrForm extends NrView {
 
     /**
      *
+     * @param label {string}
+     * @param icon {NrIcon}
      * @param submit {NrModel}
      * @param cancel {NrModel}
-     * @param label {string}
      * @param content {Array.<NrView>}
      */
     constructor ({
-        submit = undefined
+        label = undefined
+        , icon = undefined
+        , submit = undefined
         , cancel = undefined
-        , label = undefined
         , content = []
     } = {}) {
+
+        if ( label !== undefined && !_.isString(label) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): label invalid: "${label}"`);
+        }
+
+        if ( icon !== undefined && !(icon instanceof NrIcon) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): icon invalid: "${icon}"`);
+        }
 
         if ( submit !== undefined && !NrModelUtils.isModel(submit) ) {
             throw new TypeError(`new ${NrForm.nrName}(): submit invalid: "${submit}"`);
@@ -66,16 +77,26 @@ export class NrForm extends NrView {
             throw new TypeError(`new ${NrForm.nrName}(): cancel invalid: "${cancel}"`);
         }
 
-        if ( label !== undefined && !_.isString(label) ) {
-            throw new TypeError(`new ${NrForm.nrName}(): label invalid: "${label}"`);
-        }
-
         // FIXME: This should check also NrView interface
         if ( content !== undefined && !_.isArray(content) ) {
             throw new TypeError(`new ${NrForm.nrName}(): content invalid: "${content}"`);
         }
 
         super();
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._label = label;
+
+        /**
+         *
+         * @member {NrIcon|undefined}
+         * @protected
+         */
+        this._icon = icon ? Object.freeze(icon) : undefined;
 
         /**
          *
@@ -90,13 +111,6 @@ export class NrForm extends NrView {
          * @protected
          */
         this._cancel = cancel;
-
-        /**
-         *
-         * @member {string|undefined}
-         * @protected
-         */
-        this._label = label;
 
         /**
          *
@@ -117,6 +131,22 @@ export class NrForm extends NrView {
 
     /**
      *
+     * @returns {string}
+     */
+    get label () {
+        return this._label;
+    }
+
+    /**
+     *
+     * @returns {NrIcon}
+     */
+    get icon () {
+        return this._icon;
+    }
+
+    /**
+     *
      * @returns {NrModel}
      */
     get submit () {
@@ -129,14 +159,6 @@ export class NrForm extends NrView {
      */
     get cancel () {
         return this._cancel;
-    }
-
-    /**
-     *
-     * @returns {string}
-     */
-    get label () {
-        return this._label;
     }
 
     /**
@@ -154,9 +176,10 @@ export class NrForm extends NrView {
     valueOf () {
         return {
             type: this.type
+            , label: this._label
+            , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
             , submit: this._submit
             , cancel: this._cancel
-            , label: this._label
             , content: _.map(this._content, item => item.valueOf())
         };
     }
@@ -178,9 +201,10 @@ export class NrForm extends NrView {
 
         const {
             type
+            , label
+            , icon
             , submit
             , cancel
-            , label
             , content
         } = value;
 
@@ -194,10 +218,11 @@ export class NrForm extends NrView {
         }
 
         return new NrForm({
-            submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
-            , cancel  : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
-            , label   : !_.isNil(label)    ? label                            : undefined
-            , content : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined
+              label     : !_.isNil(label)    ? label                            : undefined
+            , icon      : !_.isNil(icon)     ? NrIcon.parseValue(icon)          : undefined
+            , submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
+            , cancel    : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
+            , content   : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined
         });
 
     }

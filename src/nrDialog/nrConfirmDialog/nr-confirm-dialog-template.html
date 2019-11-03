@@ -1,5 +1,14 @@
 <header class="confirm-dialog-header">
-    <h3 translate="{{$ctrl.model.label}}"></h3>
+
+    <nr-icon class="icon"
+             ng-if="$ctrl.hasIconValue()"
+             nr-type="{{$ctrl.getIconValue()}}"
+    ></nr-icon>
+
+    <h3 class="label"
+        translate="{{$ctrl.model.label}}"
+    ></h3>
+
 </header>
 <section class="confirm-dialog-body"></section>
 <footer class="confirm-dialog-footer">

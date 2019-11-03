@@ -2,6 +2,7 @@ import _ from 'lodash';
 import NrModelUtils from "../../utils/NrModelUtils";
 import NrObjectType from "../NrObjectType";
 import NrView from "./NrView";
+import NrIcon from "../NrIcon";
 
 /**
  *
@@ -36,17 +37,23 @@ export class NrConfirmDialog extends NrView {
     /**
      *
      * @param label {string}
+     * @param icon {NrIcon}
      * @param accept {NrModel}
      * @param cancel {NrModel}
      */
     constructor ({
         label = undefined
-        , accept: accept = undefined
-        , cancel: cancel = undefined
+        , icon = undefined
+        , accept = undefined
+        , cancel = undefined
     } = {}) {
 
         if ( label !== undefined && !_.isString(label) ) {
             throw new TypeError(`new ${NrConfirmDialog.nrName}(): label invalid: "${label}"`);
+        }
+
+        if ( icon !== undefined && !(icon instanceof NrIcon) ) {
+            throw new TypeError(`new ${NrConfirmDialog.nrName}(): icon invalid: "${icon}"`);
         }
 
         if ( accept !== undefined && !NrModelUtils.isModel(accept) ) {
@@ -65,6 +72,13 @@ export class NrConfirmDialog extends NrView {
          * @protected
          */
         this._label = label;
+
+        /**
+         *
+         * @member {NrIcon|undefined}
+         * @protected
+         */
+        this._icon = icon ? Object.freeze(icon) : undefined;
 
         /**
          *
@@ -100,6 +114,14 @@ export class NrConfirmDialog extends NrView {
 
     /**
      *
+     * @returns {NrIcon}
+     */
+    get icon () {
+        return this._icon;
+    }
+
+    /**
+     *
      * @returns {NrModel}
      */
     get accept () {
@@ -122,6 +144,7 @@ export class NrConfirmDialog extends NrView {
         return {
             type: this.type
             , label: this._label
+            , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
             , accept: this._accept ? this._accept : null
             , cancel: this._cancel ? this._cancel : null
         };
@@ -142,14 +165,21 @@ export class NrConfirmDialog extends NrView {
             return value;
         }
 
-        const { type, label, accept, cancel } = value;
+        const {
+            type
+            , label
+            , icon
+            , accept
+            , cancel
+        } = value;
 
         if ( type !== NrObjectType.CONFIRM_DIALOG ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrConfirmDialog({
-            label  : !_.isNil(label)  ? label                        : undefined
+            label    : !_.isNil(label)  ? label                           : undefined
+            , icon   : !_.isNil(icon)   ? NrIcon.parseValue(icon)         : undefined
             , accept : !_.isNil(accept) ? NrModelUtils.parseValue(accept) : undefined
             , cancel : !_.isNil(cancel) ? NrModelUtils.parseValue(cancel) : undefined
         });
