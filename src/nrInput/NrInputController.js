@@ -39,6 +39,17 @@ export class NrInputController {
 	 */
 	getLabel () {}
 
+	/**
+	 * @returns {boolean}
+	 * @abstract
+	 */
+	hasIconValue () {}
+
+	/**
+	 * @returns {string}
+	 * @abstract
+	 */
+	getIconValue () {}
 
 	/**
 	 *
@@ -76,7 +87,6 @@ export class NrInputController {
 	 * @abstract
 	 */
 	getNgModelController () {}
-
 
 	/**
 	 *

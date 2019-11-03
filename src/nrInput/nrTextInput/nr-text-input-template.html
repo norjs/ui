@@ -1,8 +1,7 @@
-<label
-    ng-click="$ctrl.onLabelClick($event)"
-    ng-if="::$ctrl.useLabel()">
-
-    <span class="label" translate="{{::$ctrl.getLabel()}}"></span>
+<label ng-click="$ctrl.onLabelClick($event)"
+       ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
+    <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+    <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
 </label>
 <input
     type="text"

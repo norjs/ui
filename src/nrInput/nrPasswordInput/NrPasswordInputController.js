@@ -114,6 +114,26 @@ export class NrPasswordInputController extends NrTextInputController {
 
 	}
 
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	hasIconValue () {
+
+		return super.hasIconValue();
+
+	}
+
+	/**
+	 *
+	 * @returns {NrIconValue|string|undefined}
+	 */
+	getIconValue () {
+
+		return super.getIconValue();
+
+	}
+
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller getter for AngularJS required feature.

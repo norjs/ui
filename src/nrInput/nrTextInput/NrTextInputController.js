@@ -238,6 +238,26 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	hasIconValue () {
+
+		return !!(this[PRIVATE.nrModel] && this[PRIVATE.nrModel].icon && this[PRIVATE.nrModel].icon.value);
+
+	}
+
+	/**
+	 *
+	 * @returns {NrIconValue|string|undefined}
+	 */
+	getIconValue () {
+
+		return this[PRIVATE.nrModel] && this[PRIVATE.nrModel].icon ? this[PRIVATE.nrModel].icon.value : undefined;
+
+	}
+
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller getter for AngularJS required feature.
@@ -482,7 +502,11 @@ export class NrTextInputController extends NrInputController {
 	set nrModel (value) {
 
 		if (this[PRIVATE.nrModel] !== value) {
+
 			this[PRIVATE.nrModel] = value;
+
+			nrLog.trace(`${this.nrName}[set nrModel]: Model set as `, value);
+
 		}
 
 	}
@@ -526,7 +550,9 @@ export class NrTextInputController extends NrInputController {
 	set ngModel (value) {
 
 		if (this[PRIVATE.ngModel] !== value) {
+
 			this[PRIVATE.ngModel] = value;
+
 		}
 
 	}

@@ -11,6 +11,10 @@ export const NrIconValue = {
     , HOME               : "home"
     , CHECK              : "check"
     , EXCLAMATION_CIRCLE : "exclamation-circle"
+    , USER               : "user"
+    , KEY                : "key"
+    , UNLOCK             : "unlock-alt"
+    , PASSWORD           : "unlock-alt"
 
 };
 
