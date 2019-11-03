@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import LogUtils from "@norjs/utils/Log";
+
 import NrObjectType from "../models/NrObjectType";
 import NrResponse from "../models/NrResponse";
 import NrRequest from "../models/NrRequest";
@@ -8,16 +10,38 @@ import NrInfoMessage from "../models/views/NrInfoMessage";
 import NrForm from "../models/views/NrForm";
 import NrTextField from "../models/views/fields/NrTextField";
 import NrPasswordField from "../models/views/fields/NrPasswordField";
-import LogUtils from "@norjs/utils/Log";
 import NrView from "../models/views/NrView";
 import NrUser from "../models/NrUser";
 import NrMessage from "../models/views/NrMessage";
 import NrErrorMessage from "../models/views/NrErrorMessage";
+import NrIcon from "../models/NrIcon";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
+/**
+ *
+ * @type {boolean}
+ */
+let IS_INITIALIZED = false;
+
+/**
+ * Globally registered model classes.
+ *
+ * These are used by `NrModelUtils.parseValue(value)`.
+ *
+ * @type {Object.<NrObjectType|string, NrModel>}
+ */
+const REGISTERED_TYPES = {};
+
+/**
+ * Utilities for NrModels
+ */
 export class NrModelUtils {
 
+    /**
+     *
+     * @returns {string}
+     */
     static get nrName () {
         return "NrModelUtils";
     }
@@ -39,12 +63,96 @@ export class NrModelUtils {
     }
 
     /**
-     * Parses a variable as a model instance.
+     *
+     */
+    static registerDefaultModels () {
+
+        IS_INITIALIZED = true;
+
+        NrModelUtils.registerModel(NrResponse);
+        NrModelUtils.registerModel(NrUser);
+        NrModelUtils.registerModel(NrSession);
+        NrModelUtils.registerModel(NrRequest);
+        NrModelUtils.registerModel(NrIcon);
+        NrModelUtils.registerModel(NrForm);
+        NrModelUtils.registerModel(NrInfoMessage);
+        NrModelUtils.registerModel(NrErrorMessage);
+        NrModelUtils.registerModel(NrConfirmDialog);
+        NrModelUtils.registerModel(NrPasswordField);
+        NrModelUtils.registerModel(NrTextField);
+
+    }
+
+    /**
+     *
+     * @param typeName {NrObjectType|string}
+     * @param typeClass {NrModel}
+     */
+    static registerModel (typeClass, typeName = typeClass.nrName) {
+
+        if ( !this.isModelClass(typeClass) ) {
+            throw new TypeError(`${this.nrName}.registerModel(): typeClass not a class implementing NrModel interface: ${typeClass}`);
+        }
+
+        if (!_.isString(typeName)) {
+            throw new TypeError(`${this.nrName}.registerModel(): typeName not a string: ${typeName}`);
+        }
+
+        if (this.isModelRegistered(typeName)) {
+            throw new TypeError(`${this.nrName}.registerModel(): typeName exists already: ${typeName}`);
+        }
+
+        this._initialize();
+
+        REGISTERED_TYPES[typeName] = typeClass;
+
+    }
+
+    // noinspection JSUnusedGlobalSymbols
+    /**
+     *
+     * @param typeName {NrObjectType|string}
+     */
+    static unregisterModel (typeName) {
+
+        if (this.isModelRegistered(typeName)) {
+            delete REGISTERED_TYPES[typeName];
+        }
+
+    }
+
+    /**
+     *
+     * @private
+     */
+    static _initialize () {
+
+        if (IS_INITIALIZED === false) {
+            this.registerDefaultModels();
+        }
+
+    }
+
+    /**
+     *
+     * @param typeName {NrObjectType|string}
+     * @returns {boolean}
+     */
+    static isModelRegistered (typeName) {
+
+        this._initialize();
+
+        return Object.prototype.hasOwnProperty.call(REGISTERED_TYPES, typeName);
+
+    }
+
+    /**
+     * Parses a variable as a model object.
      *
      * @param value {*}
      * @returns {NrUser|NrSession|NrResponse|NrRequest|NrMessage|NrForm|NrConfirmDialog|NrTextField|NrPasswordField}
      */
-    static parseModel (value) {
+    static parseValue (value) {
 
         if ( !value ) {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined: ${value}`);
@@ -59,66 +167,29 @@ export class NrModelUtils {
         const typeParts = type.split(":");
         const typeFirstPart = typeParts[0];
 
-        switch (typeFirstPart) {
+        const Class = this.isModelRegistered(typeFirstPart) ? REGISTERED_TYPES[typeFirstPart] : undefined;
 
-            case NrObjectType.REQUEST:
-                nrLog.trace(`parseModel: type "${type}" ==> REQUEST`);
-                return NrRequest.parseValue(value);
-
-            case NrObjectType.RESPONSE:
-                nrLog.trace(`parseModel: type "${type}" ==> RESPONSE`);
-                return NrResponse.parseValue(value);
-
-            case NrObjectType.USER:
-                nrLog.trace(`parseModel: type "${type}" ==> USER`);
-                return NrRequest.parseValue(value);
-
-            case NrObjectType.SESSION:
-                nrLog.trace(`parseModel: type "${type}" ==> SESSION`);
-                return NrSession.parseValue(value);
-
-            case NrObjectType.CONFIRM_DIALOG:
-                nrLog.trace(`parseModel: type "${type}" ==> CONFIRM_DIALOG`);
-                return NrConfirmDialog.parseValue(value);
-
-            case NrObjectType.FORM:
-                nrLog.trace(`parseModel: type "${type}" ==> FORM`);
-                return NrForm.parseValue(value);
-
-            case NrObjectType.INFO_MESSAGE:
-                nrLog.trace(`parseModel: type "${type}" ==> INFO_MESSAGE`);
-                return NrInfoMessage.parseValue(value);
-
-            case NrObjectType.ERROR_MESSAGE:
-                nrLog.trace(`parseModel: type "${type}" ==> ERROR_MESSAGE`);
-                return NrErrorMessage.parseValue(value);
-
-            case NrObjectType.PASSWORD_FIELD:
-                nrLog.trace(`parseModel: type "${type}" ==> PASSWORD_FIELD`);
-                return NrPasswordField.parseValue(value);
-
-            case NrObjectType.TEXT_FIELD:
-                nrLog.trace(`parseModel: type "${type}" ==> TEXT_FIELD`);
-                return NrTextField.parseValue(value);
-
-            default:
-                throw new TypeError(`${this.nrName}.parseValue(): value's type is unsupported: "${value.type}"`);
-
+        if ( !Class ) {
+            throw new TypeError(`${this.nrName}.parseValue(): value's type is unsupported: "${type}"`);
         }
+
+        nrLog.trace(`parseValue(): type "${type}" ==> ${typeFirstPart}`);
+
+        return Class.parseValue(value);
 
     }
 
+    // noinspection JSUnusedGlobalSymbols
     /**
-     * Use .parseModel(value) instead.
+     *
+     * Use .parseValue(value) instead.
      *
      * @deprecated
      * @param value
-     * @returns {NrUser|NrSession|NrResponse|NrRequest|NrInfoMessage|NrForm|NrConfirmDialog|NrTextField|NrPasswordField}
+     * @returns {NrUser|NrSession|NrResponse|NrRequest|NrMessage|NrForm|NrConfirmDialog|NrTextField|NrPasswordField}
      */
-    static parseValue (value) {
-
-        return this.parseModel(value);
-
+    static parseModel (value) {
+        return this.parseValue(value);
     }
 
     /**
@@ -139,6 +210,7 @@ export class NrModelUtils {
         return !!( value && value instanceof NrForm );
     }
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      *
      * @param value {*}
@@ -148,6 +220,7 @@ export class NrModelUtils {
         return !!( value && value instanceof NrInfoMessage );
     }
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      *
      * @param value {*}
@@ -184,19 +257,37 @@ export class NrModelUtils {
         return !!( value && value instanceof NrPasswordField );
     }
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      *
-     * @param value {*}
+     * @param value {NrView|*}
+     * @returns {boolean}
+     */
+    static isView (value) {
+        return value instanceof NrView;
+    }
+
+    /**
+     * Returns `true` if value is a class implementing NrModel interface.
+     *
+     * @param Class {typeof NrModel|*}
+     * @returns {boolean}
+     */
+    static isModelClass (Class) {
+
+        return !!( Class && _.isString(Class.nrName) && _.isFunction(Class.parseValue) );
+
+    }
+
+    /**
+     * Returns `true` if value is an instance implementing NrModel interface.
+     *
+     * @param value {NrModel|*}
      * @returns {boolean}
      */
     static isModel (value) {
 
-        if (value instanceof NrView) return true;
-        if (value instanceof NrRequest) return true;
-        if (value instanceof NrResponse) return true;
-        if (value instanceof NrSession) return true;
-
-        return value instanceof NrUser;
+        return !!( value && _.isString(value.nrName) && _.isFunction(value.valueOf) && this.isModelClass(value.Class) );
 
     }
 

@@ -129,7 +129,7 @@ export class NrRequestService {
 
             nrLog.trace(`response = `, response);
 
-            return NrModelUtils.parseModel(response.data);
+            return NrModelUtils.parseValue(response.data);
 
         }).catch(err => {
 

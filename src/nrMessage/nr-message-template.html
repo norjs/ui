@@ -1,9 +1,14 @@
-<nr-icon
-    ng-if="$ctrl.hasIcon()"
-    nr-type="{{$ctrl.getIconValue()}}"
-></nr-icon>
+<div class="container"
+     ng-class="$ctrl.getContainerClasses()">
 
-<span
-    class="label"
-    translate="{{$ctrl.label}}"
-></span>
+    <nr-icon
+        ng-if="$ctrl.hasIcon()"
+        nr-type="{{$ctrl.getIconValue()}}"
+    ></nr-icon>
+
+    <span
+        class="label"
+        translate="{{$ctrl.label}}"
+    ></span>
+
+</div>

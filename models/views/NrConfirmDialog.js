@@ -150,8 +150,8 @@ export class NrConfirmDialog extends NrView {
 
         return new NrConfirmDialog({
             label  : !_.isNil(label)  ? label                        : undefined
-            , accept : !_.isNil(accept) ? NrModelUtils.parseModel(accept) : undefined
-            , cancel : !_.isNil(cancel) ? NrModelUtils.parseModel(cancel) : undefined
+            , accept : !_.isNil(accept) ? NrModelUtils.parseValue(accept) : undefined
+            , cancel : !_.isNil(cancel) ? NrModelUtils.parseValue(cancel) : undefined
         });
 
     }

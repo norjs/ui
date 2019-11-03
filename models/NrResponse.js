@@ -106,7 +106,7 @@ export class NrResponse {
         }
 
         return new NrResponse({
-            payload: !_.isNil(value.payload) ? NrModelUtils.parseModel(value.payload) : undefined
+            payload: !_.isNil(value.payload) ? NrModelUtils.parseValue(value.payload) : undefined
         });
 
     }

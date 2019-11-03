@@ -94,13 +94,13 @@ export class NrUser {
      * @param value {*}
      * @returns {NrUser}
      */
-    static parseModel (value) {
+    static parseValue (value) {
 
         if ( !value ) {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value instanceof NrUser) {
+        if ( value instanceof NrUser ) {
             return value;
         }
 

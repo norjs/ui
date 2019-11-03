@@ -26,11 +26,13 @@ nr-text-input {
     text-align: left;
     color: #707076;
     border-bottom: $text-border-size $text-border-style $text-border-color;
+    cursor: pointer;
 
   }
 
   & > input {
 
+    cursor: pointer;
     font-size: 0.8em;
     padding: 0.8em 1em;
     border: 0;

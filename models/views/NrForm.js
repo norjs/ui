@@ -194,10 +194,10 @@ export class NrForm extends NrView {
         }
 
         return new NrForm({
-            submit    : !_.isNil(submit)   ? NrModelUtils.parseModel(submit)  : undefined
-            , cancel  : !_.isNil(cancel)   ? NrModelUtils.parseModel(cancel)  : undefined
+            submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
+            , cancel  : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
             , label   : !_.isNil(label)    ? label                            : undefined
-            , content : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseModel(item)) : undefined
+            , content : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined
         });
 
     }

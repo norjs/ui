@@ -1,6 +1,7 @@
 import LogUtils from "@norjs/utils/Log";
 import NrMessage from "../../models/views/NrMessage";
 import NrAttribute from "../NrAttribute";
+import NrObjectType from "../../models/NrObjectType";
 
 const nrLog = LogUtils.getLogger(`NrMessageController`);
 
@@ -85,6 +86,18 @@ export class NrMessageController {
 	 */
 	getIconValue () {
 		return this._model && this._model.icon ? this._model.icon.value : undefined;
+	}
+
+	/**
+	 *
+	 * @returns {{}}
+	 */
+	getContainerClasses () {
+		const type = this.model.type;
+		return {
+			'error-message': type === NrObjectType.ERROR_MESSAGE
+			, 'info-message': type === NrObjectType.INFO_MESSAGE
+		};
 	}
 
 	/**

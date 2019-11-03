@@ -1,8 +1,9 @@
 <label
     ng-click="$ctrl.onLabelClick($event)"
-    ng-if="::$ctrl.useLabel()"
-    translate="{{::$ctrl.getLabel()}}"
-></label>
+    ng-if="::$ctrl.useLabel()">
+
+    <span class="label" translate="{{::$ctrl.getLabel()}}"></span>
+</label>
 <input
     type="text"
     class="form-input theme-input"
