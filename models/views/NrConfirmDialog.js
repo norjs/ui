@@ -6,6 +6,7 @@ import NrIcon from "../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrConfirmDialog extends NrView {
 
@@ -36,10 +37,10 @@ export class NrConfirmDialog extends NrView {
 
     /**
      *
-     * @param label {string}
-     * @param icon {NrIcon}
-     * @param accept {NrModel}
-     * @param cancel {NrModel}
+     * @param [label] {string}
+     * @param [icon] {NrIcon}
+     * @param [accept] {NrModel}
+     * @param [cancel] {NrModel}
      */
     constructor ({
         label = undefined

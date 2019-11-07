@@ -45,7 +45,7 @@ export class NrIcon {
 
     /**
      *
-     * @param value {NrIconValue|string}
+     * @param [value] {NrIconValue|string}
      */
     constructor ({
         value = undefined

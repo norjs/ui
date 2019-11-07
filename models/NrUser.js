@@ -35,7 +35,7 @@ export class NrUser {
 
     /**
      *
-     * @param id {string}
+     * @param [email] {string}
      */
     constructor ({
         email = undefined

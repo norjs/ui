@@ -5,6 +5,7 @@ import NrIcon from "../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrInfoMessage extends NrMessage {
 
@@ -35,8 +36,8 @@ export class NrInfoMessage extends NrMessage {
 
     /**
      *
-     * @param label {string}
-     * @param icon {NrIcon}
+     * @param [label] {string}
+     * @param [icon] {NrIcon}
      */
     constructor ({
         label = undefined

@@ -17,6 +17,7 @@ export const NrFormPayloadType = {
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrForm extends NrView {
 
@@ -47,12 +48,12 @@ export class NrForm extends NrView {
 
     /**
      *
-     * @param label {string}  The label of the form
-     * @param icon {NrIcon} Icon for form
-     * @param payload {Object} The payload object (eg. form field data object)
-     * @param submit {NrModel} The submit action
-     * @param cancel {NrModel} The cancel action
-     * @param content {Array.<NrView>} Form fields
+     * @param [label] {string}  The label of the form
+     * @param [icon] {NrIcon} Icon for form
+     * @param [payload] {Object} The payload object (eg. form field data object)
+     * @param [submit] {NrModel} The submit action
+     * @param [cancel] {NrModel} The cancel action
+     * @param [content] {Array.<NrView>} Form fields
      */
     constructor ({
         label = undefined

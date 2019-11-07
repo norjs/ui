@@ -35,9 +35,9 @@ export class NrTextField extends NrField {
 
     /**
      *
-     * @param name {string}
-     * @param label {string}
-     * @param icon {NrIcon}
+     * @param [name] {string}
+     * @param [label] {string}
+     * @param [icon] {NrIcon}
      */
     constructor ({
         name = undefined

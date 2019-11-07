@@ -1,42 +1,40 @@
 /**
- * Interface for NorJS data models.
+ * Describes an interface for view controllers.
+ *
+ * This is used in the NorJS Edge Backend.
  *
  * @interface
  */
-export class NrModel {
+export class NrViewController {
 
     /**
-     *
      * @returns {string}
      */
     static get nrName () {}
 
     /**
-     *
-     * @returns {typeof NrModel}
+     * @returns {typeof NrViewController}
      */
     get Class () {}
 
     /**
-     *
      * @returns {string}
      */
     get nrName () {}
 
-    /**
-     *
-     * @returns {Object}
-     */
-    valueOf () {}
+    constructor () {}
 
     /**
      *
-     * @param value {*}
-     * @returns {NrModel}
      */
-    static parseValue (value) {}
+    init () {}
+
+    /**
+     *
+     */
+    destroy () {}
 
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrModel;
+export default NrViewController;

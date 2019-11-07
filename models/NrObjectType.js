@@ -4,6 +4,7 @@
  * @readonly
  */
 export const NrObjectType = {
+    VIEW_COMPONENT: 'NrViewComponent',
     REQUEST: 'NrRequest',
     RESPONSE: 'NrResponse',
     INFO_MESSAGE: 'NrInfoMessage',

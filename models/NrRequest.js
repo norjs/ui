@@ -12,10 +12,27 @@ import LogUtils from "@norjs/utils/src/LogUtils";
  * @readonly
  */
 export const NrRequestMethod = {
+
+    /**
+     * @member {NrRequestMethod|string}
+     */
     GET: 'get',
+
+    /**
+     * @member {NrRequestMethod|string}
+     */
     POST: 'post',
+
+    /**
+     * @member {NrRequestMethod|string}
+     */
     PUT: 'put',
+
+    /**
+     * @member {NrRequestMethod|string}
+     */
     DELETE: 'delete'
+
 };
 
 /**
@@ -26,7 +43,7 @@ export class NrRequest {
 
     /**
      *
-     * @returns {typeof Method}
+     * @returns {typeof NrRequestMethod}
      */
     static get Method () {
         return NrRequestMethod;
@@ -59,11 +76,11 @@ export class NrRequest {
 
     /**
      *
-     * @param href {string}
-     * @param method {NrRequestMethod}
-     * @param session {NrSession}
-     * @param params {Object}
-     * @param payload {*}
+     * @param [href] {string}
+     * @param [method] {NrRequestMethod}
+     * @param [session] {NrSession}
+     * @param [params] {Object}
+     * @param [payload] {*}
      */
     constructor ({
         href = undefined,

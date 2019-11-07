@@ -36,7 +36,7 @@ export class NrResponse {
 
     /**
      *
-     * @param payload {*}
+     * @param [payload] {*}
      */
     constructor ({
         payload = undefined

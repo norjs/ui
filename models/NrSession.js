@@ -58,10 +58,10 @@ export class NrSession {
 
     /**
      *
-     * @param id {string}
-     * @param authToken {string}
-     * @param created {string}
-     * @param user {NrUser}
+     * @param [id] {string}
+     * @param [authToken] {string}
+     * @param [created] {string}
+     * @param [user] {NrUser}
      */
     constructor ({
         id = undefined,

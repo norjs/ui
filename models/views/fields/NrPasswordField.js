@@ -35,9 +35,9 @@ export class NrPasswordField extends NrView {
 
     /**
      *
-     * @param name {string}
-     * @param label {string}
-     * @param icon {NrIcon}
+     * @param [name] {string}
+     * @param [label] {string}
+     * @param [icon] {NrIcon}
      */
     constructor ({
         name = undefined

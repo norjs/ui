@@ -36,8 +36,8 @@ export class NrErrorMessage extends NrMessage {
 
     /**
      *
-     * @param label {string}
-     * @param icon {NrIcon}
+     * @param [label] {string}
+     * @param [icon] {NrIcon}
      */
     constructor ({
         label = undefined
