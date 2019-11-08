@@ -67,6 +67,20 @@ export class NrModelComponentService {
             };
         }
 
+        if (NrModelUtils.isCheckboxField(model)) {
+            return {
+                component: NrTag.CHECKBOX_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isTextareaField(model)) {
+            return {
+                component: NrTag.TEXTAREA,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
         if (NrModelUtils.isForm(model)) {
             return {
                 component: NrTag.FORM,

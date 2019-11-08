@@ -1,25 +1,78 @@
+$textarea-label-color: #707076;
+$textarea-label-size:  1rem;
+
+$textarea-border-size: 2px;
+$textarea-border-style: solid;
+$textarea-border-color: #f0f0f6;
+
+$textarea-focused-border-size: 2px;
+$textarea-focused-border-style: solid;
+$textarea-focused-border-color: #e0e6e0;
+
 nr-textarea {
-  margin: 0.2em;
-  padding: 0.2em;
-  border-width: 1px;
-  border-style: solid;
 
   display: flex;
   flex-direction: column;
+  border: $textarea-border-size $textarea-border-style $textarea-border-color;
+  border-radius: 4px;
+  background-color: #fbfbfd;
+  max-width: 40em;
+  padding: 0;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
 
   & > label {
-    font-size: 1rem;
-    text-align: left;
+
+    display: flex;
+    padding: 0;
+    border-bottom: $textarea-border-size $textarea-border-style $textarea-border-color;
+    cursor: pointer;
+
+    & > nr-icon {
+
+      display: block;
+      font-size: $textarea-label-size;
+      color: $textarea-label-color;
+      border-right: $textarea-border-size $textarea-border-style $textarea-border-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+
+    }
+
+    & > .label {
+
+      flex: 1;
+      font-size: $textarea-label-size;
+      color: $textarea-label-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+      text-align: left;
+
+    }
+
   }
 
   & > textarea {
-    border-width: 1px;
-    border-style: solid;
 
-    flex: 1;
-    resize: none;
-    font-size: 1rem;
-    padding: 0.5em;
+    cursor: pointer;
+    font-size: 0.8em;
+    padding: 0.8em 1em;
+    border: 0;
+
+  }
+
+  &.nr-focus {
+
+    border: $textarea-focused-border-size $textarea-focused-border-style $textarea-focused-border-color;
+
+    & > label {
+
+      background-color: #fbfffd;
+      border-bottom: $textarea-focused-border-size $textarea-focused-border-style $textarea-focused-border-color;
+
+    }
+
   }
 
 }

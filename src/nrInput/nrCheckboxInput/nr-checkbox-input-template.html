@@ -1,0 +1,26 @@
+<label ng-click="$ctrl.onLabelClick($event)"
+       ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
+    <div class="checkbox-container">
+        <input
+            type="checkbox"
+            class="form-input theme-input"
+            ng-model="$ctrl.innerViewValue"
+            nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
+            ng-change="$ctrl.onChange()"
+            ng-focus="$ctrl.onFocus($event)"
+            ng-blur="$ctrl.onBlur($event)"
+            autocomplete="off"
+            ng-model-options="{
+            allowInvalid: '$inherit',
+            updateOn: 'default blur',
+            debounce: {
+                default: 250,
+                blur: 0
+            }
+        }"
+        >
+    </div>
+
+    <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
+</label>
+

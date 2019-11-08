@@ -3,7 +3,7 @@ import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
 
 // noinspection JSUnusedLocalSymbols
-const nrLog = LogUtils.getLogger(NrTag.TEXTAREA);
+const nrLog = LogUtils.getLogger(NrTag.CHECKBOX_INPUT);
 
 // noinspection JSUnusedLocalSymbols
 /**
@@ -12,7 +12,6 @@ const nrLog = LogUtils.getLogger(NrTag.TEXTAREA);
  * @readonly
  */
 const PRIVATE = {
-	$element: Symbol('_$element')
 };
 
 /**
@@ -21,14 +20,14 @@ const PRIVATE = {
  *
  * @ngInject
  */
-export class NrTextareaController extends NrTextInputController {
+export class NrCheckboxInputController extends NrTextInputController {
 
 	/**
 	 *
-	 * @returns {typeof NrTextareaController}
+	 * @returns {typeof NrCheckboxInputController}
 	 */
 	get Class () {
-		return NrTextareaController;
+		return NrCheckboxInputController;
 	}
 
 	/**
@@ -36,7 +35,7 @@ export class NrTextareaController extends NrTextInputController {
 	 * @returns {NrTag|string}
 	 */
 	static get nrName () {
-		return NrTag.TEXTAREA;
+		return NrTag.CHECKBOX_INPUT;
 	}
 
 	/**
@@ -85,13 +84,6 @@ export class NrTextareaController extends NrTextInputController {
 	) {
 
 		super($attrs, $element);
-
-		/**
-		 *
-		 * @member {JQLite}
-		 * @private
-		 */
-		this[PRIVATE.$element] = $element;
 
 	}
 
@@ -268,7 +260,7 @@ export class NrTextareaController extends NrTextInputController {
 	hasFocus () {
 
 		return super.hasFocus;
-
+		
 	}
 
 	/**
@@ -451,12 +443,11 @@ export class NrTextareaController extends NrTextInputController {
 	 */
 	onLabelClick ($event) {
 
-		this[PRIVATE.$element][0].querySelector('textarea').focus();
+		super.onLabelClick($event);
 
 	}
-
 
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrTextareaController;
+export default NrCheckboxInputController;

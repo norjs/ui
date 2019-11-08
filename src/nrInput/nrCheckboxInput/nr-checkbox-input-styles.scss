@@ -1,0 +1,78 @@
+$checkbox-label-color: #707076;
+$checkbox-label-size:  1rem;
+
+$checkbox-border-size: 2px;
+$checkbox-border-style: solid;
+$checkbox-border-color: #f0f0f6;
+
+$checkbox-focused-border-size: 2px;
+$checkbox-focused-border-style: solid;
+$checkbox-focused-border-color: #e0e6e0;
+
+nr-checkbox-input {
+
+  display: flex;
+  flex-direction: column;
+  border: $checkbox-border-size $checkbox-border-style $checkbox-border-color;
+  border-radius: 4px;
+  background-color: #fbfbfd;
+  max-width: 40em;
+  padding: 0;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+
+  & > label {
+
+    display: flex;
+    padding: 0;
+    cursor: pointer;
+
+    & > .checkbox-container {
+
+      display: block;
+      font-size: $checkbox-label-size;
+      color: $checkbox-label-color;
+      border-right: $checkbox-border-size $checkbox-border-style $checkbox-border-color;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      padding: 0.5em 1em;
+
+      & > input {
+        cursor: pointer;
+        font-size: 0.8em;
+        border: 0;
+        -ms-transform: scale(1.5); /* IE */
+        -moz-transform: scale(1.5); /* FF */
+        -webkit-transform: scale(1.5); /* Safari and Chrome */
+        -o-transform: scale(1.5); /* Opera */
+        transform: scale(1.5);
+      }
+    }
+
+    & > .label {
+
+      flex: 1;
+      font-size: $checkbox-label-size;
+      color: $checkbox-label-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+      text-align: left;
+
+    }
+
+  }
+
+
+
+  &.nr-focus {
+
+    border: $checkbox-focused-border-size $checkbox-focused-border-style $checkbox-focused-border-color;
+
+    & > label {
+      background-color: #fbfffd;
+    }
+  }
+
+}

@@ -13,6 +13,7 @@ export const NrTag = {
     , DATE_INPUT     : "nrDateInput"
     , MENU           : "nrMenu"
     , PASSWORD_INPUT : "nrPasswordInput"
+    , CHECKBOX_INPUT : "nrCheckboxInput"
     , SELECT         : "nrSelect"
     , TEXTAREA       : "nrTextarea"
     , TEXT_INPUT     : "nrTextInput"

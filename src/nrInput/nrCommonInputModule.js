@@ -7,12 +7,14 @@ import {nrDateInputModule} from './nrDateInput/nrDateInputModule.js';
 import {nrSelectModule} from './nrSelect/nrSelectModule.js';
 import {nrMenuModule} from './nrMenu/nrMenuModule.js';
 import {nrButtonModule} from './nrButton/nrButtonModule.js';
+import nrCheckboxInputModule from "./nrCheckboxInput/nrCheckboxInputModule";
 
 export const nrCommonInputModule = angular.module(
 	NrModuleName.INPUT
 	, [
 		nrTextInputModule
 		, nrPasswordInputModule
+		, nrCheckboxInputModule
 		, nrTextareaModule
 		, nrDateInputModule
 		, nrSelectModule
