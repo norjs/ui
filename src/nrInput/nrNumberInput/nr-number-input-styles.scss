@@ -1,0 +1,78 @@
+$number-label-color: #707076;
+$number-label-size:  1rem;
+
+$number-border-size: 2px;
+$number-border-style: solid;
+$number-border-color: #f0f0f6;
+
+$number-focused-border-size: 2px;
+$number-focused-border-style: solid;
+$number-focused-border-color: #e0e6e0;
+
+nr-number-input {
+
+  display: flex;
+  flex-direction: column;
+  border: $number-border-size $number-border-style $number-border-color;
+  border-radius: 4px;
+  background-color: #fbfbfd;
+  max-width: 40em;
+  padding: 0;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+
+  & > label {
+
+    display: flex;
+    padding: 0;
+    border-bottom: $number-border-size $number-border-style $number-border-color;
+    cursor: pointer;
+
+    & > nr-icon {
+
+      display: block;
+      font-size: $number-label-size;
+      color: $number-label-color;
+      border-right: $number-border-size $number-border-style $number-border-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+
+    }
+
+    & > .label {
+
+      flex: 1;
+      font-size: $number-label-size;
+      color: $number-label-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+      text-align: left;
+
+    }
+
+  }
+
+  & > input {
+
+    cursor: pointer;
+    font-size: 0.8em;
+    padding: 0.8em 1em;
+    border: 0;
+
+  }
+
+  &.nr-focus {
+
+    border: $number-focused-border-size $number-focused-border-style $number-focused-border-color;
+
+    & > label {
+
+      background-color: #fbfffd;
+      border-bottom: $number-focused-border-size $number-focused-border-style $number-focused-border-color;
+
+    }
+
+  }
+
+}

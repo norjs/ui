@@ -21,6 +21,7 @@ export const NrModuleName = {
     , MENU           : "norjs.ui.nrInput.nrMenu"
     , PASSWORD_INPUT : "norjs.ui.nrInput.nrPassword"
     , CHECKBOX_INPUT : "norjs.ui.nrInput.nrCheckbox"
+    , NUMBER_INPUT   : "norjs.ui.nrInput.nrNumber"
     , SELECT         : "norjs.ui.nrInput.nrSelect"
     , TEXTAREA       : "norjs.ui.nrInput.nrTextarea"
     , TEXT_INPUT     : "norjs.ui.nrInput.nrText"

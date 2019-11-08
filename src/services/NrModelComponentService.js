@@ -81,6 +81,13 @@ export class NrModelComponentService {
             };
         }
 
+        if (NrModelUtils.isNumberField(model)) {
+            return {
+                component: NrTag.NUMBER_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
         if (NrModelUtils.isForm(model)) {
             return {
                 component: NrTag.FORM,

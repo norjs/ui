@@ -16,6 +16,7 @@ export const NrObjectType = {
     PASSWORD_FIELD: 'NrPasswordField',
     CHECKBOX_FIELD: 'NrCheckboxField',
     TEXTAREA_FIELD: 'NrTextareaField',
+    NUMBER_FIELD: 'NrNumberField',
     USER: 'NrUser',
     SESSION: 'NrSession'
 };

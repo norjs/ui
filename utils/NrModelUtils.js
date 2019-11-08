@@ -17,6 +17,7 @@ import NrErrorMessage from "../models/views/NrErrorMessage";
 import NrIcon from "../models/NrIcon";
 import NrCheckboxField from "../models/views/fields/NrCheckboxField";
 import NrTextareaField from "../models/views/fields/NrTextareaField";
+import NrNumberField from "../models/views/fields/NrNumberField";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -84,6 +85,7 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrTextField);
         NrModelUtils.registerModel(NrCheckboxField);
         NrModelUtils.registerModel(NrTextareaField);
+        NrModelUtils.registerModel(NrNumberField);
 
     }
 
@@ -277,6 +279,15 @@ export class NrModelUtils {
      */
     static isTextareaField (value) {
         return !!( value && value instanceof NrTextareaField );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isNumberField (value) {
+        return !!( value && value instanceof NrNumberField );
     }
 
     // noinspection JSUnusedGlobalSymbols

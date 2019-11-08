@@ -1,16 +1,16 @@
 
-### nr-checkbox-input
+### nr-number-input
 
-A checkbox field
+A number input field.
 
 #### Example 
 
 Minimal usage in a template:
 
 ```html
-<nr-checkbox-input
+<nr-number-input
   ng-model="$ctrl.value"
-></nr-checkbox-input>
+></nr-number-input>
 ``` 
 
 Recommended example controller:
@@ -42,10 +42,10 @@ class ExampleController {
 This is an optional string to use as a field label. It will be translated, so you should use a translation keyword here.
 
 ```html
-<nr-checkbox-input
+<nr-number-input
   label="foo.label"
   ng-model="$ctrl.value"
-></nr-checkbox-input>
+></nr-number-input>
 ``` 
 
 By default no label is displayed.

@@ -17,6 +17,7 @@ export const NrTag = {
     , SELECT         : "nrSelect"
     , TEXTAREA       : "nrTextarea"
     , TEXT_INPUT     : "nrTextInput"
+    , NUMBER_INPUT   : "nrNumberInput"
     , BUTTON         : "nrButton"
     , NAV            : "nrNav"
     , WINDOW         : "nrWindow"
