@@ -1,10 +1,13 @@
-<label
-    ng-if="::$ctrl.useLabel()"
-    translate="{{::$ctrl.getLabel()}}"
-></label>
+<label ng-click="$ctrl.onLabelClick($event)"
+       ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
+    <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+    <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
+</label>
+
 <select
         class="form-input select-item theme-input"
         ng-model="$ctrl.innerViewValue"
+        nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
         ng-focus="$ctrl.onFocus($event)"
         ng-blur="$ctrl.onBlur($event)"
 >

@@ -88,6 +88,13 @@ export class NrModelComponentService {
             };
         }
 
+        if (NrModelUtils.isSelectField(model)) {
+            return {
+                component: NrTag.SELECT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
         if (NrModelUtils.isForm(model)) {
             return {
                 component: NrTag.FORM,
