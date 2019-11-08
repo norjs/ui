@@ -34,6 +34,11 @@ export class NrViewController {
      */
     destroy () {}
 
+    /**
+     * @param request {NrRequest}
+     */
+    onRequest (request) {}
+
 }
 
 // noinspection JSUnusedGlobalSymbols
