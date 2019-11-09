@@ -103,7 +103,7 @@ export class NrEventList {
     valueOf () {
         return {
             type    : this.type,
-            name    : this._name !== undefined ? name : null,
+            name    : this._name !== undefined ? this._name : null,
             content : _.map(this._content, e => e.valueOf())
         };
     }
