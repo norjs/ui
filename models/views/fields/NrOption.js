@@ -97,6 +97,14 @@ export class NrOption extends NrView {
 
     /**
      *
+     * @returns {*}
+     */
+    get value () {
+        return this._value;
+    }
+
+    /**
+     *
      * @returns {NrIcon}
      */
     get icon () {
@@ -144,7 +152,7 @@ export class NrOption extends NrView {
 
         return new NrOption({
               label : !_.isNil(label) ? label                   : undefined
-            , value : !_.isNil(value) ? value                   : undefined
+            , value : !_.isNil(value) ? (NrModelUtils.isModelValue(value) ? NrModelUtils.parseValue(value) : value) : undefined
             , icon  : !_.isNil(icon)  ? NrIcon.parseValue(icon) : undefined
         });
 

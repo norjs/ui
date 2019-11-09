@@ -163,6 +163,50 @@ export class NrModelUtils {
     }
 
     /**
+     *
+     * @param value {*}
+     * @returns {string|undefined}
+     */
+    static parseModelType (value) {
+
+        if ( ! ( value && _.isObject(value) ) ) {
+            nrLog.trace(`.parseModelType(): value was not a model: "${value}"`);
+            return undefined;
+        }
+
+        const { type } = value;
+
+        if (!(type && _.isString(type))) {
+            nrLog.trace(`.parseModelType(): value's type was not a string: "${type}"`);
+            return undefined;
+        }
+
+        nrLog.trace(`.parseModelType(): type = "${type}"`);
+
+        const typeParts = type.split(":");
+        const typeFirstPart = typeParts.shift();
+
+        nrLog.trace(`.parseModelType(): typeFirstPart = "${typeFirstPart}"`);
+
+        return typeFirstPart ? typeFirstPart : undefined;
+
+    }
+
+    /**
+     * Returns `true` if this is a model object which we can parse using `NrModelUtils.parseValue()`.
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isModelValue (value) {
+
+        const typeFirstPart = this.parseModelType(value);
+
+        return typeFirstPart ? this.isModelRegistered(typeFirstPart) : false;
+
+    }
+
+    /**
      * Parses a variable as a model object.
      *
      * @param value {*}
@@ -170,26 +214,19 @@ export class NrModelUtils {
      */
     static parseValue (value) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined: ${value}`);
+        const type = this.parseModelType(value);
+
+        if (!type) {
+            throw new TypeError(`${this.nrName}.parseValue(): could not parse value's type: "${type}"`);
         }
 
-        const { type } = value;
-
-        if (!(type && _.isString(type))) {
-            throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
-        }
-
-        const typeParts = type.split(":");
-        const typeFirstPart = typeParts[0];
-
-        const Class = this.isModelRegistered(typeFirstPart) ? REGISTERED_TYPES[typeFirstPart] : undefined;
+        const Class = this.isModelRegistered(type) ? REGISTERED_TYPES[type] : undefined;
 
         if ( !Class ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is unsupported: "${type}"`);
         }
 
-        nrLog.trace(`parseValue(): type "${type}" ==> ${typeFirstPart}`);
+        nrLog.trace(`.parseValue(): type "${LogUtils.getAsString(type)}" ==> ${LogUtils.getAsString(Class.nrName)}`);
 
         return Class.parseValue(value);
 
@@ -316,6 +353,15 @@ export class NrModelUtils {
      */
     static isSelectField (value) {
         return !!( value && value instanceof NrSelectField );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isOption (value) {
+        return !!( value && value instanceof NrOption );
     }
 
     /**

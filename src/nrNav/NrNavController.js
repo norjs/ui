@@ -65,7 +65,9 @@ class NrNavController {
    * @param $scope {angular.IScope}
    * @ngInject
    */
-  constructor ($scope) {
+  constructor (
+      $scope
+  ) {
 
     /**
      *
@@ -252,7 +254,7 @@ class NrNavController {
 
     // FIXME: implement support for nrModel.action and/or item if it is NrRequest
 
-    this._$scope.emit(NrEventName.NAV_CLICK, item);
+    this._$scope.$emit(NrEventName.NAV_CLICK, item);
 
     nrLog.warn(`.onClick(): No click action configured`);
 
