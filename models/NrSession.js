@@ -203,7 +203,7 @@ export class NrSession {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value instanceof NrSession) {
+        if ( value instanceof NrSession ) {
             return value;
         }
 
@@ -211,7 +211,12 @@ export class NrSession {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
-        const {id, created, authToken, user} = value;
+        const {
+            id
+            , created
+            , authToken
+            , user
+        } = value;
 
         return new NrSession({
             id        : !_.isNil(id)        ? id        : undefined,

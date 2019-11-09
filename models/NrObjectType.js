@@ -22,6 +22,8 @@ export const NrObjectType = {
     SELECT_FIELD: 'NrSelectField',
     OPTION: 'NrOption',
     USER: 'NrUser',
+    EVENT: 'NrEvent',
+    EVENT_LIST: 'NrEventList',
     SESSION: 'NrSession'
 };
 
