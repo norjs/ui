@@ -135,7 +135,7 @@ export class NrRequestService {
 
             nrLog.error(`Request failed: `, err);
 
-            return this[PRIVATE.q].reject(err);
+            return this[PRIVATE.q].reject( err.data );
 
         });
     }
