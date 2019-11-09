@@ -17,7 +17,7 @@ const nrLog = LogUtils.getLogger(NrTag.SELECT);
  */
 const PRIVATE = {
 	$element: Symbol('_$element')
-	list: Symbol('_$list')
+	, list: Symbol('_list')
 };
 
 /**

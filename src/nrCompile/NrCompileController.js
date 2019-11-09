@@ -3,6 +3,7 @@ import _ from 'lodash';
 import NrTag from "../NrTag";
 import NrCompileUtils from "../../utils/NrCompileUtils";
 import LogUtils from "@norjs/utils/Log";
+import NrModelUtils from "../../utils/NrModelUtils";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.COMPILE);
@@ -47,6 +48,11 @@ const PRIVATE = {
   $element: Symbol('$element'),
 
   /**
+   * Symbol for a property containing NrView which should be compiled
+   */
+  nrModel: Symbol('nrModel'),
+
+  /**
    * Symbol for a property containing the options attribute which contains options as an object
    */
   options: Symbol('options'),
@@ -69,7 +75,7 @@ const PRIVATE = {
   /**
    * Symbol for a property containing a boolean which tells if the controller has been initialized.
    */
-  initialized: Symbol('initialied'),
+  initialized: Symbol('initialized'),
 
   /**
    * Symbol for a property containing a private method for compiling the element.
@@ -106,14 +112,26 @@ const NG_ATTRIBUTE_REGEXP = /^([=<@&])[?]?(.*)/;
  */
 class NrCompileController {
 
+  /**
+   *
+   * @returns {NrTag|string}
+   */
   static get nrName () {
     return NrTag.COMPILE;
   }
 
+  /**
+   *
+   * @returns {typeof NrCompileController}
+   */
   get Class () {
     return NrCompileController;
   }
 
+  /**
+   *
+   * @returns {NrTag|string}
+   */
   get nrName () {
     return this.Class.nrName;
   }
@@ -199,6 +217,12 @@ class NrCompileController {
 
     /**
      *
+     * @member {NrModel|undefined}
+     */
+    this[PRIVATE.nrModel] = undefined;
+
+    /**
+     *
      * @member {boolean}
      */
     this[PRIVATE.initialized] = false;
@@ -208,10 +232,30 @@ class NrCompileController {
   // noinspection JSUnusedGlobalSymbols
   /**
    *
-   * @returns {{component: string, bindings:{}}}
-   * @private
+   * @returns {NrModel|undefined}
    */
-  get __options () {
+  get bindNrModel () {
+    return this[PRIVATE.nrModel];
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  /**
+   *
+   * @param nrModel {NrModel|undefined}
+   */
+  set bindNrModel (nrModel) {
+    if (nrModel !== this[PRIVATE.nrModel]) {
+      nrLog.trace(`set bindNrModel: nrModel set as ${LogUtils.getAsString(nrModel)}`);
+      this[PRIVATE.nrModel] = nrModel;
+    }
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  /**
+   *
+   * @returns {{component: string, bindings:{}}}
+   */
+  get bindOptions () {
     return this[PRIVATE.options];
   }
 
@@ -219,11 +263,10 @@ class NrCompileController {
   /**
    *
    * @param options {{component: string, bindings:{}}}
-   * @private
    */
-  set __options (options) {
+  set bindOptions (options) {
     if (options !== this[PRIVATE.options]) {
-      nrLog.trace(`set __options: options set as ${LogUtils.getAsString(options)}`);
+      nrLog.trace(`set bindOptions: options set as ${LogUtils.getAsString(options)}`);
       this[PRIVATE.options] = options;
     }
   }
@@ -232,9 +275,8 @@ class NrCompileController {
   /**
    *
    * @returns {string}
-   * @private
    */
-  get __component () {
+  get bindComponent () {
     return this[PRIVATE.component];
   }
 
@@ -242,12 +284,11 @@ class NrCompileController {
   /**
    *
    * @param component {string}
-   * @private
    */
-  set __component (component) {
+  set bindComponent (component) {
 
     if (this[PRIVATE.component] !== component) {
-      nrLog.trace(`set __component: component set as ${LogUtils.getAsString(component)}`);
+      nrLog.trace(`set bindComponent: component set as ${LogUtils.getAsString(component)}`);
       this[PRIVATE.component] = component;
     }
 
@@ -257,9 +298,8 @@ class NrCompileController {
   /**
    *
    * @returns {string}
-   * @private
    */
-  get __content () {
+  get bindContent () {
     return this[PRIVATE.content];
   }
 
@@ -267,12 +307,11 @@ class NrCompileController {
   /**
    *
    * @param content {string}
-   * @private
    */
-  set __content (content) {
+  set bindContent (content) {
 
     if (this[PRIVATE.content] !== content) {
-      nrLog.trace(`set __content: content set as ${LogUtils.getAsString(content)}`);
+      nrLog.trace(`set bindContent: content set as ${LogUtils.getAsString(content)}`);
       this[PRIVATE.content] = content;
     }
 
@@ -282,9 +321,8 @@ class NrCompileController {
   /**
    *
    * @returns {{}}
-   * @private
    */
-  get __resolve () {
+  get bindResolve () {
     return this[PRIVATE.resolve];
   }
 
@@ -292,9 +330,8 @@ class NrCompileController {
   /**
    *
    * @param resolve {{}}
-   * @private
    */
-  set __resolve (resolve) {
+  set bindResolve (resolve) {
     this[PRIVATE.resolve] = resolve;
   }
 
@@ -306,19 +343,52 @@ class NrCompileController {
 
     this[PRIVATE.initialized] = true;
 
-    if (this[PRIVATE.component] === undefined && this[PRIVATE.options] && this[PRIVATE.options].component) {
-      nrLog.trace(`$onInit(): component set as "${LogUtils.getAsString(this[PRIVATE.options].component)}"`)
-      this[PRIVATE.component] = this[PRIVATE.options].component;
+    /**
+     *
+     * @type {{component: NrTag|string, resolve: Object}|undefined}
+     */
+    let componentConfig = undefined;
+    if (this[PRIVATE.nrModel]) {
+      componentConfig = NrModelUtils.getComponentConfig(this[PRIVATE.nrModel]);
+    }
+
+    if (this[PRIVATE.component] === undefined) {
+
+      if ( this[PRIVATE.options] && this[PRIVATE.options].component ) {
+
+        nrLog.trace(`$onInit(): component set as "${LogUtils.getAsString(this[PRIVATE.options].component)}" from options`);
+        this[PRIVATE.component] = this[PRIVATE.options].component;
+
+      } else if ( componentConfig && componentConfig.component ) {
+
+        nrLog.trace(`$onInit(): component set as "${LogUtils.getAsString(componentConfig.component)}" from nrModel`);
+        this[PRIVATE.component] = componentConfig.component;
+
+      } else {
+          throw new TypeError(`${this.nrName}: No component name configured!`);
+      }
+
     }
 
     if (this[PRIVATE.content] === undefined && this[PRIVATE.options] && this[PRIVATE.options].content) {
-      nrLog.trace(`$onInit(): content set as "${LogUtils.getAsString(this[PRIVATE.options].content)}"`)
+      nrLog.trace(`$onInit(): content set as "${LogUtils.getAsString(this[PRIVATE.options].content)}" from options`)
       this[PRIVATE.content] = this[PRIVATE.options].content;
     }
 
-    if (this[PRIVATE.resolve] === undefined && this[PRIVATE.options] && this[PRIVATE.options].resolve) {
-      nrLog.trace(`$onInit(): resolve set as "${LogUtils.getAsString(this[PRIVATE.options].resolve)}"`)
-      this[PRIVATE.resolve] = this[PRIVATE.options].resolve;
+    if (this[PRIVATE.resolve] === undefined) {
+
+      if (this[PRIVATE.options] && this[PRIVATE.options].resolve) {
+
+        nrLog.trace(`$onInit(): resolve set as "${LogUtils.getAsString(this[PRIVATE.options].resolve)}" from options`);
+        this[PRIVATE.resolve] = this[PRIVATE.options].resolve;
+
+      } else if (componentConfig && componentConfig.component) {
+
+        nrLog.trace(`$onInit(): resolve set as "${LogUtils.getAsString(componentConfig.resolve)}" from nrModel`);
+        this[PRIVATE.resolve] = componentConfig.resolve;
+
+      }
+
     }
 
     this[PRIVATE.compileElement]();

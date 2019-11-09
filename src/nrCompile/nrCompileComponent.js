@@ -8,10 +8,11 @@ import NrAttribute from "../NrAttribute";
 let nrCompileComponent = {
   transclude: true
   , bindings: {
-    "__options"   : `<?${NrAttribute.OPTIONS}`,
-    "__component" : `@?${NrAttribute.COMPONENT}`,
-    "__resolve"   : `<?${NrAttribute.RESOLVE}`,
-    "__content"   : `@?${NrAttribute.CONTENT}`
+    "bindNrModel"   : `<?${NrAttribute.MODEL}`,
+    "bindOptions"   : `<?${NrAttribute.OPTIONS}`,
+    "bindComponent" : `@?${NrAttribute.COMPONENT}`,
+    "bindResolve"   : `<?${NrAttribute.RESOLVE}`,
+    "bindContent"   : `@?${NrAttribute.CONTENT}`
   }
   , controller: NrCompileController
 };

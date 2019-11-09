@@ -19,6 +19,11 @@ import NrCheckboxField from "../models/views/fields/NrCheckboxField";
 import NrTextareaField from "../models/views/fields/NrTextareaField";
 import NrNumberField from "../models/views/fields/NrNumberField";
 import NrSelectField from "../models/views/fields/NrSelectField";
+import {NrDiv} from "../models/views/NrDiv";
+import NrTag from "../src/NrTag";
+import NrAttribute from "../src/NrAttribute";
+import {NrNav} from "../models/views/NrNav";
+import {NrOption} from "../models/views/fields/NrOption";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -88,6 +93,9 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrTextareaField);
         NrModelUtils.registerModel(NrNumberField);
         NrModelUtils.registerModel(NrSelectField);
+        NrModelUtils.registerModel(NrDiv);
+        NrModelUtils.registerModel(NrNav);
+        NrModelUtils.registerModel(NrOption);
 
     }
 
@@ -218,6 +226,15 @@ export class NrModelUtils {
         return !!( value && value instanceof NrForm );
     }
 
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isDiv (value) {
+        return !!( value && value instanceof NrDiv );
+    }
+
     // noinspection JSUnusedGlobalSymbols
     /**
      *
@@ -301,6 +318,15 @@ export class NrModelUtils {
         return !!( value && value instanceof NrSelectField );
     }
 
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isNav (value) {
+        return !!( value && value instanceof NrNav );
+    }
+
     // noinspection JSUnusedGlobalSymbols
     /**
      *
@@ -332,6 +358,218 @@ export class NrModelUtils {
     static isModel (value) {
 
         return !!( value && _.isString(value.nrName) && _.isFunction(value.valueOf) && this.isModelClass(value.Class) );
+
+    }
+
+    /**
+     * Get component name and resolve params for this model object.
+     *
+     * @param model {NrModel}
+     * @return {{component: NrTag|string, resolve: Object}|undefined}
+     */
+    static getComponentConfig (model) {
+
+        if (!model) {
+            throw new TypeError(`${this.nrName}.getComponentConfig(): model not defined: ${LogUtils.getAsString(model)}`);
+        }
+
+        if (NrModelUtils.isConfirmDialog(model)) {
+            return {
+                component: NrTag.CONFIRM_DIALOG,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isTextField(model)) {
+            return {
+                component: NrTag.TEXT_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isPasswordField(model)) {
+            return {
+                component: NrTag.PASSWORD_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isCheckboxField(model)) {
+            return {
+                component: NrTag.CHECKBOX_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isTextareaField(model)) {
+            return {
+                component: NrTag.TEXTAREA,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isNumberField(model)) {
+            return {
+                component: NrTag.NUMBER_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isSelectField(model)) {
+            return {
+                component: NrTag.SELECT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isNav(model)) {
+            return {
+                component: NrTag.NAV,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isForm(model)) {
+            return {
+                component: NrTag.FORM,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isDiv(model)) {
+            return {
+                component: NrTag.DIV,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isMessage(model)) {
+            return {
+                component: NrTag.MESSAGE,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        return undefined;
+
+    }
+
+    /**
+     *
+     * @param err {*}
+     * @return {{component: NrTag|string, resolve: Object}|undefined}
+     */
+    static getComponentFromError (err) {
+
+        nrLog.trace(`.getComponentFromError(): Error: `, err);
+
+        let config = this.getComponentConfig(err);
+
+        if (!config) {
+            config = this.getComponentConfig(new NrErrorMessage({
+                label: `errors.${this._getErrorKey(err)}`
+            }));
+        }
+
+        return config;
+
+    }
+
+    /**
+     *
+     * @param err {*}
+     * @returns {string}
+     * @private
+     * @fixme This should be in its own utils
+     */
+    static _getErrorKey (err) {
+
+        if (err.code) {
+            return this._stringifyValue(err.code);
+        }
+
+        return this._stringifyValue(err);
+
+    }
+
+    /**
+     * Parses any variable as a simple string keyword.
+     *
+     * @param value
+     * @returns {string}
+     * @private
+     */
+    static _stringifyValue (value) {
+        let words = _.trim(`${value}`.replace(/[^a-zA-Z0-9]+/g, " ").replace(/ +/g, " ")).split(' ');
+        if (words.length > 10) {
+            words = words.splice(0, 10);
+        }
+        return words.join('-');
+    }
+
+    /**
+     *
+     * @param model {NrModel}
+     * @return {string}
+     */
+    static getModelId (model) {
+
+        if (!model) throw new TypeError(`${this.nrName}.getId(): Model not defined: ${model}`);
+
+        return model.id || model.name || model.label;
+
+    }
+
+    /**
+     *
+     * @param model {NrModel}
+     * @returns {string}
+     */
+    static getModelLabel (model) {
+        return model.label;
+    }
+
+    /**
+     *
+     * @param model {NrModel}
+     * @returns {string}
+     */
+    static getModelHref (model) {
+
+        if (model instanceof NrOption && model.value) {
+            return this.getModelHref(model.value);
+        }
+
+        return model ? model.href : undefined;
+
+    }
+
+    /**
+     *
+     * @param model {NrModel}
+     * @returns {NrIcon|string}
+     */
+    static getModelIcon (model) {
+
+        if (model instanceof NrIcon) {
+            return model;
+        }
+
+        return model && model.icon ? model.icon : undefined;
+    }
+
+    /**
+     *
+     * @param model {NrModel}
+     * @returns {NrIconValue|string}
+     */
+    static getModelIconValue (model) {
+
+        if (model instanceof NrIcon) {
+            return model.value;
+        }
+
+        return model && model.icon ? model.icon.value : undefined;
 
     }
 

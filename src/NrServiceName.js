@@ -9,7 +9,6 @@ export const NrServiceName = {
     , REQUEST : "nrRequestService"
     , LOCAL_STORAGE : "nrLocalStorageService"
     , SESSION_STORAGE : "nrSessionStorageService"
-    , MODEL_COMPONENT : "nrModelComponentService"
 
 };
 

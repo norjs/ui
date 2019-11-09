@@ -1,17 +1,20 @@
 import template from './nr-nav-template.html';
-import './nr-nav-styles.css';
+import './nr-nav-styles.scss';
 import NrNavController from './NrNavController';
 import NrAttribute from "../NrAttribute";
 
 /**
  *
  * @type {angular.IComponentOptions}
+ * @fixme Implement attribute to override style from nrModel
+ * @fixme Implement attribute to override nr-click from options.onClick
  */
 export const nrNavComponent = {
   template
   , bindings: {
-    __collection: `<?${NrAttribute.COLLECTION}`
-    , __options: `<?${NrAttribute.OPTIONS}`
+    bindCollection: `<?${NrAttribute.COLLECTION}`
+    , bindOptions: `<?${NrAttribute.OPTIONS}`
+    , bindNrModel: `<?${NrAttribute.MODEL}`
   }
   , controller: NrNavController
 };

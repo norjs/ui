@@ -2,6 +2,7 @@ import _ from 'lodash';
 import NrView from "../NrView";
 import NrObjectType from "../../NrObjectType";
 import NrIcon from "../../NrIcon";
+import NrModelUtils from "../../../utils/NrModelUtils";
 
 /**
  *
@@ -18,7 +19,7 @@ export class NrOption extends NrView {
 
     /**
      *
-     * @returns {typeof NrPasswordField}
+     * @returns {typeof NrOption}
      */
     get Class () {
         return NrOption;
@@ -35,26 +36,22 @@ export class NrOption extends NrView {
 
     /**
      *
-     * @param [name] {string}
      * @param [label] {string}
+     * @param [value] {*}
      * @param [icon] {NrIcon}
      */
     constructor ({
-                     label = undefined
-                     , value = undefined
-                     , icon = undefined
-                 } = {}) {
+        label = undefined
+        , value = undefined
+        , icon = undefined
+    } = {}) {
 
-        if ( name !== undefined && !_.isString(label) ) {
-            throw new TypeError(`new ${NrSelectField.nrName}(): label invalid: "${label}"`);
-        }
-
-        if ( value !== undefined && !_.isString(value) ) {
-            throw new TypeError(`new ${NrSelectField.nrName}(): value invalid: "${value}"`);
+        if ( label !== undefined && !_.isString(label) ) {
+            throw new TypeError(`new ${NrOption.nrName}(): label invalid: "${label}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
-            throw new TypeError(`new ${NrTextareaField.nrName}(): icon invalid: "${icon}"`);
+            throw new TypeError(`new ${NrOption.nrName}(): icon invalid: "${icon}"`);
         }
 
         super();
@@ -68,11 +65,10 @@ export class NrOption extends NrView {
 
         /**
          *
-         * @member {NrIcon|undefined}
+         * @member {*}
          * @protected
          */
         this._value = value;
-
 
         /**
          *
@@ -81,7 +77,6 @@ export class NrOption extends NrView {
          */
         this._icon = icon;
 
-
     }
 
     /**
@@ -89,7 +84,7 @@ export class NrOption extends NrView {
      * @returns {string}
      */
     get type () {
-        return NrObjectType.SELECT_FIELD;
+        return NrObjectType.OPTION;
     }
 
     /**
@@ -110,66 +105,47 @@ export class NrOption extends NrView {
 
     /**
      *
-     * @returns {string}
-     */
-    get name () {
-        return this._name;
-    }
-
-    /**
-     *
-     * @returns {string}
-     */
-    get list () {
-        return this._list;
-    }
-
-    /**
-     *
      * @returns {Object}
      */
     valueOf () {
         return {
             type: this.type
             , label: this._label
-            , name: this._name
+            , value: NrModelUtils.isModel(this._value) ? this._value.valueOf() : this._value
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
-            , list: this._list
         };
     }
 
     /**
      *
-     * @param value {*}
-     * @returns {NrSelectField}
+     * @param modelValue {*}
+     * @returns {NrOption}
      */
-    static parseValue (value) {
+    static parseValue (modelValue) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        if ( !modelValue ) {
+            throw new TypeError(`${this.nrName}.parseValue(): modelValue was not defined`);
         }
 
-        if ( value instanceof NrSelectField ) {
-            return value;
+        if ( modelValue instanceof NrOption ) {
+            return modelValue;
         }
 
         const {
             type
-            , name
             , label
+            , value
             , icon
-            , list
-        } = value;
+        } = modelValue;
 
-        if ( type !== NrObjectType.SELECT_FIELD ) {
+        if ( type !== NrObjectType.OPTION ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
-        return new NrSelectField({
-            name  : !_.isNil(name)  ? name                    : undefined
-            , label : !_.isNil(label) ? label                   : undefined
+        return new NrOption({
+              label : !_.isNil(label) ? label                   : undefined
+            , value : !_.isNil(value) ? value                   : undefined
             , icon  : !_.isNil(icon)  ? NrIcon.parseValue(icon) : undefined
-            , list  : !_.isNil(list)  ? list                    : undefined
         });
 
     }
@@ -177,4 +153,4 @@ export class NrOption extends NrView {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrSelectField;
+export default NrOption;

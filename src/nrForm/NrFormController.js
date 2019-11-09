@@ -2,6 +2,7 @@ import _ from 'lodash';
 import LogUtils from "@norjs/utils/Log";
 import {NrInputController} from "../nrInput/NrInputController";
 import NrTag from "../NrTag";
+import NrModelUtils from "../../utils/NrModelUtils";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger('nrFormController');
@@ -13,7 +14,6 @@ const nrLog = LogUtils.getLogger('nrFormController');
  */
 const PRIVATE = {
 	nrModel                   : Symbol('_nrModel')
-	, nrModelComponentService : Symbol('_nrModelComponentService')
 	, submitAction            : Symbol('_submitAction')
 	, cancelAction            : Symbol('_cancelAction')
 	, items                   : Symbol('_items')
@@ -79,17 +79,9 @@ export class NrFormController {
 	}
 
 	/**
-	 * @param nrModelComponentService {NrModelComponentService}
 	 * @ngInject
 	 */
-	constructor (nrModelComponentService) {
-
-		/**
-		 *
-		 * @member {NrModelComponentService|undefined}
-		 * @private
-		 */
-		this[PRIVATE.nrModelComponentService] = nrModelComponentService;
+	constructor () {
 
 		/**
 		 *
@@ -133,7 +125,6 @@ export class NrFormController {
 	// noinspection JSUnusedGlobalSymbols
 	$onDestroy () {
 
-		this[PRIVATE.nrModelComponentService] = undefined;
 		this[PRIVATE.nrModel] = undefined;
 		this[PRIVATE.submitAction] = undefined;
 		this[PRIVATE.cancelAction] = undefined;
@@ -223,6 +214,7 @@ export class NrFormController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 *
 	 * @param item {NrFormItemObject}
@@ -440,6 +432,7 @@ export class NrFormController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	/**
 	 *
 	 * @returns {Object}
@@ -475,7 +468,7 @@ export class NrFormController {
 			this[PRIVATE.nrModel].content,
 			item => {
 
-				const config = this[PRIVATE.nrModelComponentService].getComponentConfig(item);
+				const config = NrModelUtils.getComponentConfig(item);
 
 				return {
 					id: this[PRIVATE.getItemId](item)

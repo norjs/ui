@@ -244,7 +244,7 @@ export class NrForm extends NrView {
         return new NrForm({
               label     : !_.isNil(label)    ? label                            : undefined
             , icon      : !_.isNil(icon)     ? NrIcon.parseValue(icon)          : undefined
-            , payload      : !_.isNil(payload)     ? payload                             : undefined
+            , payload   : !_.isNil(payload)  ? payload                          : undefined
             , submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
             , cancel    : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
             , content   : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined

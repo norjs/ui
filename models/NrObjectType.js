@@ -12,6 +12,8 @@ export const NrObjectType = {
     CONFIRM_DIALOG: 'NrConfirmDialog',
     ICON: 'NrIcon',
     FORM: 'NrForm',
+    DIV: 'NrDiv',
+    NAV: 'NrNav',
     TEXT_FIELD: 'NrTextField',
     PASSWORD_FIELD: 'NrPasswordField',
     CHECKBOX_FIELD: 'NrCheckboxField',

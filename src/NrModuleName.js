@@ -32,6 +32,7 @@ export const NrModuleName = {
     , CONFIRM_DIALOG : "norjs.ui.nrDialog.nrConfirmDialog"
     , MESSAGE        : "norjs.ui.nrMessage"
     , FORM           : "norjs.ui.nrForm"
+    , DIV            : "norjs.ui.nrDiv"
 };
 
 // noinspection JSUnusedGlobalSymbols
