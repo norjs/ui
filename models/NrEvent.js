@@ -41,11 +41,11 @@ export class NrEvent {
      * @param [payload] {*|undefined}
      */
     constructor ({
-        name = undefined,
+        name,
         payload = undefined
     } = {}) {
 
-        if ( !_.isString(name) ) {
+        if ( !( name && _.isString(name) ) ) {
             throw new TypeError(`new ${NrEvent.nrName}(): name invalid: "${name}"`);
         }
 
@@ -70,7 +70,7 @@ export class NrEvent {
      * @returns {string}
      */
     get type () {
-        return `${NrObjectType.EVENT}`;
+        return NrObjectType.EVENT;
     }
 
     /**
@@ -96,6 +96,7 @@ export class NrEvent {
     valueOf () {
         return {
             type: this.type,
+            name: this._name,
             payload: this._payload ? (NrModelUtils.isModel(this._payload) ? NrModelUtils.valueOf(this._payload) : _.cloneDeep(this._payload)) : null
         };
     }
@@ -129,12 +130,12 @@ export class NrEvent {
             , payload
         } = modelValue;
 
-        if ( !_.startsWith(type, `${NrObjectType.EVENT}:`) ) {
+        if ( type !== NrObjectType.EVENT ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrEvent({
-            name    : !_.isNil(name)    ? name                                                                                      : undefined,
+            name    : name,
             payload : !_.isNil(payload) ? (NrModelUtils.isModel(payload) ? NrModelUtils.parseValue(payload) : _.cloneDeep(payload)) : undefined
         });
 

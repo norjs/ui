@@ -77,7 +77,7 @@ export class NrEventList {
      * @returns {string}
      */
     get type () {
-        return `${NrObjectType.EVENT}`;
+        return NrObjectType.EVENT_LIST;
     }
 
     /**
@@ -137,7 +137,7 @@ export class NrEventList {
             , content
         } = modelValue;
 
-        if ( !_.startsWith(type, `${NrObjectType.EVENT}:`) ) {
+        if ( type !== NrObjectType.EVENT_LIST ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${LogUtils.getAsString(type)}"`);
         }
 
