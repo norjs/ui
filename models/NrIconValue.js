@@ -9,6 +9,8 @@ export const NrIconValue = {
 
     BARS                 : "bars"
     , HOME               : "home"
+    , TASKS              : "tasks"
+    , COMMENT            : "comment"
     , CHECK              : "check"
     , CHECK_CIRCLE       : "check-circle"
     , EXCLAMATION_CIRCLE : "exclamation-circle"
