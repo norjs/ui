@@ -24,6 +24,8 @@ import NrTag from "../src/NrTag";
 import NrAttribute from "../src/NrAttribute";
 import {NrNav} from "../models/views/NrNav";
 import {NrOption} from "../models/views/fields/NrOption";
+import {NrEventList} from "../models/NrEventList";
+import {NrEvent} from "../models/NrEvent";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -96,6 +98,8 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrDiv);
         NrModelUtils.registerModel(NrNav);
         NrModelUtils.registerModel(NrOption);
+        NrModelUtils.registerModel(NrEvent);
+        NrModelUtils.registerModel(NrEventList);
 
     }
 
