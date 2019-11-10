@@ -143,12 +143,13 @@ export class NrDivController {
 	/**
 	 *
 	 * @param item {NrFormItemObject}
+	 * @param index {number}
 	 * @returns {string}
 	 * @private
 	 */
-	getItemId (item) {
+	getItemId (item, index) {
 
-		return item.id;
+		return item && item.id !== undefined ? item.id : index;
 
 	}
 
