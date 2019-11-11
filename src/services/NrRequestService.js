@@ -16,6 +16,9 @@ const PRIVATE = {
  */
 let API_PATH_PREFIX = '/';
 
+/**
+ * @fixme Implement request cancel support
+ */
 export class NrRequestService {
 
     /**

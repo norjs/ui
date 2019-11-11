@@ -76,6 +76,8 @@ export class NrRequest {
 
     /**
      *
+     * @param [id] {string}
+     * @param [version] {number}
      * @param [href] {string}
      * @param [method] {NrRequestMethod}
      * @param [session] {NrSession}
@@ -83,12 +85,22 @@ export class NrRequest {
      * @param [payload] {*}
      */
     constructor ({
+        id,
+        version = 0,
         href = undefined,
         method = NrRequestMethod.GET,
         session = undefined,
         params = undefined,
         payload = undefined
     } = {}) {
+
+        if ( id !== undefined && !(id && _.isString(id)) ) {
+            throw new TypeError(`new ${NrRequest.nrName}(): id invalid: ${LogUtils.getAsString(id)}`);
+        }
+
+        if ( !_.isNumber(version) ) {
+            throw new TypeError(`new ${NrRequest.nrName}(): version invalid: ${LogUtils.getAsString(version)}`);
+        }
 
         if ( href !== undefined && !_.isString(href) ) {
             throw new TypeError(`new ${NrRequest.nrName}(): href invalid: ${LogUtils.getAsString(href)}`);
@@ -106,6 +118,20 @@ export class NrRequest {
         if ( params !== undefined && !_.isPlainObject(params) ) {
             throw new TypeError(`new ${NrRequest.nrName}(): params not plain object: ${LogUtils.getAsString(params)}`);
         }
+
+        /**
+         *
+         * @member {string}
+         * @protected
+         */
+        this._id = id;
+
+        /**
+         *
+         * @member {number}
+         * @protected
+         */
+        this._version = version;
 
         /**
          *
@@ -163,6 +189,23 @@ export class NrRequest {
      *
      * @returns {string|undefined}
      */
+    get id () {
+        return this._id;
+    }
+
+    /**
+     *
+     * @returns {number|undefined}
+     */
+    get version () {
+        return this._version;
+    }
+
+    /**
+     *
+     *
+     * @returns {string|undefined}
+     */
     get href () {
         return this._href;
     }
@@ -208,6 +251,8 @@ export class NrRequest {
     valueOf () {
         return {
             type: this.type,
+            id: this._id,
+            version: this._version,
             href: this._href,
             method: this._method,
             session: this._session ? this._session.valueOf() : null,
@@ -243,9 +288,19 @@ export class NrRequest {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
-        const {href, method, session, params, payload} = value;
+        const {
+            href
+            , id
+            , version
+            , method
+            , session
+            , params
+            , payload
+        } = value;
 
         return new NrRequest({
+            id      : !_.isNil(id)      ? id       : undefined,
+            version : version,
             href    : !_.isNil(href)    ? href     : undefined,
             method  : !_.isNil(method)  ? method   : undefined,
             params  : !_.isNil(params)  ? params   : undefined,
@@ -266,6 +321,8 @@ export class NrRequest {
         let modifiedModelValue = model.valueOf();
 
         modifiedModelValue.payload = payload;
+
+        modifiedModelValue.version += 1;
 
         return NrRequest.parseValue(modifiedModelValue);
 

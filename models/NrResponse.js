@@ -2,6 +2,7 @@ import _ from 'lodash';
 import "./NrModel";
 import NrObjectType from "./NrObjectType";
 import NrModelUtils from "../utils/NrModelUtils";
+import LogUtils from "@norjs/utils/Log";
 
 /**
  *
@@ -36,11 +37,37 @@ export class NrResponse {
 
     /**
      *
+     * @param [id] {string} This should be same as request.id from NrRequest which this is a response to.
+     * @param [version] {number}
      * @param [payload] {*}
      */
     constructor ({
+        id,
+        version = 0,
         payload = undefined
     } = {}) {
+
+        if ( id && _.isString(id) ) {
+            throw new TypeError(`new ${NrResponse.nrName}(): id invalid: ${LogUtils.getAsString(id)}`);
+        }
+
+        if ( !_.isNumber(version) ) {
+            throw new TypeError(`new ${NrResponse.nrName}(): version invalid: ${LogUtils.getAsString(version)}`);
+        }
+
+        /**
+         *
+         * @member {string}
+         * @protected
+         */
+        this._id = id;
+
+        /**
+         *
+         * @member {number}
+         * @protected
+         */
+        this._version = version;
 
         /**
          *
@@ -61,6 +88,23 @@ export class NrResponse {
 
     /**
      *
+     *
+     * @returns {string|undefined}
+     */
+    get id () {
+        return this._id;
+    }
+
+    /**
+     *
+     * @returns {number|undefined}
+     */
+    get version () {
+        return this._version;
+    }
+
+    /**
+     *
      * @returns {*}
      */
     get payload () {
@@ -74,6 +118,8 @@ export class NrResponse {
     valueOf () {
         return {
             type: this.type,
+            id: this._id,
+            version: this._version,
             payload: NrModelUtils.valueOf(this._payload)
         };
     }
@@ -105,8 +151,16 @@ export class NrResponse {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${value.type}"`);
         }
 
+        const {
+            id
+            , version
+            , payload
+        } = value;
+
         return new NrResponse({
-            payload: !_.isNil(value.payload) ? NrModelUtils.parseValue(value.payload) : undefined
+            id      : id,
+            version : version,
+            payload : !_.isNil(payload) ? NrModelUtils.parseValue(payload) : undefined
         });
 
     }

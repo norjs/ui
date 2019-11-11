@@ -3,6 +3,7 @@ import LogUtils from "@norjs/utils/Log";
 import {NrInputController} from "../nrInput/NrInputController";
 import NrTag from "../NrTag";
 import NrModelUtils from "../../utils/NrModelUtils";
+import NrEventName from "../../models/NrEventName";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger('nrFormController');
@@ -22,6 +23,7 @@ const PRIVATE = {
 	, fieldControllers        : Symbol('_fieldControllers')
 	, getFieldValues          : Symbol('_getFieldValues')
 	, getItemId               : Symbol('_getItemId')
+	, $scope               : Symbol('_$scope')
 };
 
 /**
@@ -80,8 +82,16 @@ export class NrFormController {
 
 	/**
 	 * @ngInject
+	 * @param $scope {angular.IScope}
 	 */
-	constructor () {
+	constructor ($scope) {
+
+		/**
+		 *
+		 * @member {angular.IScope}
+		 * @private
+		 */
+		this[PRIVATE.$scope] = $scope;
 
 		/**
 		 *
@@ -122,7 +132,7 @@ export class NrFormController {
 
 	}
 
-	// noinspection JSUnusedGlobalSymbols
+	// noinspection JSUnusedGlobalSymbols,DuplicatedCode
 	$onDestroy () {
 
 		this[PRIVATE.nrModel] = undefined;
@@ -164,6 +174,14 @@ export class NrFormController {
 
 		return this[PRIVATE.nrModel];
 
+	}
+
+	/**
+	 *
+	 * @returns {NrForm}
+	 */
+	get nrModel () {
+		return this[PRIVATE.nrModel];
 	}
 
 	/**
@@ -313,18 +331,33 @@ export class NrFormController {
 	 */
 	submit () {
 
-		if (_.isFunction(this[PRIVATE.submitAction])) {
+		if ( this[PRIVATE.submitAction] !== undefined ) {
 
-			nrLog.trace(`Submit clicked`);
+			if (_.isFunction(this[PRIVATE.submitAction])) {
 
-			this[PRIVATE.submitAction]({
-				nrModel: this[PRIVATE.nrModel]
-				, payload: this.getModifiedPayload()
-			});
+				const payload = this.getModifiedPayload();
+
+				nrLog.trace(`.submit(): submit action with payload: `, payload);
+
+				this[PRIVATE.submitAction]({
+					nrFormController: this,
+					nrModel: this[PRIVATE.nrModel]
+					, payload
+				});
+
+			} else {
+
+				throw new TypeError(`${nrLog.name}.submit(): submit action with non-function callback: ${LogUtils.getAsString(this[PRIVATE.submitAction])}`);
+
+			}
 
 		} else {
 
-			nrLog.warn(`No submit callback.`);
+			const payload = this.getModifiedPayload();
+
+			this[PRIVATE.$scope].$emit(NrEventName.FORM_SUBMIT, payload, this);
+
+			nrLog.trace(`.onClick(): No submit action configured; emitted an event FORM_SUBMIT "${NrEventName.FORM_SUBMIT}"`);
 
 		}
 
@@ -397,7 +430,7 @@ export class NrFormController {
 		if (fieldController instanceof NrInputController) {
 
 			if (this.hasFieldController(fieldController)) {
-				throw new TypeError(`${this.nrName}.registerFieldController(): Field controller already registered: ${fieldController}`);
+				throw new TypeError(`${nrLog.name}.registerFieldController(): Field controller already registered: ${fieldController}`);
 			}
 
 			this[PRIVATE.fieldControllers].push(fieldController);
