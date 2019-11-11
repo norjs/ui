@@ -47,7 +47,7 @@ export class NrResponse {
         payload = undefined
     } = {}) {
 
-        if ( id && _.isString(id) ) {
+        if ( !(id && _.isString(id)) ) {
             throw new TypeError(`new ${NrResponse.nrName}(): id invalid: ${LogUtils.getAsString(id)}`);
         }
 
