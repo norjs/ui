@@ -38,10 +38,12 @@ export class NrErrorMessage extends NrMessage {
      *
      * @param [label] {string}
      * @param [icon] {NrIcon}
+     * @param [content] {string}
      */
     constructor ({
         label = undefined
         , icon = undefined
+        , content = undefined
     } = {}) {
 
         if ( label !== undefined && !_.isString(label) ) {
@@ -50,6 +52,10 @@ export class NrErrorMessage extends NrMessage {
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
             throw new TypeError(`new ${NrErrorMessage.nrName}(): icon invalid: "${icon}"`);
+        }
+
+        if ( content !== undefined && !_.isString(content) ) {
+            throw new TypeError(`new ${NrErrorMessage.nrName}(): content invalid: "${content}"`);
         }
 
         super();
@@ -68,6 +74,13 @@ export class NrErrorMessage extends NrMessage {
          */
         this._icon = icon ? Object.freeze(icon) : undefined;
 
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._content = content;
+
     }
 
     /**
@@ -84,6 +97,14 @@ export class NrErrorMessage extends NrMessage {
      */
     get label () {
         return this._label;
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    get content () {
+        return this._content;
     }
 
     /**
@@ -121,15 +142,21 @@ export class NrErrorMessage extends NrMessage {
             return value;
         }
 
-        const { type, label, icon } = value;
+        const {
+            type,
+            label,
+            content,
+            icon
+        } = value;
 
         if ( type !== NrObjectType.ERROR_MESSAGE ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrErrorMessage({
-            label: !_.isNil(label) ? label : undefined
-            , icon: !_.isNil(icon) ? NrIcon.parseValue(icon) : undefined
+            label     : !_.isNil(label)   ? label                   : undefined
+            , content : !_.isNil(content) ? content                 : undefined
+            , icon    : !_.isNil(icon)    ? NrIcon.parseValue(icon) : undefined
         });
 
     }

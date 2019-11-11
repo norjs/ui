@@ -23,9 +23,8 @@ nr-message {
 
   display: block;
 
-  & > .container {
+  & > .nr-message-container {
 
-    display: flex;
     border: $message-border-size $message-border-style $message-border-color;
     border-radius: 4px;
     background-color: $message-background-color;
@@ -33,56 +32,76 @@ nr-message {
     max-width: 80em;
     padding: 0;
 
-    & > nr-icon {
+    & > .nr-message-header {
 
       display: flex;
-      color: $message-header-text-color;
-      background-color: $message-header-background-color;
-      border-right: $message-border-size $message-border-style $message-border-color;
-      text-align: center;
-      padding: 0.5em 0.5em;
-      font-size: 1.5em;
-      vertical-align: middle;
+
+      & > .nr-message-icon {
+
+        display: flex;
+        color: $message-header-text-color;
+        background-color: $message-header-background-color;
+        border-right: $message-border-size $message-border-style $message-border-color;
+        text-align: center;
+        padding: 0.25em 0.5em;
+        font-size: 1.5em;
+        vertical-align: middle;
+
+      }
+
+      & > .nr-message-label {
+
+        flex: 1;
+        padding: 0.5em 0.75em;
+
+      }
+
     }
 
-    & > .label {
+    & > .nr-message-content {
 
-      flex: 1;
-      padding: 1em;
+      border-top: $message-border-size $message-border-style $message-border-color;
+      padding: 0.5em 0.75em;
 
     }
 
-    &.info-message {
+    &.nr-info-message {
 
       border: $info-message-border-size $info-message-border-style $info-message-border-color;
       background-color: $info-message-background-color;
 
-      & > nr-icon {
+      & > .nr-message-header {
 
-        color: $info-message-header-text-color;
-        background-color: $info-message-header-background-color;
-        border-right: $info-message-border-size $info-message-border-style $info-message-border-color;
+        & > .nr-message-icon {
+
+          color: $info-message-header-text-color;
+          background-color: $info-message-header-background-color;
+          border-right: $info-message-border-size $info-message-border-style $info-message-border-color;
+
+        }
 
       }
 
     }
 
-    &.error-message {
+    &.nr-error-message {
 
       border: $error-message-border-size $error-message-border-style $error-message-border-color;
       background-color: $error-message-background-color;
 
-      & > nr-icon {
+      & > .nr-message-header {
 
-        color: $error-message-header-text-color;
-        background-color: $error-message-header-background-color;
-        border-right: $error-message-border-size $error-message-border-style $error-message-border-color;
+        & > .nr-message-icon {
+
+          color: $error-message-header-text-color;
+          background-color: $error-message-header-background-color;
+          border-right: $error-message-border-size $error-message-border-style $error-message-border-color;
+
+        }
 
       }
-
     }
 
   }
-
 
 }

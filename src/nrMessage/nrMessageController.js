@@ -66,6 +66,14 @@ export class NrMessageController {
 
 	/**
 	 *
+	 * @returns {string|undefined}
+	 */
+	get content () {
+		return this.model ? this.model.content : undefined;
+	}
+
+	/**
+	 *
 	 * @returns {boolean}
 	 */
 	hasModel () {
@@ -78,6 +86,14 @@ export class NrMessageController {
 	 */
 	hasIcon () {
 		return !!(this._model && this._model.icon)
+	}
+
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	hasContent () {
+		return !!(this._model && this._model.content)
 	}
 
 	/**
@@ -95,8 +111,8 @@ export class NrMessageController {
 	getContainerClasses () {
 		const type = this.model.type;
 		return {
-			'error-message': type === NrObjectType.ERROR_MESSAGE
-			, 'info-message': type === NrObjectType.INFO_MESSAGE
+			'nr-error-message': type === NrObjectType.ERROR_MESSAGE
+			, 'nr-info-message': type === NrObjectType.INFO_MESSAGE
 		};
 	}
 

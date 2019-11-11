@@ -22,6 +22,12 @@ export class NrMessage extends NrView {
 
     /**
      *
+     * @returns {string|undefined}
+     */
+    get content () {}
+
+    /**
+     *
      * @returns {NrIcon}
      */
     get icon () {}

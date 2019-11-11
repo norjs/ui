@@ -1,14 +1,28 @@
-<div class="container"
+<div class="nr-message-container"
      ng-class="$ctrl.getContainerClasses()">
 
-    <nr-icon
-        ng-if="$ctrl.hasIcon()"
-        nr-type="{{$ctrl.getIconValue()}}"
-    ></nr-icon>
+    <header class="nr-message-header">
 
-    <span
-        class="label"
-        translate="{{$ctrl.label}}"
-    ></span>
+        <nr-icon
+            class="nr-message-icon"
+            ng-if="$ctrl.hasIcon()"
+            nr-type="{{$ctrl.getIconValue()}}"
+        ></nr-icon>
+
+        <span
+            class="nr-message-label"
+            translate="{{$ctrl.label}}"
+        ></span>
+
+    </header>
+
+    <article
+            class="nr-message-content"
+            ng-if="$ctrl.hasContent()">
+
+        <pre>{{$ctrl.content}}</pre>
+
+    </article>
 
 </div>
+
