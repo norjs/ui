@@ -43,6 +43,14 @@ export class NrRequest {
 
     /**
      *
+     * @returns {string}
+     */
+    static get nrName () {
+        return NrObjectType.REQUEST;
+    }
+
+    /**
+     *
      * @returns {typeof NrRequestMethod}
      */
     static get Method () {
@@ -51,10 +59,19 @@ export class NrRequest {
 
     /**
      *
-     * @returns {string}
+     * @param method {string}
      */
-    static get nrName () {
-        return NrObjectType.REQUEST;
+    static parseMethod (method) {
+        switch(_.toLower(_.trim(method))) {
+
+            case "get"    : return NrRequestMethod.GET;
+            case "post"   : return NrRequestMethod.POST;
+            case "put"    : return NrRequestMethod.PUT;
+            case "delete" : return NrRequestMethod.DELETE;
+
+            default: throw new TypeError(`${this.nrName}.parseMethod(): method invalid: "${LogUtils.getAsString(method)}"`);
+
+        }
     }
 
     // noinspection JSUnusedGlobalSymbols
