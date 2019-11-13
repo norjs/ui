@@ -2,7 +2,7 @@ import _ from 'lodash';
 import "./NrModel";
 import NrObjectType from "./NrObjectType";
 import NrUser from "./NrUser";
-import LogUtils from "@norjs/utils";
+import LogUtils from "@norjs/utils/Log";
 
 /**
  *
