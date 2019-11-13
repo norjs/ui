@@ -2,6 +2,7 @@ import _ from 'lodash';
 import "./NrModel";
 import NrObjectType from "./NrObjectType";
 import NrUser from "./NrUser";
+import LogUtils from "@norjs/utils";
 
 /**
  *
@@ -59,31 +60,31 @@ export class NrSession {
     /**
      *
      * @param [id] {string}
-     * @param [authToken] {string}
+     * @param [version] {number}
      * @param [created] {string}
      * @param [user] {NrUser}
      */
     constructor ({
         id = undefined,
-        authToken = undefined,
+        version = 0,
         created = undefined,
         user = undefined
     } = {}) {
 
         if ( id !== undefined && !_.isString(id) ) {
-            throw new TypeError(`new ${NrSession.nrName}(): id invalid: "${id}"`);
+            throw new TypeError(`new ${NrSession.nrName}(): id invalid: ${LogUtils.getAsString(id)}`);
         }
 
-        if ( authToken !== undefined && !_.isString(authToken) ) {
-            throw new TypeError(`new ${NrSession.nrName}(): authToken invalid: "${authToken}"`);
+        if ( !_.isNumber(version) ) {
+            throw new TypeError(`new ${NrSession.nrName}(): version invalid: ${LogUtils.getAsString(version)}`);
         }
 
         if ( created !== undefined && !_.isString(created) ) {
-            throw new TypeError(`new ${NrSession.nrName}(): created invalid: "${created}"`);
+            throw new TypeError(`new ${NrSession.nrName}(): created invalid: ${LogUtils.getAsString(created)}`);
         }
 
         if ( user !== undefined && !(user instanceof NrUser) ) {
-            throw new TypeError(`new ${NrSession.nrName}(): user invalid: "${user}"`);
+            throw new TypeError(`new ${NrSession.nrName}(): user invalid: ${LogUtils.getAsString(user)}`);
         }
 
         /**
@@ -105,10 +106,10 @@ export class NrSession {
 
         /**
          *
-         * @member {string|undefined}
+         * @member {Number|undefined}
          * @protected
          */
-        this._authToken = authToken;
+        this._version = version;
 
         /**
          *
@@ -145,13 +146,12 @@ export class NrSession {
         return this._id;
     }
 
-    // noinspection JSUnusedGlobalSymbols
     /**
      *
-     * @returns {string}
+     * @returns {number|undefined}
      */
-    get authToken () {
-        return this._authToken;
+    get version () {
+        return this._version;
     }
 
     /**
@@ -167,7 +167,7 @@ export class NrSession {
      * @returns {boolean}
      */
     isAuthenticated () {
-        return !!this._authToken;
+        return !!this._user;
     }
 
     /**
@@ -178,15 +178,15 @@ export class NrSession {
         return {
             type: this.type,
             id: this._id,
+            version: this._version,
             created: this._created,
-            authToken: this._authToken,
             user: this._user ? this._user.valueOf() : null
         };
     }
 
     /**
      *
-     * @returns {{created: string, authToken: string, id: string, type: (NrObjectType|string), user: null}}
+     * @returns {{created: string, id: string, type: (NrObjectType|string), user: null}}
      */
     toJSON () {
         return this.valueOf();
@@ -213,15 +213,15 @@ export class NrSession {
 
         const {
             id
+            , version
             , created
-            , authToken
             , user
         } = value;
 
         return new NrSession({
             id        : !_.isNil(id)        ? id        : undefined,
+            version   : version,
             created   : !_.isNil(created)   ? created   : undefined,
-            authToken : !_.isNil(authToken) ? authToken : undefined,
             user      : !_.isNil(user)      ? NrUser.parseValue(user) : undefined
         });
 
