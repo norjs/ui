@@ -1,5 +1,6 @@
 import NrCompileController from './NrCompileController';
 import NrAttribute from "../NrAttribute";
+import "./nr-compile-styles.scss";
 
 /**
  *
