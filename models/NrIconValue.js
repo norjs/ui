@@ -12,6 +12,7 @@ export const NrIconValue = {
     , TASKS              : "tasks"
     , COMMENT            : "comment"
     , CHECK              : "check"
+    , BAN                : "ban"
     , CHECK_CIRCLE       : "check-circle"
     , EXCLAMATION_CIRCLE : "exclamation-circle"
     , USER               : "user"
@@ -21,6 +22,7 @@ export const NrIconValue = {
     , PASSWORD           : "unlock-alt"
     , LOGIN              : "sign-in"
     , LOGOUT             : "sign-out"
+    , CLOCK              : "clock-o"
 
 };
 

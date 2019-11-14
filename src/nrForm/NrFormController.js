@@ -4,6 +4,8 @@ import {NrInputController} from "../nrInput/NrInputController";
 import NrTag from "../NrTag";
 import NrModelUtils from "../../utils/NrModelUtils";
 import NrEventName from "../../models/NrEventName";
+import WaTranslation from '../../../work-assistant/WaTranslation';
+import NrIcon from '../../models/NrIcon';
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger('nrFormController');
@@ -383,6 +385,22 @@ export class NrFormController {
 
 		}
 
+	}
+
+	getSubmitIcon () {
+		return this[PRIVATE.nrModel].submitButton ? this[PRIVATE.nrModel].submitButton.icon : NrIcon.Value.CHECK;
+	}
+
+	getSubmitLabel () {
+		return this[PRIVATE.nrModel].submitButton ? this[PRIVATE.nrModel].submitButton.label : "nrForm.submit.label";
+	}
+
+	getCancelIcon () {
+		return this[PRIVATE.nrModel].cancelButton ? this[PRIVATE.nrModel].cancelButton.icon : NrIcon.Value.BAN;
+	}
+
+	getCancelLabel () {
+		return this[PRIVATE.nrModel].cancelButton ? this[PRIVATE.nrModel].cancelButton.label : "nrForm.cancel.label";
 	}
 
 	/**

@@ -19,6 +19,7 @@ import NrCheckboxField from "../models/views/fields/NrCheckboxField";
 import NrTextareaField from "../models/views/fields/NrTextareaField";
 import NrNumberField from "../models/views/fields/NrNumberField";
 import NrSelectField from "../models/views/fields/NrSelectField";
+import NrButton from "../models/views/NrButton";
 import {NrDiv} from "../models/views/NrDiv";
 import NrTag from "../src/NrTag";
 import NrAttribute from "../src/NrAttribute";
@@ -95,6 +96,7 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrTextareaField);
         NrModelUtils.registerModel(NrNumberField);
         NrModelUtils.registerModel(NrSelectField);
+        NrModelUtils.registerModel(NrButton);
         NrModelUtils.registerModel(NrDiv);
         NrModelUtils.registerModel(NrNav);
         NrModelUtils.registerModel(NrOption);
@@ -357,6 +359,15 @@ export class NrModelUtils {
      */
     static isSelectField (value) {
         return !!( value && value instanceof NrSelectField );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isButton (value) {
+        return !!( value && value instanceof NrButton );
     }
 
     /**

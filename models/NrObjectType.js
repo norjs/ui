@@ -20,6 +20,7 @@ export const NrObjectType = {
     TEXTAREA_FIELD: 'NrTextareaField',
     NUMBER_FIELD: 'NrNumberField',
     SELECT_FIELD: 'NrSelectField',
+    BUTTON: 'NrButton',
     OPTION: 'NrOption',
     USER: 'NrUser',
     EVENT: 'NrEvent',

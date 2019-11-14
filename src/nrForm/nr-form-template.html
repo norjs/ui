@@ -20,16 +20,16 @@
         <nr-button
                 ng-if="$ctrl.hasCancelAction()"
                 class="nr-cancel"
-                nr-icon="{{'nrForm.cancel.icon'|translate}}"
+                nr-icon="{{$ctrl.getCancelIcon()}}"
                 nr-click="$ctrl.cancel()"
-                nr-label="nrForm.cancel.label"
+                nr-label="{{$ctrl.getCancelLabel()}}"
         ></nr-button>
         <nr-button
                 nr-enabled="$ctrl.isSubmitEnabled()"
                 class="nr-submit"
-                nr-icon="{{'nrForm.submit.icon'|translate}}"
+                nr-icon="{{$ctrl.getSubmitIcon()}}"
                 nr-click="$ctrl.submit()"
-                nr-label="nrForm.submit.label"
+                nr-label="{{$ctrl.getSubmitLabel()}}"
         ></nr-button>
     </footer>
 </form>

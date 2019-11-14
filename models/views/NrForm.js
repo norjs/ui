@@ -62,6 +62,8 @@ export class NrForm extends NrView {
         , submit = undefined
         , cancel = undefined
         , content = []
+        , submitButton = undefined
+        , cancelButton = undefined
     } = {}) {
 
         if ( label !== undefined && !_.isString(label) ) {
@@ -87,6 +89,14 @@ export class NrForm extends NrView {
         // FIXME: This should check also NrView interface
         if ( content !== undefined && !_.isArray(content) ) {
             throw new TypeError(`new ${NrForm.nrName}(): content invalid: "${content}"`);
+        }
+
+        if ( submitButton !== undefined && !NrModelUtils.isModel(submitButton) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): submitButton invalid: "${submitButton}"`);
+        }
+
+        if ( cancelButton !== undefined && !NrModelUtils.isModel(cancelButton) ) {
+            throw new TypeError(`new ${NrForm.nrName}(): cancelButton invalid: "${cancelButton}"`);
         }
 
         super();
@@ -132,6 +142,20 @@ export class NrForm extends NrView {
          * @protected
          */
         this._content = Object.freeze(_.concat([], content));
+
+        /**
+         *
+         * @member {NrModel|undefined}
+         * @protected
+         */
+        this._submitButton = submitButton;
+
+        /**
+         *
+         * @member {NrModel|undefined}
+         * @protected
+         */
+        this._cancelButton = cancelButton;
 
     }
 
@@ -193,6 +217,22 @@ export class NrForm extends NrView {
 
     /**
      *
+     * @returns {NrModel}
+     */
+    get submitButton () {
+        return this._submitButton;
+    }
+
+    /**
+     *
+     * @returns {NrModel}
+     */
+    get cancelButton () {
+        return this._cancelButton;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
@@ -204,6 +244,8 @@ export class NrForm extends NrView {
             , cancel: this._cancel
             , payload: this._payload
             , content: _.map(this._content, item => item.valueOf())
+            , submitButton: this._submitButton
+            , cancelButton: this._cancelButton
         };
     }
 
@@ -230,6 +272,8 @@ export class NrForm extends NrView {
             , cancel
             , content
             , payload
+            , submitButton
+            , cancelButton
         } = value;
 
         if ( type !== NrObjectType.FORM ) {
@@ -248,6 +292,9 @@ export class NrForm extends NrView {
             , submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
             , cancel    : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
             , content   : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined
+            , submitButton    : !_.isNil(submitButton)   ? NrModelUtils.parseValue(submitButton)  : undefined
+            , cancelButton    : !_.isNil(cancelButton)   ? NrModelUtils.parseValue(cancelButton)  : undefined
+
         });
 
     }
