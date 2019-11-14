@@ -1,6 +1,6 @@
 {
   "name": "@norjs/ui",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Common NorJS frontend components",
   "main": "./src/nrCommonModule.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/norjs/ui#readme",
   "dependencies": {
-    "@norjs/utils": "^1.0.17",
+    "@norjs/utils": "^1.0.18",
     "lodash": "^4.17.15"
   }
 }
