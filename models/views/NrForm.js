@@ -3,6 +3,7 @@ import NrObjectType from "../NrObjectType";
 import NrView from "./NrView";
 import NrModelUtils from "../../utils/NrModelUtils";
 import NrIcon from "../NrIcon";
+import NrButton from "./NrButton";
 
 /**
  *
@@ -52,6 +53,8 @@ export class NrForm extends NrView {
      * @param [icon] {NrIcon} Icon for form
      * @param [payload] {Object} The payload object (eg. form field data object)
      * @param [submit] {NrModel} The submit action
+     * @param [submitButton] {NrButton} The submit button model
+     * @param [cancelButton] {NrButton} The cancel button model
      * @param [cancel] {NrModel} The cancel action
      * @param [content] {Array.<NrView>} Form fields
      */
@@ -91,11 +94,11 @@ export class NrForm extends NrView {
             throw new TypeError(`new ${NrForm.nrName}(): content invalid: "${content}"`);
         }
 
-        if ( submitButton !== undefined && !NrModelUtils.isModel(submitButton) ) {
+        if ( submitButton !== undefined && !NrModelUtils.isButton(submitButton) ) {
             throw new TypeError(`new ${NrForm.nrName}(): submitButton invalid: "${submitButton}"`);
         }
 
-        if ( cancelButton !== undefined && !NrModelUtils.isModel(cancelButton) ) {
+        if ( cancelButton !== undefined && !NrModelUtils.isButton(cancelButton) ) {
             throw new TypeError(`new ${NrForm.nrName}(): cancelButton invalid: "${cancelButton}"`);
         }
 
@@ -145,14 +148,14 @@ export class NrForm extends NrView {
 
         /**
          *
-         * @member {NrModel|undefined}
+         * @member {NrButton|undefined}
          * @protected
          */
         this._submitButton = submitButton;
 
         /**
          *
-         * @member {NrModel|undefined}
+         * @member {NrButton|undefined}
          * @protected
          */
         this._cancelButton = cancelButton;
@@ -217,7 +220,7 @@ export class NrForm extends NrView {
 
     /**
      *
-     * @returns {NrModel}
+     * @returns {NrButton}
      */
     get submitButton () {
         return this._submitButton;
@@ -225,7 +228,7 @@ export class NrForm extends NrView {
 
     /**
      *
-     * @returns {NrModel}
+     * @returns {NrButton}
      */
     get cancelButton () {
         return this._cancelButton;
@@ -286,14 +289,14 @@ export class NrForm extends NrView {
         }
 
         return new NrForm({
-              label     : !_.isNil(label)    ? label                            : undefined
-            , icon      : !_.isNil(icon)     ? NrIcon.parseValue(icon)          : undefined
-            , payload   : !_.isNil(payload)  ? payload                          : undefined
-            , submit    : !_.isNil(submit)   ? NrModelUtils.parseValue(submit)  : undefined
-            , cancel    : !_.isNil(cancel)   ? NrModelUtils.parseValue(cancel)  : undefined
-            , content   : !_.isNil(content)  ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined
-            , submitButton    : !_.isNil(submitButton)   ? NrModelUtils.parseValue(submitButton)  : undefined
-            , cancelButton    : !_.isNil(cancelButton)   ? NrModelUtils.parseValue(cancelButton)  : undefined
+              label         : !_.isNil(label)          ? label                              : undefined
+            , icon          : !_.isNil(icon)           ? NrIcon.parseValue(icon)            : undefined
+            , payload       : !_.isNil(payload)        ? payload                            : undefined
+            , submit        : !_.isNil(submit)         ? NrModelUtils.parseValue(submit)    : undefined
+            , cancel        : !_.isNil(cancel)         ? NrModelUtils.parseValue(cancel)    : undefined
+            , content       : !_.isNil(content)        ? _.map(content, item => NrModelUtils.parseValue(item)) : undefined
+            , submitButton  : !_.isNil(submitButton)   ? NrButton.parseValue(submitButton)  : undefined
+            , cancelButton  : !_.isNil(cancelButton)   ? NrButton.parseValue(cancelButton)  : undefined
 
         });
 

@@ -30,6 +30,9 @@ import {NrEvent} from "../models/NrEvent";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
+// Disabled for development purposes
+nrLog.setLogLevel(nrLog.LogLevel.INFO);
+
 /**
  *
  * @type {boolean}
@@ -274,6 +277,15 @@ export class NrModelUtils {
      * @param value {*}
      * @returns {boolean}
      */
+    static isButton (value) {
+        return !!( value && value instanceof NrButton );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
     static isDiv (value) {
         return !!( value && value instanceof NrDiv );
     }
@@ -493,6 +505,13 @@ export class NrModelUtils {
         if (NrModelUtils.isForm(model)) {
             return {
                 component: NrTag.FORM,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isButton(model)) {
+            return {
+                component: NrTag.BUTTON,
                 resolve: {[NrAttribute.MODEL]: model}
             };
         }

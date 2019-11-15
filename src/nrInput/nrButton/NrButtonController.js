@@ -4,17 +4,11 @@ import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
 import angular from "angular";
 import NrIconValue from "../../../models/NrIconValue";
+import NrEventName from "../../../models/NrEventName";
+import NrButton from "../../../models/views/NrButton";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.BUTTON);
-
-/**
- *
- * @enum {Symbol}
- * @readonly
- */
-const PRIVATE = {
-};
 
 /**
  *
@@ -54,12 +48,15 @@ export class NrButtonController {
 	 */
 	static getComponentBindings () {
 		return {
-			__type: `@?${NrAttribute.TYPE}`
+			bindType: `@?${NrAttribute.TYPE}`
+			, __style: `@?${NrAttribute.STYLE}`
 			, __id: `@?${NrAttribute.ID}`
+			, __name: `@?${NrAttribute.NAME}`
 			, __label: `@?${NrAttribute.LABEL}`
 			, __icon: `@?${NrAttribute.ICON}`
 			, __click: `&?${NrAttribute.BUTTON_CLICK}`
 			, __enabled: `&?${NrAttribute.ENABLED}`
+			, __nrModel: `<?${NrAttribute.MODEL}`
 		};
 	}
 
@@ -88,25 +85,81 @@ export class NrButtonController {
 
 	/**
 	 *
-	 * @param $attrs {angular.IAttributes}
-	 * @param $element {JQLite}
 	 * @param $scope {angular.IScope}
+	 * @param $attrs {angular.IAttributes}
 	 * @ngInject
 	 */
-	constructor ($attrs, $element) {
+	constructor ($scope, $attrs) {
 
 		/**
 		 *
-		 * @member {JQLite}
+		 * @member {boolean}
+		 * @private
 		 */
-		this.$element = $element;
+		this._hasTypeAttribute = !!$attrs[NrAttribute.TYPE];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasStyleAttribute = !!$attrs[NrAttribute.STYLE];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasIdAttribute = !!$attrs[NrAttribute.ID];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasNameAttribute = !!$attrs[NrAttribute.NAME];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasLabelAttribute = !!$attrs[NrAttribute.LABEL];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasIconAttribute = !!$attrs[NrAttribute.ICON];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasClickAttribute = !!$attrs[NrAttribute.BUTTON_CLICK];
+
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._hasEnabledAttribute = !!$attrs[NrAttribute.ENABLED];
+
+		/**
+		 *
+		 * @member {angular.IScope}
+		 * @private
+		 */
+		this._$scope = $scope;
 
 		/**
 		 *
 		 * @member {NrIconValue|string|undefined}
 		 * @private
 		 */
-		this.__type = undefined;
+		this.__style = undefined;
 
 		/**
 		 *
@@ -114,6 +167,13 @@ export class NrButtonController {
 		 * @private
 		 */
 		this.__id = undefined;
+
+		/**
+		 *
+		 * @member {string|undefined}
+		 * @private
+		 */
+		this.__name = undefined;
 
 		/**
 		 *
@@ -143,15 +203,27 @@ export class NrButtonController {
 		 */
 		this.__click = undefined;
 
+		/**
+		 * Optional button model
+		 * @member {NrButton|undefined}
+		 * @private
+		 */
+		this.__nrModel = undefined;
+
 	}
 
 	/**
 	 *
-	 * @returns {{top: boolean, left: boolean, bottom: boolean, right: boolean}}
+	 * @returns {Object}
 	 */
 	getClasses () {
 		return {
-			nrDisabled: !this.enabled
+			"nr-icon": this.style === NrButton.Style.ICON,
+			"nr-submit": this.style === NrButton.Style.SUBMIT,
+			"nr-cancel": this.style === NrButton.Style.CANCEL,
+			"nr-default": this.style === NrButton.Style.DEFAULT,
+			"nr-accept": this.style === NrButton.Style.ACCEPT,
+			"nr-disabled": !this.enabled
 		};
 	}
 
@@ -162,10 +234,18 @@ export class NrButtonController {
 	 */
 	onClick ($event) {
 
-		if (_.isFunction(this.__click)) {
+		if ( this._hasClickAttribute && _.isFunction(this.__click)) {
+
+			nrLog.trace(`.onClick(): Using nr-click attribute`);
+
 			return this.__click({nrButton: this, $event});
+
 		} else {
-			nrLog.warn(`No click handler defined.`);
+
+			this._$scope.$emit(NrEventName.BUTTON_CLICK, this);
+
+			nrLog.trace(`.onClick(): No click action configured; emitted an event BUTTON_CLICK "${NrEventName.BUTTON_CLICK}"`);
+
 		}
 
 	}
@@ -175,7 +255,32 @@ export class NrButtonController {
 	 * @returns {boolean}
 	 */
 	hasIcon () {
-		return this.__icon !== undefined;
+
+		if (this._hasIconAttribute) {
+			return this.__icon !== undefined;
+		}
+
+		return _.has(this.__nrModel, 'icon.value') !== undefined;
+
+	}
+
+	/**
+	 *
+	 * @returns {NrButton|undefined}
+	 */
+	get nrModel () {
+		return this.__nrModel;
+	}
+
+	/**
+	 *
+	 * Use `.nrModel`
+	 *
+	 * @returns {NrButton|undefined}
+	 * @deprecated
+	 */
+	get model () {
+		return this.__nrModel;
 	}
 
 	/**
@@ -183,7 +288,58 @@ export class NrButtonController {
 	 * @returns {boolean}
 	 */
 	get enabled () {
-		return this.__enabled !== false;
+		if (this._hasEnabledAttribute) {
+			return this.__enabled !== false;
+		} else {
+			return _.get(this.__nrModel, 'enabled') !== false;
+		}
+	}
+
+	/**
+	 *
+	 * @returns {string}
+	 */
+	get style () {
+		if (this._hasStyleAttribute) {
+			return this.__style;
+		} else {
+			return _.get(this.__nrModel, 'style');
+		}
+	}
+
+	/**
+	 *
+	 * **DEPRECATED:** Use `$ctrl.style` instead.
+	 *
+	 * @returns {string}
+	 * @deprecated
+	 */
+	get type () {
+		return this.style;
+	}
+
+	/**
+	 *
+	 * @returns {string}
+	 */
+	get name () {
+		if (this._hasNameAttribute) {
+			return this.__name;
+		} else {
+			return _.get(this.__nrModel, 'name');
+		}
+	}
+
+	/**
+	 *
+	 * @returns {string}
+	 */
+	get id () {
+		if (this._hasIdAttribute) {
+			return this.__id;
+		} else {
+			return _.get(this.__nrModel, 'id');
+		}
 	}
 
 	/**
@@ -191,7 +347,11 @@ export class NrButtonController {
 	 * @returns {NrIconValue|string}
 	 */
 	get icon () {
-		return this.__icon;
+		if (this._hasIconAttribute) {
+			return this.__icon;
+		} else {
+			return _.get(this.__nrModel, 'icon.value');
+		}
 	}
 
 	/**
@@ -199,7 +359,45 @@ export class NrButtonController {
 	 * @returns {string}
 	 */
 	get label () {
-		return this.__label;
+		if (this._hasLabelAttribute) {
+			return this.__label;
+		} else {
+			return _.get(this.__nrModel, 'label');
+		}
+	}
+
+	/**
+	 *
+	 * @returns {string}
+	 */
+	get bindType () {
+
+		return this.__style;
+
+	}
+
+	/**
+	 *
+	 * @param value {string}
+	 */
+	set bindType (value) {
+
+		if (this.__style !== value) {
+
+			this.__style = value;
+
+		}
+
+	}
+
+	$onInit () {
+
+		if (this._hasTypeAttribute) {
+
+			nrLog.warn(`Warning! nr-type attribute for nr-button component is obsolete. Use nr-style instead.`);
+
+		}
+
 	}
 
 }

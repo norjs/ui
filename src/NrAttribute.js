@@ -6,6 +6,7 @@
 export const NrAttribute = {
     ID: "nrId"
     , TYPE: "nrType"
+    , STYLE: "nrStyle"
     , MODEL: "nrModel"
     , LABEL: "nrLabel"
     , NAME: "nrName"

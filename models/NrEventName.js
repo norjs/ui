@@ -38,7 +38,7 @@ export const NrEventName = {
     /**
      * Triggered to parent scopes when `nr-form` was configured without a cancel callback.
      *
-     * The event string is "NrForm:onSubmit".
+     * The event string is "NrForm:onCancel".
      *
      * The event arguments are:
      *
@@ -48,7 +48,21 @@ export const NrEventName = {
      *
      * @fixme: Check out which is type for AngularJS event
      */
-    FORM_CANCEL: 'NrForm:onCancel'
+    FORM_CANCEL: 'NrForm:onCancel',
+
+    /**
+     * Triggered to parent scopes when `nr-button` was configured without a click callback.
+     *
+     * The event string is "NrButton:onClick".
+     *
+     * The event arguments are:
+     *
+     *   1. Angular's Event Object -- includes the event name in `event.name`
+     *   2. {NrButtonController} The nr-button controller
+     *
+     * @fixme: Check out which is type for AngularJS event
+     */
+    BUTTON_CLICK: 'NrButton:onClick'
 
 };
 
