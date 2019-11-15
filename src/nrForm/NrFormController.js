@@ -4,7 +4,6 @@ import {NrInputController} from "../nrInput/NrInputController";
 import NrTag from "../NrTag";
 import NrModelUtils from "../../utils/NrModelUtils";
 import NrEventName from "../../models/NrEventName";
-import WaTranslation from '../../../work-assistant/WaTranslation';
 import NrIcon from '../../models/NrIcon';
 
 // noinspection JSUnusedLocalSymbols
@@ -19,13 +18,14 @@ const PRIVATE = {
 	nrModel                   : Symbol('_nrModel')
 	, submitAction            : Symbol('_submitAction')
 	, cancelAction            : Symbol('_cancelAction')
+	, isCancelVisible         : Symbol('_cancelVisible')
 	, items                   : Symbol('_items')
 	, updateItems             : Symbol('_updateItems')
 	, ngFormController        : Symbol('_ngForm')
 	, fieldControllers        : Symbol('_fieldControllers')
 	, getFieldValues          : Symbol('_getFieldValues')
 	, getItemId               : Symbol('_getItemId')
-	, $scope               : Symbol('_$scope')
+	, $scope                  : Symbol('_$scope')
 };
 
 /**
@@ -79,6 +79,7 @@ export class NrFormController {
 			bindNrModel: "<nrModel"
 			, bindSubmitAction: "&?nrSubmit"
 			, bindCancelAction: "&?nrCancel"
+			, bindCancelVisible: "&?nrCancelVisible"
 		};
 	}
 
@@ -308,12 +309,42 @@ export class NrFormController {
 
 	}
 
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS binding uses this.
+	 *
+	 * @param value {Function | undefined}
+	 */
+	set bindCancelVisible (value) {
+
+		this[PRIVATE.isCancelVisible] = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS binding uses this.
+	 *
+	 * @returns {Function|undefined}
+	 */
+	get bindCancelVisible () {
+
+		return this[PRIVATE.isCancelVisible];
+
+	}
+
 	/**
 	 *
 	 * @returns {boolean}
 	 */
 	hasCancelAction () {
+
+		if (_.isFunction(this[PRIVATE.isCancelVisible])) {
+			return this[PRIVATE.isCancelVisible]({nrFormController: this});
+		}
+
 		return _.isFunction(this[PRIVATE.cancelAction]);
+
 	}
 
 	// noinspection JSUnusedGlobalSymbols
