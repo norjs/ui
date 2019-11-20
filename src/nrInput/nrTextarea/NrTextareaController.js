@@ -455,6 +455,13 @@ export class NrTextareaController extends NrTextInputController {
 
 	}
 
+	/**
+	 * Template uses this
+	 * @returns {string}
+	 */
+	getPlaceholder () {
+		return super.getPlaceholder();
+	}
 
 }
 

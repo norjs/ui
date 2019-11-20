@@ -15,6 +15,7 @@ export const NrObjectType = {
     DIV: 'NrDiv',
     NAV: 'NrNav',
     TEXT_FIELD: 'NrTextField',
+    DATE_FIELD: 'NrDateField',
     PASSWORD_FIELD: 'NrPasswordField',
     CHECKBOX_FIELD: 'NrCheckboxField',
     TEXTAREA_FIELD: 'NrTextareaField',

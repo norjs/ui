@@ -37,11 +37,13 @@ export class NrPasswordField extends NrView {
      *
      * @param [name] {string}
      * @param [label] {string}
+     * @param [placeholder] {string}
      * @param [icon] {NrIcon}
      */
     constructor ({
         name = undefined
         , label = undefined
+        , placeholder = undefined
         , icon = undefined
     } = {}) {
 
@@ -51,6 +53,10 @@ export class NrPasswordField extends NrView {
 
         if ( label !== undefined && !_.isString(label) ) {
             throw new TypeError(`new ${NrPasswordField.nrName}(): label invalid: "${label}"`);
+        }
+
+        if ( placeholder !== undefined && !_.isString(placeholder) ) {
+            throw new TypeError(`new ${NrPasswordField.nrName}(): placeholder invalid: "${placeholder}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
@@ -72,6 +78,13 @@ export class NrPasswordField extends NrView {
          * @protected
          */
         this._label = label;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._placeholder = placeholder;
 
         /**
          *
@@ -100,6 +113,14 @@ export class NrPasswordField extends NrView {
 
     /**
      *
+     * @returns {string}
+     */
+    get placeholder () {
+        return this._placeholder;
+    }
+
+    /**
+     *
      * @returns {NrIcon}
      */
     get icon () {
@@ -122,6 +143,7 @@ export class NrPasswordField extends NrView {
         return {
             type: this.type
             , label: this._label
+            , placeholder: this._placeholder
             , name: this._name
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
         };
@@ -146,6 +168,7 @@ export class NrPasswordField extends NrView {
             type
             , name
             , label
+            , placeholder
             , icon
         } = value;
 
@@ -154,9 +177,10 @@ export class NrPasswordField extends NrView {
         }
 
         return new NrPasswordField({
-              name  : !_.isNil(name)  ? name                    : undefined
-            , label : !_.isNil(label) ? label                   : undefined
-            , icon  : !_.isNil(icon)  ? NrIcon.parseValue(icon) : undefined
+              name        : !_.isNil(name)        ? name                    : undefined
+            , label       : !_.isNil(label)       ? label                   : undefined
+            , placeholder : !_.isNil(placeholder) ? placeholder                   : undefined
+            , icon        : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
         });
 
     }

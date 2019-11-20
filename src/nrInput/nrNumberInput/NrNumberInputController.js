@@ -447,6 +447,14 @@ export class NrNumberInputController extends NrTextInputController {
 
 	}
 
+	/**
+	 * Template uses this
+	 * @returns {string|undefined}
+	 */
+	getPlaceholder () {
+		return super.getPlaceholder();
+	}
+
 }
 
 // noinspection JSUnusedGlobalSymbols

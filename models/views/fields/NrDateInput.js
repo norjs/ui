@@ -1,27 +1,27 @@
 import _ from 'lodash';
-import NrField from "./NrField";
+import NrView from "../NrView";
 import NrObjectType from "../../NrObjectType";
 import NrIcon from "../../NrIcon";
 
 /**
  *
  */
-export class NrTextField extends NrField {
+export class NrDateField extends NrView {
 
     /**
      *
      * @returns {string}
      */
     static get nrName () {
-        return NrObjectType.TEXT_FIELD;
+        return NrObjectType.DATE_FIELD;
     }
 
     /**
      *
-     * @returns {typeof NrTextField}
+     * @returns {typeof NrDateField}
      */
     get Class () {
-        return NrTextField;
+        return NrDateField;
     }
 
     // noinspection JSUnusedGlobalSymbols
@@ -48,19 +48,19 @@ export class NrTextField extends NrField {
     } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
-            throw new TypeError(`new ${NrTextField.nrName}(): name invalid: "${name}"`);
+            throw new TypeError(`new ${NrDateField.nrName}(): name invalid: "${name}"`);
         }
 
         if ( label !== undefined && !_.isString(label) ) {
-            throw new TypeError(`new ${NrTextField.nrName}(): label invalid: "${label}"`);
+            throw new TypeError(`new ${NrDateField.nrName}(): label invalid: "${label}"`);
         }
 
         if ( placeholder !== undefined && !_.isString(placeholder) ) {
-            throw new TypeError(`new ${NrTextField.nrName}(): placeholder invalid: "${placeholder}"`);
+            throw new TypeError(`new ${NrDateField.nrName}(): placeholder invalid: "${placeholder}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
-            throw new TypeError(`new ${NrTextField.nrName}(): icon invalid: "${icon}"`);
+            throw new TypeError(`new ${NrDateField.nrName}(): icon invalid: "${icon}"`);
         }
 
         super();
@@ -100,7 +100,7 @@ export class NrTextField extends NrField {
      * @returns {string}
      */
     get type () {
-        return NrObjectType.TEXT_FIELD;
+        return NrObjectType.DATE_FIELD;
     }
 
     /**
@@ -151,16 +151,8 @@ export class NrTextField extends NrField {
 
     /**
      *
-     * @returns {Object}
-     */
-    toJSON () {
-        return this.valueOf();
-    }
-
-    /**
-     *
      * @param value {*}
-     * @returns {NrTextField}
+     * @returns {NrDateField}
      */
     static parseValue (value) {
 
@@ -168,7 +160,7 @@ export class NrTextField extends NrField {
             throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
         }
 
-        if ( value instanceof NrTextField ) {
+        if ( value instanceof NrDateField ) {
             return value;
         }
 
@@ -180,15 +172,15 @@ export class NrTextField extends NrField {
             , icon
         } = value;
 
-        if ( type !== NrObjectType.TEXT_FIELD ) {
+        if ( type !== NrObjectType.DATE_FIELD ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
-        return new NrTextField({
-            name           : !_.isNil(name)         ? name                    : undefined
-            , label        : !_.isNil(label)        ? label                   : undefined
-            , placeholder  : !_.isNil(placeholder)  ? placeholder             : undefined
-            , icon         : !_.isNil(icon)         ? NrIcon.parseValue(icon) : undefined
+        return new NrDateField({
+              name        : !_.isNil(name)        ? name                    : undefined
+            , label       : !_.isNil(label)       ? label                   : undefined
+            , placeholder : !_.isNil(placeholder) ? placeholder             : undefined
+            , icon        : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
         });
 
     }
@@ -196,4 +188,4 @@ export class NrTextField extends NrField {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrTextField;
+export default NrDateField;

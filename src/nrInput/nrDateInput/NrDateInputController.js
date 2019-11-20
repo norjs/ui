@@ -1,11 +1,10 @@
 import _ from 'lodash';
-import NrInputController from '../NrInputController.js';
 import moment from "moment";
 import NrAttribute from "../../NrAttribute";
 import NgAttribute from "../../NgAttribute";
 import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
-import NrStyleClass from "../../NrStyleClass";
+import { NrTextInputController } from "../nrTextInput/NrTextInputController";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.DATE_INPUT);
@@ -16,21 +15,29 @@ const nrLog = LogUtils.getLogger(NrTag.DATE_INPUT);
  * @readonly
  */
 const PRIVATE = {
-	useLabel: Symbol('useLabel'),
-	ngModelController: Symbol('ngModelController'),
-	ngModel: Symbol('ngModel'),
-	innerViewValue: Symbol('innerViewValue'),
-	focus: Symbol('focus')
+	useLabel: Symbol('_useLabel')
+	, ngModelController: Symbol('_ngModelController')
+	, ngModel: Symbol('_ngModel')
+	, innerViewValue: Symbol('_innerViewValue')
+	, focus: Symbol('_focus')
+	, nrFormController: Symbol('_nrFormController')
+	, type: Symbol('_type')
+	, id: Symbol('_id')
+	, name: Symbol('_name')
+	, nrModel: Symbol('_nrModel')
+	, label: Symbol('_label')
+	, $element: Symbol('_$element')
+	, $timeout: Symbol('_$timeout')
 };
 
 /**
  *
  * TODO: Implement support for ng-touched: $setTouched(): A model is considered to be touched when the user has first
- * focused the control element and then shifted focus away from the control (blur event).
+ *       focused the control element and then shifted focus away from the control (blur event).
  *
  * @ngInject
  */
-export class NrDateInputController extends NrInputController {
+export class NrDateInputController extends NrTextInputController {
 
 	/**
 	 *
@@ -62,11 +69,11 @@ export class NrDateInputController extends NrInputController {
 	 */
 	static getComponentBindings () {
 		return {
-			__type: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
-			, __id: `@?${NrAttribute.ID}` // FIXME: This is not used?
-			, __name: `@?${NrAttribute.NAME}` // FIXME: This is not used?
-			, __label: `@?${NrAttribute.LABEL}`
-			, __ngModel: `=?${NgAttribute.MODEL}`
+			bindNrType: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
+			, bindNrId: `@?${NrAttribute.ID}` // FIXME: This is not used?
+			, bindNrName: `@?${NrAttribute.NAME}`
+			, bindNrModel: `<?${NrAttribute.MODEL}`
+			, bindNrLabel: `@?${NgAttribute.LABEL}`
 		};
 	}
 
@@ -76,8 +83,7 @@ export class NrDateInputController extends NrInputController {
 	 */
 	static getComponentRequire () {
 		return {
-			__nrForm: `?^^${NrTag.FORM}`,
-			__ngModelController: `?^${NgAttribute.MODEL}`
+			bindNrFormController: `?^^${NrTag.FORM}`
 		};
 	}
 
@@ -96,38 +102,39 @@ export class NrDateInputController extends NrInputController {
 		};
 	}
 
+	static get MODEL_DATE_FORMAT () {
+		return 'YYYY-MM-DD';
+	}
+
+	get MODEL_DATE_FORMAT () {
+		return this.Class.MODEL_DATE_FORMAT;
+	}
+
+	static get VIEW_DATE_FORMAT () {
+		return 'DD.MM.YYYY';
+	}
+
+	get VIEW_DATE_FORMAT () {
+		return this.Class.VIEW_DATE_FORMAT;
+	}
+
 	/**
 	 *
 	 * @param $attrs {angular.IAttributes}
 	 * @param $element {JQLite}
-	 * @param $scope {angular.IScope}
 	 * @param $timeout {angular.ITimeoutService}
 	 * @ngInject
 	 */
-	constructor ($attrs, $element, $scope, $timeout) {
+	constructor ($attrs, $element, $timeout) {
 
-		super();
-
-		/**
-		 *
-		 * @member {JQLite}
-		 * @private
-		 */
-		this.$element = $element;
-
-		/**
-		 *
-		 * @member {angular.IScope}
-		 * @private
-		 */
-		this.$scope = $scope;
+		super($attrs, $element);
 
 		/**
 		 *
 		 * @member {angular.ITimeoutService}
 		 * @private
 		 */
-		this.$timeout = $timeout;
+		this[PRIVATE.$timeout] = $timeout;
 
 		/**
 		 * If `true`, the model value will be normalized after next blur.
@@ -137,88 +144,13 @@ export class NrDateInputController extends NrInputController {
 		 */
 		this._normalizeModelValueNextBlur = false;
 
-		/**
-		 *
-		 * @member {string|undefined}
-		 * @private
-		 */
-		this.__type = undefined;
+	}
 
-		/**
-		 *
-		 * @member {string|undefined}
-		 * @private
-		 */
-		this.__id = undefined;
+	$onDestroy () {
 
-		// noinspection JSUnusedGlobalSymbols
-		/**
-		 *
-		 * @member {string|undefined}
-		 * @private
-		 */
-		this.__name = undefined;
+		super.$onDestroy();
 
-		/**
-		 *
-		 * @member {string|undefined}
-		 * @private
-		 */
-		this.__label = undefined;
-
-		// noinspection JSUnusedGlobalSymbols
-		/**
-		 *
-		 * @member {angular.IFormController|undefined}
-		 * @private
-		 */
-		this.__nrForm = undefined;
-
-		/**
-		 * The state for our .useLabel() implementation.
-		 *
-		 * @member {boolean}
-		 */
-		this[PRIVATE.useLabel] = !!_.has($attrs, NgAttribute.LABEL);
-
-		/**
-		 * The ng-model's controller.
-		 *
-		 * @member {angular.INgModelController}
-		 */
-		this[PRIVATE.ngModelController] = undefined;
-
-		/**
-		 *
-		 * @member {string}
-		 */
-		this[PRIVATE.ngModel] = undefined;
-
-		/**
-		 *
-		 * @member {string}
-		 */
-		this[PRIVATE.innerViewValue] = undefined;
-
-		/**
-		 *
-		 * @member {string}
-		 * @fixme This should be from somewhere like a settings service
-		 */
-		this.MODEL_DATE_FORMAT = 'YYYY-MM-DD';
-
-		/**
-		 *
-		 * @member {string}
-		 */
-		this.VIEW_DATE_FORMAT = 'DD.MM.YYYY';
-
-		/**
-		 * If `true`, this controller has focus.
-		 *
-		 * @member {boolean}
-		 */
-		this[PRIVATE.focus] = false;
+		this[PRIVATE.$timeout] = undefined;
 
 	}
 
@@ -227,7 +159,7 @@ export class NrDateInputController extends NrInputController {
 	 * @returns {boolean}
 	 */
 	useLabel () {
-		return this[PRIVATE.useLabel];
+		return super.useLabel();
 	}
 
 	/**
@@ -236,18 +168,46 @@ export class NrDateInputController extends NrInputController {
 	 * @returns {string}
 	 */
 	getLabel () {
-		return this.__label;
+		return super.getLabel();
 	}
 
-	// noinspection JSUnusedGlobalSymbols
 	/**
-	 * Handles ngModel controller getter for AngularJS required feature.
 	 *
-	 * @returns {ngModel.ngModelController}
-	 * @private
+	 * @returns {boolean}
 	 */
-	get __ngModelController () {
-		return this[PRIVATE.ngModelController];
+	hasIconValue () {
+		return super.hasIconValue();
+	}
+
+	/**
+	 *
+	 * @returns {NrIconValue|string|undefined}
+	 */
+	getIconValue () {
+
+		return super.getIconValue();
+
+	}
+
+	/**
+	 *
+	 * @returns {string|undefined}
+	 */
+	getName () {
+
+		return super.getName();
+
+	}
+
+	/**
+	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
+	 *
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
+	 *
+	 * @returns {boolean}
+	 */
+	hasNgModelController () {
+		return super.hasNgModelController();
 	}
 
 	// noinspection JSUnusedGlobalSymbols
@@ -255,27 +215,31 @@ export class NrDateInputController extends NrInputController {
 	 * Handles ngModel controller setter for AngularJS required feature.
 	 *
 	 * @param controller {ngModel.ngModelController}
-	 * @private
 	 */
-	set __ngModelController (controller) {
-		if (controller) {
-			this[PRIVATE.ngModelController] = controller;
-			this._initNgModelController();
-		} else if (this[PRIVATE.ngModelController]) {
-			this[PRIVATE.ngModelController] = undefined;
-		}
+	setNgModelController (controller) {
+		return super.setNgModelController(controller);
+	}
+
+	/**
+	 * Returns AngularJS angular.INgModelController of this component, if one exists.
+	 *
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element in the template.
+	 *
+	 * @returns {angular.INgModelController|undefined}
+	 */
+	getNgModelController () {
+		return super.getNgModelController();
 	}
 
 	/**
 	 *
-	 * @private
+	 * @protected
 	 */
 	_initNgModelController () {
 
-		const ngModelController = this[PRIVATE.ngModelController];
+		super._initNgModelController();
 
-		// Setup $render
-		ngModelController.$render = () => this.onNgModelRender();
+		const ngModelController = this.getNgModelController();
 
 		// Setup $parsers
 		ngModelController.$parsers.push(
@@ -293,22 +257,23 @@ export class NrDateInputController extends NrInputController {
 		// FIXME: Implement cancelers for timeout on destroy
 
 		// Validate model values after a short delay
-		this.$timeout( () => {
+		this[PRIVATE.$timeout]( () => {
+
 			const modelValue = this._getModelValue();
-			if (_.isString(modelValue) && /^([0-9]{1,2})\.([0-9]{1,2})\.((19|20)[0-9]{2})$/.test(modelValue.replace(/ +/, ""))) {
-				const date = moment(modelValue, "DD.MM.YYYY");
-				if (!date.isValid()) return;
+
+			if ( this.Class.isViewDateString( modelValue.replace(/ +/, "") )) {
+
+				const date = this.Class.parseViewStringToDate(modelValue);
+				if (!this.Class.isValidDateValue(date)) return;
 
 				const newModelValue = date.format(this.MODEL_DATE_FORMAT);
 				this._setModelValue( newModelValue );
 				//nrLog.trace(`Fixed model value: "${modelValue}" ==> "${newModelValue}"`);
 
-				// $scope.$evalAsync nor $scope.$applyAsync did nothing, $timeout is required here.
-				this.$timeout( () => {
-					//nrLog.trace('Validating...');
-					this.getNgModelController().$validate();
-				}, 0);
+				this._validateLater();
+
 			}
+
 		}, 0);
 
 	}
@@ -345,9 +310,9 @@ export class NrDateInputController extends NrInputController {
 		}
 
 		// Check if date was already in the model format
-		if (/^((19|20)[0-9]{2})-([0-9]{1,2})-([0-9]{1,2})$/.test(value)) {
-			const date = moment(value, "YYYY-MM-DD");
-			if (!date.isValid()) {
+		if ( this.Class.isModelDateString(value) ) {
+			const date = this.Class.parseModelStringToDate(value);
+			if (!this.Class.isValidDateValue(date)) {
 				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
 				return;
 			}
@@ -357,9 +322,9 @@ export class NrDateInputController extends NrInputController {
 		}
 
 		// Check if date is in a correct view format
-		if (/^([0-9]{1,2})\.([0-9]{1,2})\.((19|20)[0-9]{2})$/.test(value)) {
-			const date = moment(value, "DD.MM.YYYY");
-			if (!date.isValid()) {
+		if ( this.Class.isViewDateString(value) ) {
+			const date = this.Class.parseViewStringToDate(value);
+			if (!this.Class.isValidDateValue(date)) {
 				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
 				return;
 			}
@@ -403,21 +368,24 @@ export class NrDateInputController extends NrInputController {
 		}
 
 		// Check if date was in the model format
-		if (/^((19|20)[0-9]{2})-([0-9]{1,2})-([0-9]{1,2})$/.test(value)) {
-			const date = moment(value, "YYYY-MM-DD");
-			if (!date.isValid()) {
+		if ( this.Class.isModelDateString(value) ) {
+
+			const date = this.Class.parseModelStringToDate(value);
+			if ( !this.Class.isValidDateValue(date) ) {
 				//nrLog.trace(`valueFormatter: "${origValue}" ==> "${origValue}" : not valid date`);
 				return origValue;
 			}
 			value = date.format(this.VIEW_DATE_FORMAT);
 			//nrLog.trace(`valueFormatter: "${origValue}" ==> "${value}" : correct model format`);
 			return value;
+
 		}
 
 		// Check if date is in a correct view format
-		if (/^([0-9]{1,2})\.([0-9]{1,2})\.((19|20)[0-9]{2})$/.test(value)) {
-			const date = moment(value, "DD.MM.YYYY");
-			if (!date.isValid()) {
+		if ( this.Class.isViewDateString(value) ) {
+
+			const date = this.Class.parseViewStringToDate(value);
+			if ( !this.Class.isValidDateValue(date) ) {
 				//nrLog.trace(`valueFormatter: "${origValue}" ==> "${origValue}" : not valid date`);
 				return origValue;
 			}
@@ -429,6 +397,7 @@ export class NrDateInputController extends NrInputController {
 			}
 
 			return value;
+
 		}
 
 		//nrLog.trace(`valueFormatter: "${origValue}" ==> "${origValue}" : unknown format`);
@@ -445,11 +414,17 @@ export class NrDateInputController extends NrInputController {
 	 * @private
 	 */
 	static _valueValidator (modelValue, viewValue) {
+
 		if (modelValue === undefined) return true;
+
 		if (!_.isString(modelValue)) return false;
+
 		if (modelValue.length === 0) return true;
-		if (! /^((19|20)[0-9]{2})-([0-9]{2})-([0-9]{2})$/.test(modelValue) ) return false;
-		return moment(modelValue, "YYYY-MM-DD").isValid();
+
+		if (! this.isModelDateString(modelValue) ) return false;
+
+		return this.isValidDateValue( this.parseModelStringToDate(modelValue) );
+
 	}
 
 	/**
@@ -458,36 +433,40 @@ export class NrDateInputController extends NrInputController {
 	 * @private
 	 */
 	_normalizeModelValue () {
+
 		this._setModelValue( this._valueParser(this.getViewValue()) );
-		if (this.hasNgModelController()) {
-			// $scope.$evalAsync nor $scope.$applyAsync did nothing, $timeout is required here.
-			this.$timeout( () => {
-				//nrLog.trace('Validating...');
-				this.getNgModelController().$validate();
-			}, 0);
-		}
+
+		this._validateLater();
+
 	}
 
 	/**
-	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
 	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
-	 *
-	 * @returns {boolean}
+	 * @private
+	 * @FIXME Timeout should be cancelled if component is destroyed
 	 */
-	hasNgModelController () {
-		return !!this[PRIVATE.ngModelController];
-	}
+	_validateLater () {
 
-	/**
-	 * Returns AngularJS angular.INgModelController of this component, if one exists.
-	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element in the template.
-	 *
-	 * @returns {angular.INgModelController|undefined}
-	 */
-	getNgModelController () {
-		return this[PRIVATE.ngModelController];
+		// $scope.$evalAsync nor $scope.$applyAsync did nothing, $timeout is required here.
+		this[PRIVATE.$timeout]( () => {
+
+			nrLog.trace('._normalizeModelValue(): Validating after a timeout...');
+
+			const ngModelController = this.getNgModelController();
+
+			if (ngModelController) {
+
+				nrLog.trace('._normalizeModelValue(): Validating now.');
+				ngModelController.$validate();
+
+			} else {
+
+				nrLog.warn(`._normalizeModelValue(): Warning! No ngModelController detected.`);
+
+			}
+
+		}, 0);
+
 	}
 
 	/**
@@ -496,7 +475,7 @@ export class NrDateInputController extends NrInputController {
 	 * @returns {string|undefined}
 	 */
 	getViewValue () {
-		return this.hasNgModelController() ? this.getNgModelController().$viewValue : undefined;
+		return super.getViewValue();
 	}
 
 	/**
@@ -506,11 +485,10 @@ export class NrDateInputController extends NrInputController {
 	 * @param trigger {string} Event that triggered the update.
 	 */
 	setViewValue (value, trigger) {
-		const ngModelController = this.getNgModelController();
-		ngModelController.$setViewValue(value, trigger);
-		ngModelController.$setDirty();
-	}
 
+		super.setViewValue(value, trigger);
+
+	}
 
 	/**
 	 * This callback is called from ngModel.ngModelController's $render implementation.
@@ -518,56 +496,18 @@ export class NrDateInputController extends NrInputController {
 	 * See more at this._initNgModelController().
 	 */
 	onNgModelRender () {
-		this.innerViewValue = this.getViewValue();
-	}
 
-	// noinspection JSUnusedGlobalSymbols
-	/**
-	 * This is the getter for component attribute binding of the ng-model attribute given to this component.
-	 *
-	 * AngularJS will call this method from ngModel controller.
-	 *
-	 */
-	get __ngModel () {
-		return this._getModelValue();
-	}
+		super.onNgModelRender();
 
-	// noinspection JSUnusedGlobalSymbols
-	/**
-	 * This is the setter for component attribute binding of the ng-model attribute given to this component.
-	 *
-	 * AngularJS will call this method from ngModel controller.
-	 *
-	 * @param value
-	 * @private
-	 */
-	set __ngModel (value) {
-		this._setModelValue(value);
-	}
-
-	/**
-	 *
-	 * @returns {string} Date as a string in format YYYY-MM-DD
-	 * @private
-	 */
-	_getModelValue () {
-		return this[PRIVATE.ngModel];
-	}
-
-	/**
-	 *
-	 * @param value {string} Date as a string in format YYYY-MM-DD
-	 * @private
-	 */
-	_setModelValue (value) {
-		this[PRIVATE.ngModel] = value;
 	}
 
 	/**
 	 * Called from the template when inner nrInput element changes model value, eg. our inner view value.
 	 */
 	onChange () {
-		this.setViewValue(this.innerViewValue, undefined);
+
+		super.onChange();
+
 	}
 
 	/**
@@ -578,7 +518,7 @@ export class NrDateInputController extends NrInputController {
 	 * @returns {string}
 	 */
 	get innerViewValue () {
-		return this[PRIVATE.innerViewValue];
+		return super.innerViewValue;
 	}
 
 	/**
@@ -589,7 +529,19 @@ export class NrDateInputController extends NrInputController {
 	 * @param value {string}
 	 */
 	set innerViewValue (value) {
-		this[PRIVATE.innerViewValue] = value;
+
+		super.innerViewValue = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * Returns `true` if this element has focus.
+	 *
+	 * @returns {boolean}
+	 */
+	hasFocus () {
+		return super.hasFocus();
 	}
 
 	/**
@@ -598,12 +550,13 @@ export class NrDateInputController extends NrInputController {
 	 * @param $event
 	 */
 	onFocus ($event) {
-		this[PRIVATE.focus] = true;
-		this._updateFocusStyles();
+
+		super.onFocus($event);
 
 		if (!this.getViewValue()) {
-			this._setModelValue(moment().format(this.MODEL_DATE_FORMAT));
+			this.setViewValue( moment().format(this.VIEW_DATE_FORMAT) );
 		}
+
 	}
 
 	/**
@@ -612,22 +565,14 @@ export class NrDateInputController extends NrInputController {
 	 * @param $event
 	 */
 	onBlur ($event) {
-		this[PRIVATE.focus] = false;
-		this._updateFocusStyles();
+
+		super.onBlur($event);
 
 		if (this._normalizeModelValueNextBlur) {
 			this._normalizeModelValueNextBlur = false;
 			this._normalizeModelValue();
 		}
-	}
 
-	/**
-	 * Returns `true` if this element has focus.
-	 *
-	 * @returns {boolean}
-	 */
-	hasFocus () {
-		return this[PRIVATE.focus];
 	}
 
 	/**
@@ -636,8 +581,231 @@ export class NrDateInputController extends NrInputController {
 	 */
 	_updateFocusStyles () {
 
-		this.Class.toggleClass(this.$element, NrStyleClass.FOCUS, this[PRIVATE.focus]);
+		super._updateFocusStyles();
 
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {string|undefined}
+	 */
+	get bindNrType () {
+		return super.bindNrType;
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {string|undefined}
+	 */
+	set bindNrType (value) {
+
+		super.bindNrType = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {string|undefined}
+	 */
+	get bindNrId () {
+		return super.bindNrId;
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {string|undefined}
+	 */
+	set bindNrId (value) {
+
+		super.bindNrId = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {string|undefined}
+	 */
+	get bindNrName () {
+
+		return super.bindNrName;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {string|undefined}
+	 */
+	set bindNrName (value) {
+
+		super.bindNrName = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {NrTextField|undefined}
+	 */
+	get bindNrModel () {
+
+		return super.bindNrModel;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {NrTextField|undefined}
+	 */
+	set bindNrModel (value) {
+
+		super.bindNrModel = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {string|undefined}
+	 */
+	get bindNrLabel () {
+		return super.bindNrLabel;
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {string|undefined}
+	 */
+	set bindNrLabel (value) {
+
+		super.bindNrLabel = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {string|undefined}
+	 */
+	get bindNgModel () {
+		return super.bindNgModel;
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {string|undefined}
+	 */
+	set bindNgModel (value) {
+
+		return super.bindNgModel = value;
+
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {NrFormController|undefined}
+	 */
+	get bindNrFormController () {
+		return super.bindNrFormController;
+	}
+
+	// noinspection JSUnusedGlobalSymbols
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @param value {NrFormController|undefined}
+	 */
+	set bindNrFormController (value) {
+
+		super.bindNrFormController = value;
+
+	}
+
+	/**
+	 *
+	 * @param $event
+	 */
+	onLabelClick ($event) {
+
+		super.onLabelClick($event);
+
+	}
+
+	/**
+	 * Returns `true` if `value` is a string which contains a date like "YYYY-MM-DD".
+	 *
+	 * @param value {*}
+	 * @returns {boolean}
+	 */
+	static isModelDateString (value) {
+		return _.isString(value) && /^((19|20)[0-9]{2})-([0-9]{1,2})-([0-9]{1,2})$/.test(value);
+	}
+
+	/**
+	 * Returns `true` if `value` is a string which contains a date like "DD.MM.YYYY".
+	 *
+	 * @param value
+	 * @returns {boolean}
+	 */
+	static isViewDateString (value) {
+		return _.isString(value) && /^([0-9]{1,2})\.([0-9]{1,2})\.((19|20)[0-9]{2})$/.test(value);
+	}
+
+	/**
+	 *
+	 * @param value {string}
+	 * @returns {moment}
+	 */
+	static parseViewStringToDate (value) {
+		return moment(value, this.VIEW_DATE_FORMAT);
+	}
+
+	/**
+	 *
+	 * @param value {string}
+	 * @returns {moment}
+	 */
+	static parseModelStringToDate (value) {
+		return moment(value, this.MODEL_DATE_FORMAT);
+	}
+
+	/**
+	 *
+	 * @param value {moment}
+	 * @returns {boolean}
+	 */
+	static isValidDateValue (value) {
+		return value.isValid();
+	}
+
+	/**
+	 * Template uses this
+	 * @returns {string|undefined}
+	 */
+	getPlaceholder () {
+		return super.getPlaceholder();
 	}
 
 }

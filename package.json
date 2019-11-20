@@ -26,6 +26,7 @@
   "homepage": "https://github.com/norjs/ui#readme",
   "dependencies": {
     "@norjs/utils": "^1.0.18",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0"
   }
 }

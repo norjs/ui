@@ -6,6 +6,7 @@
 <input
     type="number"
     class="form-input theme-input"
+    placeholder="{{ $ctrl.getPlaceholder()|translate }}"
     ng-model="$ctrl.innerViewValue"
     nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
     ng-change="$ctrl.onChange()"

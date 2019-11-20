@@ -37,13 +37,15 @@ export class NrTextareaField extends NrField {
      *
      * @param [name] {string}
      * @param [label] {string}
+     * @param [placeholder] {string}
      * @param [icon] {NrIcon}
      */
     constructor ({
-                     name = undefined
-                     , label = undefined
-                     , icon = undefined
-                 } = {}) {
+        name = undefined
+        , label = undefined
+        , placeholder = undefined
+        , icon = undefined
+    } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
             throw new TypeError(`new ${NrTextareaField.nrName}(): name invalid: "${name}"`);
@@ -51,6 +53,10 @@ export class NrTextareaField extends NrField {
 
         if ( label !== undefined && !_.isString(label) ) {
             throw new TypeError(`new ${NrTextareaField.nrName}(): label invalid: "${label}"`);
+        }
+
+        if ( placeholder !== undefined && !_.isString(placeholder) ) {
+            throw new TypeError(`new ${NrTextareaField.nrName}(): placeholder invalid: "${placeholder}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
@@ -72,6 +78,13 @@ export class NrTextareaField extends NrField {
          * @protected
          */
         this._label = label;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._placeholder = placeholder;
 
         /**
          *
@@ -100,6 +113,14 @@ export class NrTextareaField extends NrField {
 
     /**
      *
+     * @returns {string}
+     */
+    get placeholder () {
+        return this._placeholder;
+    }
+
+    /**
+     *
      * @returns {NrIcon}
      */
     get icon () {
@@ -120,10 +141,11 @@ export class NrTextareaField extends NrField {
      */
     valueOf () {
         return {
-            type: this.type
-            , label: this._label
-            , name: this._name
-            , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
+              type        : this.type
+            , label       : this._label
+            , placeholder : this._placeholder
+            , name        : this._name
+            , icon        : !_.isNil(this._icon) ? this._icon.valueOf() : null
         };
     }
 
@@ -154,6 +176,7 @@ export class NrTextareaField extends NrField {
             type
             , name
             , label
+            , placeholder
             , icon
         } = value;
 
@@ -162,9 +185,10 @@ export class NrTextareaField extends NrField {
         }
 
         return new NrTextareaField({
-            name    : !_.isNil(name)  ? name                    : undefined
-            , label : !_.isNil(label) ? label                   : undefined
-            , icon  : !_.isNil(icon)  ? NrIcon.parseValue(icon) : undefined
+              name         : !_.isNil(name)        ? name                    : undefined
+            , label        : !_.isNil(label)       ? label                   : undefined
+            , placeholder  : !_.isNil(placeholder) ? placeholder             : undefined
+            , icon         : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
         });
 
     }

@@ -1,21 +1,78 @@
-nr-date-input {
-  margin: 0.2em;
-  padding: 0.2em;
+$date-label-color: #707076;
+$date-label-size:  1rem;
 
-  border-width: 1px;
-  border-style: solid;
+$date-border-size: 2px;
+$date-border-style: solid;
+$date-border-color: #f0f0f6;
+
+$date-focused-border-size: 2px;
+$date-focused-border-style: solid;
+$date-focused-border-color: #e0e6e0;
+
+nr-date-input {
 
   display: flex;
   flex-direction: column;
+  border: $date-border-size $date-border-style $date-border-color;
+  border-radius: 4px;
+  background-color: #fbfbfd;
+  max-width: 40em;
+  padding: 0;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
 
   & > label {
-    font-size: 1rem;
-    text-align: left;
+
+    display: flex;
+    padding: 0;
+    border-bottom: $date-border-size $date-border-style $date-border-color;
+    cursor: pointer;
+
+    & > nr-icon {
+
+      display: block;
+      font-size: $date-label-size;
+      color: $date-label-color;
+      border-right: $date-border-size $date-border-style $date-border-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+
+    }
+
+    & > .label {
+
+      flex: 1;
+      font-size: $date-label-size;
+      color: $date-label-color;
+      cursor: pointer;
+      padding: 0.5em 1em;
+      date-align: left;
+
+    }
+
   }
 
   & > input {
-    border-width: 1px;
-    border-style: solid;
+
+    cursor: pointer;
+    font-size: 0.8em;
+    padding: 0.8em 1em;
+    border: 0;
+
+  }
+
+  &.nr-focus {
+
+    border: $date-focused-border-size $date-focused-border-style $date-focused-border-color;
+
+    & > label {
+
+      background-color: #fbfffd;
+      border-bottom: $date-focused-border-size $date-focused-border-style $date-focused-border-color;
+
+    }
+
   }
 
 }

@@ -18,7 +18,7 @@ const PRIVATE = {
 	useLabel: Symbol('_useLabel')
 	, ngModelController: Symbol('_ngModelController')
 	, ngModel: Symbol('_ngModel')
-	, innerViewValue: Symbol('_innerViewValue')
+	, modelValue: Symbol('_modelValue')
 	, focus: Symbol('_focus')
 	, nrFormController: Symbol('_nrFormController')
 	, type: Symbol('_type')
@@ -39,18 +39,18 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
-	 * @returns {typeof NrTextInputController}
-	 */
-	get Class () {
-		return NrTextInputController;
-	}
-
-	/**
-	 *
 	 * @returns {NrTag|string}
 	 */
 	static get nrName () {
 		return NrTag.TEXT_INPUT;
+	}
+
+	/**
+	 *
+	 * @returns {typeof NrTextInputController}
+	 */
+	get Class () {
+		return NrTextInputController;
 	}
 
 	/**
@@ -188,7 +188,7 @@ export class NrTextInputController extends NrInputController {
 		 *
 		 * @type {string}
 		 */
-		this[PRIVATE.innerViewValue] = undefined;
+		this[PRIVATE.modelValue] = undefined;
 
 		/**
 		 * If `true`, this controller has focus.
@@ -275,6 +275,17 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	/**
+	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
+	 *
+	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
+	 *
+	 * @returns {boolean}
+	 */
+	hasNgModelController () {
+		return !!this[PRIVATE.ngModelController];
+	}
+
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * Handles ngModel controller setter for AngularJS required feature.
@@ -289,7 +300,7 @@ export class NrTextInputController extends NrInputController {
 
 			this[PRIVATE.ngModelController] = controller;
 
-			this[PRIVATE.ngModelController].$render = () => this.onNgModelRender();
+			this._initNgModelController();
 
 			nrLog.trace(`${this.nrName}: setNgModelController(): Installed ngModelController: `, controller);
 
@@ -308,17 +319,6 @@ export class NrTextInputController extends NrInputController {
 	}
 
 	/**
-	 * Returns true if we already have AngularJS angular.INgModelController registered to this component.
-	 *
-	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element which is in the template.
-	 *
-	 * @returns {boolean}
-	 */
-	hasNgModelController () {
-		return !!this[PRIVATE.ngModelController];
-	}
-
-	/**
 	 * Returns AngularJS angular.INgModelController of this component, if one exists.
 	 *
 	 * *Note!* This is ***NOT*** the ng-model controller of the child nrInput element in the template.
@@ -327,6 +327,15 @@ export class NrTextInputController extends NrInputController {
 	 */
 	getNgModelController () {
 		return this[PRIVATE.ngModelController];
+	}
+
+	/**
+	 * @protected
+	 */
+	_initNgModelController () {
+
+		this[PRIVATE.ngModelController].$render = () => this.onNgModelRender();
+
 	}
 
 	/**
@@ -368,7 +377,7 @@ export class NrTextInputController extends NrInputController {
 	 */
 	onNgModelRender () {
 
-		this.innerViewValue = this.getViewValue();
+		this._setModelValue( this.getViewValue() );
 
 	}
 
@@ -377,7 +386,7 @@ export class NrTextInputController extends NrInputController {
 	 */
 	onChange () {
 
-		this.setViewValue(this.innerViewValue, undefined);
+		this.setViewValue(this._getModelValue(), undefined);
 
 	}
 
@@ -389,7 +398,9 @@ export class NrTextInputController extends NrInputController {
 	 * @returns {string}
 	 */
 	get innerViewValue () {
-		return this[PRIVATE.innerViewValue];
+
+		return this[PRIVATE.modelValue];
+
 	}
 
 	/**
@@ -400,7 +411,32 @@ export class NrTextInputController extends NrInputController {
 	 * @param value {string}
 	 */
 	set innerViewValue (value) {
-		this[PRIVATE.innerViewValue] = value;
+
+		this[PRIVATE.modelValue] = value;
+
+	}
+
+	/**
+	 * Returns the model value of the field
+	 *
+	 * @returns {*}
+	 * @protected
+	 */
+	_getModelValue () {
+
+		return this[PRIVATE.modelValue];
+
+	}
+
+	/**
+	 *
+	 * @param value {*}
+	 * @protected
+	 */
+	_setModelValue (value) {
+
+		this[PRIVATE.modelValue] = value;
+
 	}
 
 	// noinspection JSUnusedGlobalSymbols
@@ -439,7 +475,7 @@ export class NrTextInputController extends NrInputController {
 
 	/**
 	 *
-	 * @private
+	 * @protected
 	 */
 	_updateFocusStyles () {
 
@@ -626,11 +662,13 @@ export class NrTextInputController extends NrInputController {
 				this[PRIVATE.nrFormController] = undefined;
 			}
 
-			this[PRIVATE.nrFormController] = value;
+			this[PRIVATE.nrFormController] = value ? value : undefined;
 
 			nrLog.trace(`nrFormController set as: `, value);
 
-			this[PRIVATE.nrFormController].registerFieldController(this);
+			if (this[PRIVATE.nrFormController]) {
+				this[PRIVATE.nrFormController].registerFieldController(this);
+			}
 
 		}
 
@@ -644,6 +682,15 @@ export class NrTextInputController extends NrInputController {
 
 		this[PRIVATE.$element][0].querySelector('input').focus();
 
+	}
+
+	/**
+	 * Template uses this
+	 *
+	 * @returns {string|undefined}
+	 */
+	getPlaceholder () {
+		return this[PRIVATE.nrModel] ? this[PRIVATE.nrModel].placeholder : undefined;
 	}
 
 }

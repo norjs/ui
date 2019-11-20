@@ -6,6 +6,7 @@
 <textarea
         class="form-input theme-input"
         rows="5"
+        placeholder="{{ $ctrl.getPlaceholder()|translate }}"
         ng-model="$ctrl.innerViewValue"
         nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
         ng-change="$ctrl.onChange()"

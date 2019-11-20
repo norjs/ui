@@ -447,6 +447,14 @@ export class NrPasswordInputController extends NrTextInputController {
 
 	}
 
+	/**
+	 * Template uses this
+	 * @returns {string}
+	 */
+	getPlaceholder () {
+		return super.getPlaceholder();
+	}
+
 }
 
 // noinspection JSUnusedGlobalSymbols
