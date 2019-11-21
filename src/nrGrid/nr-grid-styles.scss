@@ -1,6 +1,8 @@
 nr-grid {
 
     display: block;
+    min-width: 20em;
+    max-width: 100%;
 
     & > .nr-grid-row {
 
@@ -12,7 +14,7 @@ nr-grid {
         & > .nr-grid-column {
 
             display: block;
-            padding: 0.2em;
+            padding: 0 0.1em;
 
         }
 

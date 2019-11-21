@@ -143,13 +143,12 @@ export class NrDivController {
 	/**
 	 *
 	 * @param item {NrFormItemObject}
-	 * @param index {number}
 	 * @returns {string}
 	 * @private
 	 */
-	getItemId (item, index) {
+	getItemId (item) {
 
-		return item && item.id !== undefined ? item.id : index;
+		return item.id;
 
 	}
 
@@ -187,12 +186,12 @@ export class NrDivController {
 
 		this[PRIVATE.items] = _.map(
 			this[PRIVATE.nrModel].content,
-			item => {
+			(item, itemIndex) => {
 
 				const config = NrModelUtils.getComponentConfig(item);
 
 				return {
-					id: this[PRIVATE.getItemId](item)
+					id: this[PRIVATE.getItemId](item, itemIndex)
 					, model: item
 					, config
 				};
@@ -206,12 +205,13 @@ export class NrDivController {
 	/**
 	 *
 	 * @param item {NrModel}
+	 * @param itemIndex {number}
 	 * @private
 	 */
-	[PRIVATE.getItemId] (item) {
+	[PRIVATE.getItemId] (item, itemIndex) {
 
 		// FIXME: We need an interface for unique id in NrModel
-		return item.id || item.name;
+		return item && (item.id || item.name) || `item-${itemIndex}`;
 
 	}
 

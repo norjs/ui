@@ -293,6 +293,10 @@ export class NrGrid extends NrView {
             return AUTO_KEYWORD;
         }
 
+        if (value === "") {
+            return "";
+        }
+
         if ( value.length >= 2 && value[value.length-1] === '%') {
 
             const result = this._parseLayoutStringArrayItem(value.substr(0, value.length - 1 ));

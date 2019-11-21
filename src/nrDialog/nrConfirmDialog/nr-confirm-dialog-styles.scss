@@ -12,7 +12,8 @@ nr-confirm-dialog {
   border-radius: 4px;
   background-color: #fbfbfd;
   padding: 0;
-  max-width: 40em;
+  min-width: 20em;
+  max-width: 100%;
 
   & > .confirm-dialog-header {
 

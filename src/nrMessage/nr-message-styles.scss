@@ -29,7 +29,7 @@ nr-message {
     border-radius: 4px;
     background-color: $message-background-color;
     min-width: 20em;
-    max-width: 80em;
+    max-width: 100%;
     padding: 0;
 
     & > .nr-message-header {

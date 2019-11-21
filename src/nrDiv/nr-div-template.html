@@ -1,4 +1,4 @@
 <nr-compile
-    ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item, $index)"
+    ng-repeat="item in $ctrl.getItems() track by $ctrl.getItemId(item)"
     nr-options="$ctrl.getItemCompileConfig(item)"
 ></nr-compile>

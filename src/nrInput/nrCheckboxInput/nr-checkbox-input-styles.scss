@@ -16,7 +16,8 @@ nr-checkbox-input {
   border: $checkbox-border-size $checkbox-border-style $checkbox-border-color;
   border-radius: 4px;
   background-color: #fbfbfd;
-  max-width: 40em;
+  min-width: 20em;
+  max-width: 100%;
   padding: 0;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
