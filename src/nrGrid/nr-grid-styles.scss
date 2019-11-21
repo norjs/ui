@@ -1,0 +1,21 @@
+nr-grid {
+
+    display: block;
+
+    & > .nr-grid-row {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        & > .nr-grid-column {
+
+            display: block;
+            padding: 0.2em;
+
+        }
+
+    }
+
+}

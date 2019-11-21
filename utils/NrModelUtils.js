@@ -20,14 +20,15 @@ import NrTextareaField from "../models/views/fields/NrTextareaField";
 import NrNumberField from "../models/views/fields/NrNumberField";
 import NrSelectField from "../models/views/fields/NrSelectField";
 import NrButton from "../models/views/NrButton";
-import {NrDiv} from "../models/views/NrDiv";
+import NrDiv from "../models/views/NrDiv";
 import NrTag from "../src/NrTag";
 import NrAttribute from "../src/NrAttribute";
-import {NrNav} from "../models/views/NrNav";
-import {NrOption} from "../models/views/fields/NrOption";
-import {NrEventList} from "../models/NrEventList";
-import {NrEvent} from "../models/NrEvent";
-import { NrDateField } from "../models/views/fields/NrDateInput";
+import NrNav from "../models/views/NrNav";
+import NrOption from "../models/views/fields/NrOption";
+import NrEventList from "../models/NrEventList";
+import NrEvent from "../models/NrEvent";
+import NrDateField from "../models/views/fields/NrDateInput";
+import NrGrid from "../models/views/NrGrid";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -103,6 +104,7 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrSelectField);
         NrModelUtils.registerModel(NrButton);
         NrModelUtils.registerModel(NrDiv);
+        NrModelUtils.registerModel(NrGrid);
         NrModelUtils.registerModel(NrNav);
         NrModelUtils.registerModel(NrOption);
         NrModelUtils.registerModel(NrEvent);
@@ -292,6 +294,24 @@ export class NrModelUtils {
         return !!( value && value instanceof NrDiv );
     }
 
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isIcon (value) {
+        return !!( value && value instanceof NrIcon );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isGrid (value) {
+        return !!( value && value instanceof NrGrid );
+    }
+
     // noinspection JSUnusedGlobalSymbols
     /**
      *
@@ -382,15 +402,6 @@ export class NrModelUtils {
      */
     static isSelectField (value) {
         return !!( value && value instanceof NrSelectField );
-    }
-
-    /**
-     *
-     * @param value {*}
-     * @returns {boolean}
-     */
-    static isButton (value) {
-        return !!( value && value instanceof NrButton );
     }
 
     /**
@@ -537,6 +548,21 @@ export class NrModelUtils {
         if (NrModelUtils.isDiv(model)) {
             return {
                 component: NrTag.DIV,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isIcon(model)) {
+            // FIXME: nr-icon should have support for NrAttribute.MODEL
+            return {
+                component: NrTag.ICON,
+                resolve: {[NrAttribute.TYPE]: model.value}
+            };
+        }
+
+        if (NrModelUtils.isGrid(model)) {
+            return {
+                component: NrTag.GRID,
                 resolve: {[NrAttribute.MODEL]: model}
             };
         }

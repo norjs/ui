@@ -1,0 +1,13 @@
+<div
+    class="nr-grid-row"
+    ng-repeat="row in $ctrl.getRows() track by $index"
+    ng-init="rowIndex = $index"
+>
+
+    <nr-compile
+            class="nr-grid-column"
+            ng-repeat="column in row track by $ctrl.getItemId(column, rowIndex, $index)"
+            nr-options="$ctrl.getItemCompileConfig(column)"
+    ></nr-compile>
+
+</div>

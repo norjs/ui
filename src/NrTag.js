@@ -25,6 +25,7 @@ export const NrTag = {
     , FORM           : "nrForm"
     , MESSAGE        : "nrMessage"
     , DIV            : "nrDiv"
+    , GRID           : "nrGrid"
 
 };
 

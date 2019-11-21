@@ -10,6 +10,7 @@ export const NrIconValue = {
     BARS                 : "bars"
     , HOME               : "home"
     , PLUS               : "plus-circle"
+    , TIMES              : "times-circle"
     , TASKS              : "tasks"
     , COMMENT            : "comment"
     , CHECK              : "check"

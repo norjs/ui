@@ -5,7 +5,7 @@ import "../../NrModel.js";
  * @abstract
  * @implements {NrModel}
  */
-export class NrView {
+export class NrField {
 
     /**
      *
@@ -25,7 +25,7 @@ export class NrView {
 
     /**
      *
-     * @returns {typeof NrView}
+     * @returns {typeof NrField}
      * @abstract
      */
     get Class () {}
@@ -75,7 +75,7 @@ export class NrView {
     /**
      *
      * @param value {*}
-     * @returns {NrView}
+     * @returns {NrField}
      * @abstract
      */
     static parseValue (value) {}
@@ -83,4 +83,4 @@ export class NrView {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default NrView;
+export default NrField;

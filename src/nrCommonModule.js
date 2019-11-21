@@ -8,6 +8,7 @@ import NrModuleName from "./NrModuleName";
 import nrDialogModule from "./nrDialog/nrDialogModule";
 import nrFormModule from "./nrForm/nrFormModule";
 import nrDivModule from "./nrDiv/nrDivModule";
+import nrGridModule from "./nrGrid/nrGridModule";
 import nrMessageModule from "./nrMessage/nrMessageModule";
 import nrServicesModule from "./services/nrServicesModule";
 import nrDirectivesModule from "./nrDirectives/nrDirectivesModule";
@@ -26,6 +27,7 @@ export const nrCommonModule = angular.module(
 		, nrFormModule
 		, nrMessageModule
 		, nrDivModule
+		, nrGridModule
 		// Keep in the same format, it helps with git merges
 	])
 	.name;

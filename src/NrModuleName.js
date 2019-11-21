@@ -33,6 +33,7 @@ export const NrModuleName = {
     , MESSAGE        : "norjs.ui.nrMessage"
     , FORM           : "norjs.ui.nrForm"
     , DIV            : "norjs.ui.nrDiv"
+    , GRID           : "norjs.ui.nrGrid"
 };
 
 // noinspection JSUnusedGlobalSymbols

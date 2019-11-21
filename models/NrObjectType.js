@@ -13,6 +13,7 @@ export const NrObjectType = {
     ICON: 'NrIcon',
     FORM: 'NrForm',
     DIV: 'NrDiv',
+    GRID: 'NrGrid',
     NAV: 'NrNav',
     TEXT_FIELD: 'NrTextField',
     DATE_FIELD: 'NrDateField',
