@@ -232,9 +232,9 @@ export class NrCheckboxInputController extends NrTextInputController {
 	 *
 	 * @returns {string}
 	 */
-	get innerViewValue () {
+	get bindModelValue () {
 
-		return super.innerViewValue;
+		return super.bindModelValue;
 
 	}
 
@@ -245,9 +245,9 @@ export class NrCheckboxInputController extends NrTextInputController {
 	 *
 	 * @param value {string}
 	 */
-	set innerViewValue (value) {
+	set bindModelValue (value) {
 
-		super.innerViewValue = value;
+		super.bindModelValue = value;
 
 	}
 
@@ -444,6 +444,12 @@ export class NrCheckboxInputController extends NrTextInputController {
 	onLabelClick ($event) {
 
 		super.onLabelClick($event);
+
+	}
+
+	getFieldStyles () {
+
+		return super.getFieldStyles();
 
 	}
 

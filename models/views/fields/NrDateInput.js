@@ -38,12 +38,16 @@ export class NrDateField extends NrView {
      * @param [name] {string}
      * @param [label] {string}
      * @param [placeholder] {string}
+     * @param [value] {string}
+     * @param [readonly] {boolean}
      * @param [icon] {NrIcon}
      */
     constructor ({
         name = undefined
         , label = undefined
         , placeholder = undefined
+        , value = undefined
+        , readonly = undefined
         , icon = undefined
     } = {}) {
 
@@ -57,6 +61,14 @@ export class NrDateField extends NrView {
 
         if ( placeholder !== undefined && !_.isString(placeholder) ) {
             throw new TypeError(`new ${NrDateField.nrName}(): placeholder invalid: "${placeholder}"`);
+        }
+
+        if ( value !== undefined && !_.isString(value) ) {
+            throw new TypeError(`new ${NrDateField.nrName}(): value invalid: "${value}"`);
+        }
+
+        if ( readonly !== undefined && !_.isBoolean(readonly) ) {
+            throw new TypeError(`new ${NrDateField.nrName}(): readonly invalid: "${readonly}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
@@ -85,6 +97,20 @@ export class NrDateField extends NrView {
          * @protected
          */
         this._placeholder = placeholder;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._value = value;
+
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._readonly = !!readonly;
 
         /**
          *
@@ -121,6 +147,22 @@ export class NrDateField extends NrView {
 
     /**
      *
+     * @returns {string|undefined}
+     */
+    get value () {
+        return this._value;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    get readonly () {
+        return this._readonly;
+    }
+
+    /**
+     *
      * @returns {NrIcon}
      */
     get icon () {
@@ -141,27 +183,29 @@ export class NrDateField extends NrView {
      */
     valueOf () {
         return {
-            type: this.type
-            , label: this._label
-            , placeholder: this._placeholder
-            , name: this._name
-            , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
+              type        : this.type
+            , label       : this._label
+            , placeholder : this._placeholder
+            , value       : !_.isNil(this._value) ? this._value : undefined
+            , readonly    : this._readonly ? true : undefined
+            , name        : this._name
+            , icon        : !_.isNil(this._icon) ? this._icon.valueOf() : null
         };
     }
 
     /**
      *
-     * @param value {*}
+     * @param objValue {*}
      * @returns {NrDateField}
      */
-    static parseValue (value) {
+    static parseValue (objValue) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        if ( !objValue ) {
+            throw new TypeError(`${this.nrName}.parseValue(): objValue was not defined`);
         }
 
-        if ( value instanceof NrDateField ) {
-            return value;
+        if ( objValue instanceof NrDateField ) {
+            return objValue;
         }
 
         const {
@@ -169,8 +213,10 @@ export class NrDateField extends NrView {
             , name
             , label
             , placeholder
+            , value
+            , readonly
             , icon
-        } = value;
+        } = objValue;
 
         if ( type !== NrObjectType.DATE_FIELD ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
@@ -180,6 +226,8 @@ export class NrDateField extends NrView {
               name        : !_.isNil(name)        ? name                    : undefined
             , label       : !_.isNil(label)       ? label                   : undefined
             , placeholder : !_.isNil(placeholder) ? placeholder             : undefined
+            , value       : !_.isNil(value)       ? value                   : undefined
+            , readonly    : !_.isNil(readonly)    ? !!readonly              : undefined
             , icon        : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
         });
 

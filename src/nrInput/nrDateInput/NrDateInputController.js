@@ -5,6 +5,7 @@ import NgAttribute from "../../NgAttribute";
 import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
 import { NrTextInputController } from "../nrTextInput/NrTextInputController";
+import StringUtils from "@norjs/utils/src/StringUtils";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.DATE_INPUT);
@@ -18,7 +19,6 @@ const PRIVATE = {
 	useLabel: Symbol('_useLabel')
 	, ngModelController: Symbol('_ngModelController')
 	, ngModel: Symbol('_ngModel')
-	, innerViewValue: Symbol('_innerViewValue')
 	, focus: Symbol('_focus')
 	, nrFormController: Symbol('_nrFormController')
 	, type: Symbol('_type')
@@ -28,13 +28,14 @@ const PRIVATE = {
 	, label: Symbol('_label')
 	, $element: Symbol('_$element')
 	, $timeout: Symbol('_$timeout')
+	, validateTimeout: Symbol('_validateTimeout')
+	, initialNormalizeTimeout: Symbol('_initialNormalizeTimeout')
 };
 
 /**
  *
- * TODO: Implement support for ng-touched: $setTouched(): A model is considered to be touched when the user has first
- *       focused the control element and then shifted focus away from the control (blur event).
- *
+ * @TODO: Implement support for ng-touched: $setTouched(): A model is considered to be touched when the user has first
+ *        focused the control element and then shifted focus away from the control (blur event).
  * @ngInject
  */
 export class NrDateInputController extends NrTextInputController {
@@ -70,7 +71,7 @@ export class NrDateInputController extends NrTextInputController {
 	static getComponentBindings () {
 		return {
 			bindNrType: `@?${NrAttribute.TYPE}` // FIXME: This is not used?
-			, bindNrId: `@?${NrAttribute.ID}` // FIXME: This is not used?
+			, bindNrId: `@?${NrAttribute.ID}`
 			, bindNrName: `@?${NrAttribute.NAME}`
 			, bindNrModel: `<?${NrAttribute.MODEL}`
 			, bindNrLabel: `@?${NgAttribute.LABEL}`
@@ -106,12 +107,12 @@ export class NrDateInputController extends NrTextInputController {
 		return 'YYYY-MM-DD';
 	}
 
-	get MODEL_DATE_FORMAT () {
-		return this.Class.MODEL_DATE_FORMAT;
-	}
-
 	static get VIEW_DATE_FORMAT () {
 		return 'DD.MM.YYYY';
+	}
+
+	get MODEL_DATE_FORMAT () {
+		return this.Class.MODEL_DATE_FORMAT;
 	}
 
 	get VIEW_DATE_FORMAT () {
@@ -137,18 +138,42 @@ export class NrDateInputController extends NrTextInputController {
 		this[PRIVATE.$timeout] = $timeout;
 
 		/**
-		 * If `true`, the model value will be normalized after next blur.
 		 *
-		 * @member {boolean}
+		 * @member {angular.IPromise|undefined}
 		 * @private
 		 */
-		this._normalizeModelValueNextBlur = false;
+		this[PRIVATE.validateTimeout] = undefined;
+
+		/**
+		 *
+		 * @member {angular.IPromise|undefined}
+		 * @private
+		 */
+		this[PRIVATE.initialNormalizeTimeout] = undefined;
+
+		// /**
+		//  * If `true`, the model value will be normalized after next blur.
+		//  *
+		//  * @member {boolean}
+		//  * @private
+		//  */
+		// this._normalizeModelValueFromViewValueNextBlur = false;
 
 	}
 
 	$onDestroy () {
 
 		super.$onDestroy();
+
+		if ( this[PRIVATE.validateTimeout] !== undefined ) {
+			this[PRIVATE.$timeout].cancel(this[PRIVATE.validateTimeout]);
+			this[PRIVATE.validateTimeout] = undefined;
+		}
+
+		if ( this[PRIVATE.initialNormalizeTimeout] !== undefined ) {
+			this[PRIVATE.$timeout].cancel(this[PRIVATE.initialNormalizeTimeout]);
+			this[PRIVATE.initialNormalizeTimeout] = undefined;
+		}
 
 		this[PRIVATE.$timeout] = undefined;
 
@@ -254,27 +279,39 @@ export class NrDateInputController extends NrTextInputController {
 		// Setup $validators
 		ngModelController.$validators.nrDateInputValidator = (modelValue, viewValue) => NrDateInputController._valueValidator(modelValue, viewValue);
 
-		// FIXME: Implement cancelers for timeout on destroy
+		// Normalize model value after a short delay
+		const timeout = this[PRIVATE.initialNormalizeTimeout] = this[PRIVATE.$timeout]( () => {
 
-		// Validate model values after a short delay
-		this[PRIVATE.$timeout]( () => {
-
-			const modelValue = this._getModelValue();
-
-			if ( this.Class.isViewDateString( modelValue.replace(/ +/, "") )) {
-
-				const date = this.Class.parseViewStringToDate(modelValue);
-				if (!this.Class.isValidDateValue(date)) return;
-
-				const newModelValue = date.format(this.MODEL_DATE_FORMAT);
-				this._setModelValue( newModelValue );
-				//nrLog.trace(`Fixed model value: "${modelValue}" ==> "${newModelValue}"`);
-
-				this._validateLater();
-
+			if (timeout === this[PRIVATE.initialNormalizeTimeout]) {
+				this[PRIVATE.initialNormalizeTimeout] = undefined;
 			}
 
+			this._normalizeModelValueFromModelValue();
+
 		}, 0);
+
+	}
+
+	/**
+	 * Reads current model value and re-formats it to the correct model value format if it is not already.
+	 *
+	 * @private
+	 */
+	_normalizeModelValueFromModelValue () {
+
+		const modelValue = this._getModelValue();
+
+		const newModelValue = this.Class._parseValueToModelValue(modelValue ? modelValue.replace(/ +/, "") : undefined );
+
+		if ( modelValue !== newModelValue ) {
+
+			this._setModelValue( newModelValue );
+
+			nrLog.trace(`Fixed model value: "${modelValue}" ==> "${newModelValue}"`);
+
+			this._validateLater();
+
+		}
 
 	}
 
@@ -290,50 +327,37 @@ export class NrDateInputController extends NrTextInputController {
 	 */
 	_valueParser (value) {
 
-		//const origValue = value;
+		const origValue = value;
 
 		if (value === undefined) {
-			//nrLog.trace(`valueParser "${origValue}" ==> undefined : already undefined`);
-			return;
+			nrLog.trace(`._valueParser(): already undefined: ${LogUtils.getAsString(origValue)} ==> undefined`);
+			return undefined;
 		}
 
 		if (!_.isString(value)) {
-			//nrLog.trace(`valueParser "${origValue}" ==> undefined : not string`);
-			return;
+			nrLog.trace(`._valueParser(): not string: ${LogUtils.getAsString(origValue)} ==> undefined`);
+			return undefined;
 		}
 
 		value = value.replace(/ +/, "");
 
 		if (value === "") {
-			//nrLog.trace(`valueParser "${origValue}" ==> "" : empty string`);
+			nrLog.trace(`._valueParser(): empty string: ${LogUtils.getAsString(origValue)} ==> ""`);
 			return "";
 		}
 
-		// Check if date was already in the model format
-		if ( this.Class.isModelDateString(value) ) {
-			const date = this.Class.parseModelStringToDate(value);
-			if (!this.Class.isValidDateValue(date)) {
-				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
-				return;
-			}
-			value = date.format(this.MODEL_DATE_FORMAT);
-			//nrLog.trace(`valueParser "${origValue}" ==> "${value}" : already in model format`);
-			return value;
-		}
+		const newValue = this.Class._parseValueToModelValue(value);
 
-		// Check if date is in a correct view format
-		if ( this.Class.isViewDateString(value) ) {
-			const date = this.Class.parseViewStringToDate(value);
-			if (!this.Class.isValidDateValue(date)) {
-				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
-				return;
-			}
-			value = date.format(this.MODEL_DATE_FORMAT);
-			//nrLog.trace(`valueParser "${origValue}" ==> "${value}" : correct format`);
-			return value;
-		}
+		if ( newValue !== origValue ) {
 
-		//nrLog.trace(`valueParser "${origValue}" ==> undefined : unknown format`);
+			nrLog.trace(`._valueParser(): ${LogUtils.getAsString(origValue)} ==> "${newValue}"`);
+			return newValue;
+
+		} else {
+
+			return origValue;
+
+		}
 
 	}
 
@@ -351,57 +375,46 @@ export class NrDateInputController extends NrTextInputController {
 		const origValue = value;
 
 		if (value === undefined) {
-			//nrLog.trace(`valueFormatter: "${origValue}" ==> "" : was undefined`);
+			nrLog.trace(`_valueFormatter(): Undefined: ${LogUtils.getAsString(origValue)} ==> ""`);
 			return "";
 		}
 
 		if (!_.isString(value)) {
-			//nrLog.trace(`valueFormatter: "${origValue}" ==> "" : not string`);
+			nrLog.trace(`_valueFormatter(): Not string: ${LogUtils.getAsString(origValue)} ==> ""`);
 			return "";
 		}
 
 		value = value.replace(/ +/, "");
 
 		if (value === "") {
-			//nrLog.trace(`valueFormatter: "${origValue}" ==> "" : empty string`);
+			nrLog.trace(`_valueFormatter(): Empty string: ${LogUtils.getAsString(origValue)} ==> ""`);
 			return "";
 		}
 
-		// Check if date was in the model format
-		if ( this.Class.isModelDateString(value) ) {
+		const date = this.Class._parseValueToDate(value);
 
-			const date = this.Class.parseModelStringToDate(value);
-			if ( !this.Class.isValidDateValue(date) ) {
-				//nrLog.trace(`valueFormatter: "${origValue}" ==> "${origValue}" : not valid date`);
-				return origValue;
-			}
-			value = date.format(this.VIEW_DATE_FORMAT);
-			//nrLog.trace(`valueFormatter: "${origValue}" ==> "${value}" : correct model format`);
-			return value;
+		if ( !date ) {
+			nrLog.trace(`_valueFormatter(): Not valid date: ${LogUtils.getAsString(origValue)} ==> "${origValue}"`);
+			return origValue;
+		}
+
+		// if (!this._normalizeModelValueFromViewValueNextBlur) {
+		// 	this._normalizeModelValueFromViewValueNextBlur = true;
+		// }
+
+		const newValue = date.format(this.VIEW_DATE_FORMAT);
+
+		if (newValue !== origValue) {
+
+			nrLog.trace(`_valueFormatter(): ${LogUtils.getAsString(origValue)} ==> "${newValue}"`);
+			return newValue;
+
+		} else {
+
+			return origValue;
 
 		}
 
-		// Check if date is in a correct view format
-		if ( this.Class.isViewDateString(value) ) {
-
-			const date = this.Class.parseViewStringToDate(value);
-			if ( !this.Class.isValidDateValue(date) ) {
-				//nrLog.trace(`valueFormatter: "${origValue}" ==> "${origValue}" : not valid date`);
-				return origValue;
-			}
-			value = date.format(this.VIEW_DATE_FORMAT);
-			//nrLog.trace(`valueFormatter: "${origValue}" ==> "${value}" : in view format`);
-
-			if (!this._normalizeModelValueNextBlur) {
-				this._normalizeModelValueNextBlur = true;
-			}
-
-			return value;
-
-		}
-
-		//nrLog.trace(`valueFormatter: "${origValue}" ==> "${origValue}" : unknown format`);
-		return origValue;
 
 	}
 
@@ -432,7 +445,7 @@ export class NrDateInputController extends NrTextInputController {
 	 *
 	 * @private
 	 */
-	_normalizeModelValue () {
+	_normalizeModelValueFromViewValue () {
 
 		this._setModelValue( this._valueParser(this.getViewValue()) );
 
@@ -441,27 +454,38 @@ export class NrDateInputController extends NrTextInputController {
 	}
 
 	/**
+	 * Validates the field again after a short delay.
 	 *
 	 * @private
-	 * @FIXME Timeout should be cancelled if component is destroyed
 	 */
 	_validateLater () {
 
-		// $scope.$evalAsync nor $scope.$applyAsync did nothing, $timeout is required here.
-		this[PRIVATE.$timeout]( () => {
+		if ( this[PRIVATE.validateTimeout] !== undefined ) {
+			nrLog.trace('._validateLater(): Cancelling previous validation...');
+			this[PRIVATE.$timeout].cancel(this[PRIVATE.validateTimeout]);
+			this[PRIVATE.validateTimeout] = undefined;
+		}
 
-			nrLog.trace('._normalizeModelValue(): Validating after a timeout...');
+		// $scope.$evalAsync nor $scope.$applyAsync did nothing, $timeout is required here.
+
+		nrLog.trace('._validateLater(): Validating after a timeout...');
+
+		const timeout = this[PRIVATE.validateTimeout] = this[PRIVATE.$timeout]( () => {
+
+			if (timeout === this[PRIVATE.validateTimeout]) {
+				this[PRIVATE.validateTimeout] = undefined;
+			}
 
 			const ngModelController = this.getNgModelController();
 
 			if (ngModelController) {
 
-				nrLog.trace('._normalizeModelValue(): Validating now.');
+				nrLog.trace('._validateLater(): Validating now.');
 				ngModelController.$validate();
 
 			} else {
 
-				nrLog.warn(`._normalizeModelValue(): Warning! No ngModelController detected.`);
+				nrLog.warn(`._validateLater(): Warning! No ngModelController detected.`);
 
 			}
 
@@ -517,8 +541,10 @@ export class NrDateInputController extends NrTextInputController {
 	 *
 	 * @returns {string}
 	 */
-	get innerViewValue () {
-		return super.innerViewValue;
+	get bindModelValue () {
+
+		return super.bindModelValue;
+
 	}
 
 	/**
@@ -528,9 +554,9 @@ export class NrDateInputController extends NrTextInputController {
 	 *
 	 * @param value {string}
 	 */
-	set innerViewValue (value) {
+	set bindModelValue (value) {
 
-		super.innerViewValue = value;
+		super.bindModelValue = value;
 
 	}
 
@@ -554,7 +580,7 @@ export class NrDateInputController extends NrTextInputController {
 		super.onFocus($event);
 
 		if (!this.getViewValue()) {
-			this.setViewValue( moment().format(this.VIEW_DATE_FORMAT) );
+			this.setViewValue( moment().format(this.VIEW_DATE_FORMAT), $event );
 		}
 
 	}
@@ -568,10 +594,10 @@ export class NrDateInputController extends NrTextInputController {
 
 		super.onBlur($event);
 
-		if (this._normalizeModelValueNextBlur) {
-			this._normalizeModelValueNextBlur = false;
-			this._normalizeModelValue();
-		}
+		// if (this._normalizeModelValueFromViewValueNextBlur) {
+		// 	this._normalizeModelValueFromViewValueNextBlur = false;
+		// 	this._normalizeModelValueFromViewValue();
+		// }
 
 	}
 
@@ -657,7 +683,7 @@ export class NrDateInputController extends NrTextInputController {
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @returns {NrTextField|undefined}
+	 * @returns {NrDateField|undefined}
 	 */
 	get bindNrModel () {
 
@@ -669,11 +695,21 @@ export class NrDateInputController extends NrTextInputController {
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @param value {NrTextField|undefined}
+	 * @param value {NrDateField|undefined}
 	 */
 	set bindNrModel (value) {
 
 		super.bindNrModel = value;
+
+		if ( value && _.isString(value.value) ) {
+
+			this.bindModelValue = value.value;
+
+			nrLog.trace(`${this.nrName}[set bindNrModel](): Inner model value initialized as ${value.value}`);
+
+			this._normalizeModelValueFromModelValue();
+
+		}
 
 	}
 
@@ -776,7 +812,7 @@ export class NrDateInputController extends NrTextInputController {
 	/**
 	 *
 	 * @param value {string}
-	 * @returns {moment}
+	 * @returns {moment.Moment}
 	 */
 	static parseViewStringToDate (value) {
 		return moment(value, this.VIEW_DATE_FORMAT);
@@ -785,7 +821,7 @@ export class NrDateInputController extends NrTextInputController {
 	/**
 	 *
 	 * @param value {string}
-	 * @returns {moment}
+	 * @returns {moment.Moment}
 	 */
 	static parseModelStringToDate (value) {
 		return moment(value, this.MODEL_DATE_FORMAT);
@@ -793,11 +829,75 @@ export class NrDateInputController extends NrTextInputController {
 
 	/**
 	 *
-	 * @param value {moment}
+	 * @param value {moment.Moment}
 	 * @returns {boolean}
 	 */
 	static isValidDateValue (value) {
 		return value.isValid();
+	}
+
+	/**
+	 * Detects and parses multiple different formats to the moment date object.
+	 *
+	 * @param value {string}
+	 * @returns {moment.Moment|undefined}
+	 */
+	static _parseValueToDate (value) {
+
+		// Check if date was already in the model format
+		if ( this.isModelDateString(value) ) {
+			const date = this.parseModelStringToDate(value);
+			if (!this.isValidDateValue(date)) {
+				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
+				return undefined;
+			}
+			return date;
+		}
+
+		// Check if date is in a correct view format
+		if ( this.isViewDateString(value) ) {
+			const date = this.parseViewStringToDate(value);
+			if (!this.isValidDateValue(date)) {
+				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
+				return undefined;
+			}
+			// value = date.format(this.MODEL_DATE_FORMAT);
+			//nrLog.trace(`valueParser "${origValue}" ==> "${value}" : correct format`);
+			return date;
+		}
+
+		// Check if value is a UTC timestamp
+		if ( StringUtils.isDateString(value) ) {
+
+			const date = moment(value);
+
+			if (!this.isValidDateValue(date)) {
+				//nrLog.trace(`valueParser "${origValue}" ==> undefined : not valid date`);
+				return undefined;
+			}
+			// value = date.format(this.MODEL_DATE_FORMAT);
+			//nrLog.trace(`valueParser "${origValue}" ==> "${value}" : correct format`);
+			return date;
+
+
+		}
+
+		return undefined;
+
+	}
+
+	/**
+	 * Detect and parse multiple different formats to the model's date format.
+	 *
+	 * @param value {string} Value in different formats.
+	 * @returns {string|undefined} The value as model's format, eg. `"YYYY-MM-DD"`.
+	 */
+	static _parseValueToModelValue (value) {
+
+		const date = this._parseValueToDate(value);
+
+		return date ? date.format(this.MODEL_DATE_FORMAT) : undefined;
+
 	}
 
 	/**
@@ -806,6 +906,12 @@ export class NrDateInputController extends NrTextInputController {
 	 */
 	getPlaceholder () {
 		return super.getPlaceholder();
+	}
+
+	getFieldStyles () {
+
+		return super.getFieldStyles();
+
 	}
 
 }

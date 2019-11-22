@@ -334,7 +334,15 @@ export class NrTextInputController extends NrInputController {
 	 */
 	_initNgModelController () {
 
-		this[PRIVATE.ngModelController].$render = () => this.onNgModelRender();
+		const origRender = this[PRIVATE.ngModelController].$render;
+
+		this[PRIVATE.ngModelController].$render = () => {
+
+			origRender();
+
+			this.onNgModelRender();
+
+		};
 
 	}
 
@@ -362,6 +370,8 @@ export class NrTextInputController extends NrInputController {
 			ngModelController.$setViewValue(value, trigger);
 			ngModelController.$setDirty();
 
+			nrLog.trace(`${this.nrName}.setViewValue(): View value changed as: ${LogUtils.getAsString(value)}`);
+
 		} else {
 
 			nrLog.warn(`${this.nrName}.setViewValue(): No ngModelController found!`);
@@ -377,7 +387,11 @@ export class NrTextInputController extends NrInputController {
 	 */
 	onNgModelRender () {
 
-		this._setModelValue( this.getViewValue() );
+		// this._setModelValue( this.getViewValue() );
+
+		const ngModelController = this.getNgModelController();
+
+		nrLog.trace(`${this.nrName}.onNgModelRender(): `, ngModelController);
 
 	}
 
@@ -386,31 +400,31 @@ export class NrTextInputController extends NrInputController {
 	 */
 	onChange () {
 
-		this.setViewValue(this._getModelValue(), undefined);
+		// this.setViewValue(this._getModelValue(), undefined);
 
 	}
 
 	/**
-	 * Get internal nrInput element's model value; eg. it is our view value.
+	 * Get internal input element's model value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
 	 * @returns {string}
 	 */
-	get innerViewValue () {
+	get bindModelValue () {
 
 		return this[PRIVATE.modelValue];
 
 	}
 
 	/**
-	 * Sets internal nrInput element's model value; eg. it is our view value.
+	 * Sets internal input element's model value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
 	 * @param value {string}
 	 */
-	set innerViewValue (value) {
+	set bindModelValue (value) {
 
 		this[PRIVATE.modelValue] = value;
 
@@ -691,6 +705,27 @@ export class NrTextInputController extends NrInputController {
 	 */
 	getPlaceholder () {
 		return this[PRIVATE.nrModel] ? this[PRIVATE.nrModel].placeholder : undefined;
+	}
+
+	/**
+	 *
+	 * @protected
+	 */
+	getFieldStyles () {
+
+		const ngModelController = this.getNgModelController();
+
+		if (!ngModelController) return {};
+
+		return {
+			'nr-field-touched': ngModelController.$touched,
+			'nr-field-untouched': ngModelController.$untouched,
+			'nr-field-pristine': ngModelController.$pristine,
+			'nr-field-dirty': ngModelController.$dirty,
+			'nr-field-valid': ngModelController.$valid,
+			'nr-field-invalid': ngModelController.$invalid
+		};
+
 	}
 
 }

@@ -234,28 +234,28 @@ export class NrTextareaController extends NrTextInputController {
 	}
 
 	/**
-	 * Get internal nrInput element's model value; eg. it is our view value.
+	 * Get internal input element's model value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
 	 * @returns {string}
 	 */
-	get innerViewValue () {
+	get bindModelValue () {
 
-		return super.innerViewValue;
+		return super.bindModelValue;
 
 	}
 
 	/**
-	 * Sets internal nrInput element's model value; eg. it is our view value.
+	 * Sets internal input element's model value.
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
 	 * @param value {string}
 	 */
-	set innerViewValue (value) {
+	set bindModelValue (value) {
 
-		super.innerViewValue = value;
+		super.bindModelValue = value;
 
 	}
 
@@ -461,6 +461,12 @@ export class NrTextareaController extends NrTextInputController {
 	 */
 	getPlaceholder () {
 		return super.getPlaceholder();
+	}
+
+	getFieldStyles () {
+
+		return super.getFieldStyles();
+
 	}
 
 }

@@ -173,7 +173,7 @@ export class NrSelectController extends NrTextInputController {
 		 *
 		 * @type {string}
 		 */
-		this[PRIVATE.innerViewValue] = undefined;
+		this[PRIVATE.bindModelValue] = undefined;
 
 		/**
 		 * If `true`, this controller has focus.
@@ -329,9 +329,9 @@ export class NrSelectController extends NrTextInputController {
 	 *
 	 * @returns {string}
 	 */
-	get innerViewValue () {
+	get bindModelValue () {
 
-		return super.innerViewValue;
+		return super.bindModelValue;
 
 	}
 
@@ -342,9 +342,9 @@ export class NrSelectController extends NrTextInputController {
 	 *
 	 * @param value {string}
 	 */
-	set innerViewValue (value) {
+	set bindModelValue (value) {
 
-		super.innerViewValue = value;
+		super.bindModelValue = value;
 
 	}
 
@@ -587,6 +587,12 @@ export class NrSelectController extends NrTextInputController {
 	onLabelClick ($event) {
 
 		this[PRIVATE.$element][0].querySelector('select').focus();
+
+	}
+
+	getFieldStyles () {
+
+		return super.getFieldStyles();
 
 	}
 

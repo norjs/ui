@@ -1,21 +1,25 @@
-<label ng-click="$ctrl.onLabelClick($event)"
-       ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
-    <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
-    <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
-</label>
+<div class="field-container" ng-class="$ctrl.getFieldStyles()">
 
-<select
-        class="form-input select-item theme-input"
-        ng-model="$ctrl.innerViewValue"
-        nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
-        ng-focus="$ctrl.onFocus($event)"
-        ng-blur="$ctrl.onBlur($event)"
->
-    <option
-            class="select-item-value"
-            ng-repeat="item in $ctrl.getList() track by $ctrl.getItemId(item)"
-            ng-value="$ctrl.getItemValue(item)"
-            ng-selected="$ctrl.isItemSelected(item)"
-            translate="{{$ctrl.getItemLabel(item)}}"
-    ></option>
-</select>
+    <label ng-click="$ctrl.onLabelClick($event)"
+           ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
+        <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+        <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
+    </label>
+
+    <select
+            class="form-input select-item theme-input"
+            ng-model="$ctrl.bindModelValue"
+            nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
+            ng-focus="$ctrl.onFocus($event)"
+            ng-blur="$ctrl.onBlur($event)"
+    >
+        <option
+                class="select-item-value"
+                ng-repeat="item in $ctrl.getList() track by $ctrl.getItemId(item)"
+                ng-value="$ctrl.getItemValue(item)"
+                ng-selected="$ctrl.isItemSelected(item)"
+                translate="{{$ctrl.getItemLabel(item)}}"
+        ></option>
+    </select>
+
+</div>

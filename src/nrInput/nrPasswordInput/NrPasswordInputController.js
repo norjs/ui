@@ -232,9 +232,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @returns {string}
 	 */
-	get innerViewValue () {
+	get bindModelValue () {
 
-		return super.innerViewValue;
+		return super.bindModelValue;
 
 	}
 
@@ -245,9 +245,9 @@ export class NrPasswordInputController extends NrTextInputController {
 	 *
 	 * @param value {string}
 	 */
-	set innerViewValue (value) {
+	set bindModelValue (value) {
 
-		super.innerViewValue = value;
+		super.bindModelValue = value;
 
 	}
 
@@ -453,6 +453,12 @@ export class NrPasswordInputController extends NrTextInputController {
 	 */
 	getPlaceholder () {
 		return super.getPlaceholder();
+	}
+
+	getFieldStyles () {
+
+		return super.getFieldStyles();
+
 	}
 
 }

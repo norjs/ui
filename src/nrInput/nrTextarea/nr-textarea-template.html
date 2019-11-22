@@ -1,24 +1,29 @@
-<label ng-click="$ctrl.onLabelClick($event)"
-       ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
-    <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
-    <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
-</label>
-<textarea
-        class="form-input theme-input"
-        rows="5"
-        placeholder="{{ $ctrl.getPlaceholder()|translate }}"
-        ng-model="$ctrl.innerViewValue"
-        nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
-        ng-change="$ctrl.onChange()"
-        ng-focus="$ctrl.onFocus($event)"
-        ng-blur="$ctrl.onBlur($event)"
-        autocomplete="off"
-        ng-model-options="{
-            allowInvalid: '$inherit',
-            updateOn: 'default blur',
-            debounce: {
-                default: 250,
-                blur: 0
-            }
-        }"
->
+<div class="field-container" ng-class="$ctrl.getFieldStyles()">
+
+    <label ng-click="$ctrl.onLabelClick($event)"
+           ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
+        <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+        <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
+    </label>
+
+    <textarea
+            class="form-input theme-input"
+            rows="5"
+            placeholder="{{ $ctrl.getPlaceholder()|translate }}"
+            ng-model="$ctrl.bindModelValue"
+            nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
+            ng-change="$ctrl.onChange()"
+            ng-focus="$ctrl.onFocus($event)"
+            ng-blur="$ctrl.onBlur($event)"
+            autocomplete="off"
+            ng-model-options="{
+                allowInvalid: '$inherit',
+                updateOn: 'default blur',
+                debounce: {
+                    default: 250,
+                    blur: 0
+                }
+            }"
+    ></textarea>
+
+</div>
