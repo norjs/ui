@@ -5,6 +5,7 @@ import NrIcon from "../../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrCheckboxField extends NrField {
 
@@ -38,12 +39,16 @@ export class NrCheckboxField extends NrField {
      * @param [name] {string}
      * @param [label] {string}
      * @param [icon] {NrIcon}
+     * @param [value] {boolean}
+     * @param [readOnly] {boolean}
      */
     constructor ({
-                     name = undefined
-                     , label = undefined
-                     , icon = undefined
-                 } = {}) {
+        name = undefined
+        , label = undefined
+        , icon = undefined
+        , value = undefined
+        , readOnly = undefined
+    } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
             throw new TypeError(`new ${NrCheckboxField.nrName}(): name invalid: "${name}"`);
@@ -55,6 +60,14 @@ export class NrCheckboxField extends NrField {
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
             throw new TypeError(`new ${NrCheckboxField.nrName}(): icon invalid: "${icon}"`);
+        }
+
+        if ( readOnly !== undefined && !_.isBoolean(readOnly) ) {
+            throw new TypeError(`new ${NrCheckboxField.nrName}(): readOnly invalid: "${readOnly}"`);
+        }
+
+        if ( value !== undefined && !_.isBoolean(value) ) {
+            throw new TypeError(`new ${NrCheckboxField.nrName}(): value invalid: "${value}"`);
         }
 
         super();
@@ -79,6 +92,20 @@ export class NrCheckboxField extends NrField {
          * @protected
          */
         this._icon = icon;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._value = value;
+
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._readOnly = !!readOnly;
 
     }
 
@@ -116,6 +143,22 @@ export class NrCheckboxField extends NrField {
 
     /**
      *
+     * @returns {string|undefined}
+     */
+    get value () {
+        return this._value;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    get readOnly () {
+        return this._readOnly;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
@@ -124,6 +167,8 @@ export class NrCheckboxField extends NrField {
             , label: this._label
             , name: this._name
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
+            , value       : _.isBoolean(this._value) ? this._value : undefined
+            , readOnly    : this._readOnly ? true : undefined
         };
     }
 
@@ -137,17 +182,17 @@ export class NrCheckboxField extends NrField {
 
     /**
      *
-     * @param value {*}
+     * @param objValue {*}
      * @returns {NrCheckboxField}
      */
-    static parseValue (value) {
+    static parseValue (objValue) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        if ( !objValue ) {
+            throw new TypeError(`${this.nrName}.parseValue(): objValue was not defined`);
         }
 
-        if ( value instanceof NrCheckboxField ) {
-            return value;
+        if ( objValue instanceof NrCheckboxField ) {
+            return objValue;
         }
 
         const {
@@ -155,16 +200,20 @@ export class NrCheckboxField extends NrField {
             , name
             , label
             , icon
-        } = value;
+            , value
+            , readOnly
+        } = objValue;
 
         if ( type !== NrObjectType.CHECKBOX_FIELD ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
         }
 
         return new NrCheckboxField({
-            name    : !_.isNil(name)  ? name                    : undefined
-            , label : !_.isNil(label) ? label                   : undefined
-            , icon  : !_.isNil(icon)  ? NrIcon.parseValue(icon) : undefined
+            name          : !_.isNil(name)      ? name                    : undefined
+            , label       : !_.isNil(label)     ? label                   : undefined
+            , icon        : !_.isNil(icon)      ? NrIcon.parseValue(icon) : undefined
+            , value       : !_.isNil(value)       ? value                 : undefined
+            , readOnly    : !_.isNil(readOnly)    ? !!readOnly            : undefined
         });
 
     }

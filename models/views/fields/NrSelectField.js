@@ -5,6 +5,7 @@ import NrIcon from "../../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrSelectField extends NrView {
 
@@ -38,13 +39,17 @@ export class NrSelectField extends NrView {
      * @param [name] {string}
      * @param [label] {string}
      * @param [icon] {NrIcon}
+     * @param [value] {*}
+     * @param [readOnly] {boolean}
      */
     constructor ({
-                     name = undefined
-                     , label = undefined
-                     , icon = undefined
-                     , options = undefined
-                 } = {}) {
+        name = undefined
+        , label = undefined
+        , icon = undefined
+        , value = undefined
+        , options = undefined
+        , readOnly = undefined
+    } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
             throw new TypeError(`new ${NrSelectField.nrName}(): name invalid: "${name}"`);
@@ -60,6 +65,14 @@ export class NrSelectField extends NrView {
 
         if ( options !== undefined && !(typeof options == "object") ) {
             throw new TypeError(`new ${NrSelectField.nrName}(): options invalid: "${options}"`);
+        }
+
+        if ( value !== undefined && !_.isString(value) ) {
+            throw new TypeError(`new ${NrSelectField.nrName}(): value invalid: "${value}"`);
+        }
+
+        if ( readOnly !== undefined && !_.isBoolean(readOnly) ) {
+            throw new TypeError(`new ${NrSelectField.nrName}(): readOnly invalid: "${readOnly}"`);
         }
 
         super();
@@ -91,6 +104,20 @@ export class NrSelectField extends NrView {
          * @protected
          */
         this._options = options;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._value = value;
+
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._readOnly = !!readOnly;
 
     }
 
@@ -136,6 +163,22 @@ export class NrSelectField extends NrView {
 
     /**
      *
+     * @returns {string|undefined}
+     */
+    get value () {
+        return this._value;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    get readOnly () {
+        return this._readOnly;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
@@ -145,6 +188,8 @@ export class NrSelectField extends NrView {
             , name: this._name
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
             , list: this._list
+            , value       : !_.isNil(this._value) ? this._value : undefined
+            , readOnly    : this._readOnly ? true : undefined
         };
     }
 
@@ -153,14 +198,14 @@ export class NrSelectField extends NrView {
      * @param value {*}
      * @returns {NrSelectField}
      */
-    static parseValue (value) {
+    static parseValue (objValue) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        if ( !objValue ) {
+            throw new TypeError(`${this.nrName}.parseValue(): objValue was not defined`);
         }
 
-        if ( value instanceof NrSelectField ) {
-            return value;
+        if ( objValue instanceof NrSelectField ) {
+            return objValue;
         }
 
         const {
@@ -169,7 +214,9 @@ export class NrSelectField extends NrView {
             , label
             , icon
             , list
-        } = value;
+            , value
+            , readOnly
+        } = objValue;
 
         if ( type !== NrObjectType.SELECT_FIELD ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
@@ -180,6 +227,8 @@ export class NrSelectField extends NrView {
             , label : !_.isNil(label) ? label                   : undefined
             , icon  : !_.isNil(icon)  ? NrIcon.parseValue(icon) : undefined
             , list  : !_.isNil(list)  ? list                    : undefined
+            , value       : !_.isNil(value)       ? value                   : undefined
+            , readOnly    : !_.isNil(readOnly)    ? !!readOnly              : undefined
         });
 
     }

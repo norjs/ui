@@ -5,6 +5,7 @@ import NrIcon from "../../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrDateField extends NrView {
 
@@ -39,7 +40,7 @@ export class NrDateField extends NrView {
      * @param [label] {string}
      * @param [placeholder] {string}
      * @param [value] {string}
-     * @param [readonly] {boolean}
+     * @param [readOnly] {boolean}
      * @param [icon] {NrIcon}
      */
     constructor ({
@@ -47,7 +48,7 @@ export class NrDateField extends NrView {
         , label = undefined
         , placeholder = undefined
         , value = undefined
-        , readonly = undefined
+        , readOnly = undefined
         , icon = undefined
     } = {}) {
 
@@ -67,8 +68,8 @@ export class NrDateField extends NrView {
             throw new TypeError(`new ${NrDateField.nrName}(): value invalid: "${value}"`);
         }
 
-        if ( readonly !== undefined && !_.isBoolean(readonly) ) {
-            throw new TypeError(`new ${NrDateField.nrName}(): readonly invalid: "${readonly}"`);
+        if ( readOnly !== undefined && !_.isBoolean(readOnly) ) {
+            throw new TypeError(`new ${NrDateField.nrName}(): readOnly invalid: "${readOnly}"`);
         }
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
@@ -110,7 +111,7 @@ export class NrDateField extends NrView {
          * @member {boolean}
          * @protected
          */
-        this._readonly = !!readonly;
+        this._readOnly = !!readOnly;
 
         /**
          *
@@ -157,8 +158,8 @@ export class NrDateField extends NrView {
      *
      * @returns {boolean}
      */
-    get readonly () {
-        return this._readonly;
+    get readOnly () {
+        return this._readOnly;
     }
 
     /**
@@ -187,7 +188,7 @@ export class NrDateField extends NrView {
             , label       : this._label
             , placeholder : this._placeholder
             , value       : !_.isNil(this._value) ? this._value : undefined
-            , readonly    : this._readonly ? true : undefined
+            , readOnly    : this._readOnly ? true : undefined
             , name        : this._name
             , icon        : !_.isNil(this._icon) ? this._icon.valueOf() : null
         };
@@ -214,7 +215,7 @@ export class NrDateField extends NrView {
             , label
             , placeholder
             , value
-            , readonly
+            , readOnly
             , icon
         } = objValue;
 
@@ -227,7 +228,7 @@ export class NrDateField extends NrView {
             , label       : !_.isNil(label)       ? label                   : undefined
             , placeholder : !_.isNil(placeholder) ? placeholder             : undefined
             , value       : !_.isNil(value)       ? value                   : undefined
-            , readonly    : !_.isNil(readonly)    ? !!readonly              : undefined
+            , readOnly    : !_.isNil(readOnly)    ? !!readOnly              : undefined
             , icon        : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
         });
 

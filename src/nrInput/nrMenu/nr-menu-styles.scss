@@ -1,6 +1,8 @@
 nr-menu {
 
   display: block;
+  min-width: 1em;
+  max-width: 100%;
 
   & > .field-container {
 

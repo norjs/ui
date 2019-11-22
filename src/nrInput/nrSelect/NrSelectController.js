@@ -596,6 +596,16 @@ export class NrSelectController extends NrTextInputController {
 
 	}
 
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	isReadOnly () {
+
+		return super.isReadOnly();
+
+	}
+
 }
 
 // noinspection JSUnusedGlobalSymbols

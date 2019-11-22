@@ -571,11 +571,36 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	/**
+	 * AngularJS uses this in bindings.
+	 *
+	 * @returns {NrModel|undefined}
+	 */
+	get nrModel () {
+
+		return this[PRIVATE.nrModel];
+
+	}
+
+	/**
+	 *
+	 * @param value {NrModel}
+	 * @protected
+	 */
+	_setNrModel (value) {
+
+		this[PRIVATE.nrModel] = value;
+
+		nrLog.trace(`${this.nrName}._setNrModel(): Model set as `, value);
+
+	}
+
 	// noinspection JSUnusedGlobalSymbols
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @returns {NrTextField|undefined}
+	 * @returns {NrModel|undefined}
+	 * @protected
 	 */
 	get bindNrModel () {
 
@@ -587,15 +612,24 @@ export class NrTextInputController extends NrInputController {
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @param value {NrTextField|undefined}
+	 * *Note!* nrDateInput and nrDateTimeInput have overwritten this method; make any new changes there too.
+	 *
+	 * @param value {NrModel|undefined}
+	 * @protected
 	 */
 	set bindNrModel (value) {
 
 		if (this[PRIVATE.nrModel] !== value) {
 
-			this[PRIVATE.nrModel] = value;
+			this._setNrModel(value);
 
-			nrLog.trace(`${this.nrName}[set bindNrModel]: Model set as `, value);
+			if ( value && value.value !== undefined ) {
+
+				this.bindModelValue = value.value;
+
+				nrLog.trace(`${this.nrName}[set bindNrModel](): Field model value initialized as ${LogUtils.getAsString(value.value)}`);
+
+			}
 
 		}
 
@@ -718,6 +752,7 @@ export class NrTextInputController extends NrInputController {
 		if (!ngModelController) return {};
 
 		return {
+			'nr-field-readonly': this.isReadOnly(),
 			'nr-field-touched': ngModelController.$touched,
 			'nr-field-untouched': ngModelController.$untouched,
 			'nr-field-pristine': ngModelController.$pristine,
@@ -725,6 +760,16 @@ export class NrTextInputController extends NrInputController {
 			'nr-field-valid': ngModelController.$valid,
 			'nr-field-invalid': ngModelController.$invalid
 		};
+
+	}
+
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	isReadOnly () {
+
+		return this[PRIVATE.nrModel] && this[PRIVATE.nrModel].readOnly ? this[PRIVATE.nrModel].readOnly : undefined;
 
 	}
 

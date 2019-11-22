@@ -17,6 +17,7 @@ export const NrObjectType = {
     NAV: 'NrNav',
     TEXT_FIELD: 'NrTextField',
     DATE_FIELD: 'NrDateField',
+    DATE_TIME_FIELD: 'NrDateTimeField',
     PASSWORD_FIELD: 'NrPasswordField',
     CHECKBOX_FIELD: 'NrCheckboxField',
     TEXTAREA_FIELD: 'NrTextareaField',

@@ -37,6 +37,7 @@ export const NrRequestMethod = {
 
 /**
  * This is a data model for a (HTTP) request.
+ *
  * @implements {NrModel}
  */
 export class NrRequest {

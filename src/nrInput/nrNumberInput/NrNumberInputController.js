@@ -461,6 +461,16 @@ export class NrNumberInputController extends NrTextInputController {
 
 	}
 
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	isReadOnly () {
+
+		return super.isReadOnly();
+
+	}
+
 }
 
 // noinspection JSUnusedGlobalSymbols

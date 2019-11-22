@@ -26,6 +26,7 @@ export const NrButtonStyle = {
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrButton extends NrView {
 

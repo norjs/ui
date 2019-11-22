@@ -5,6 +5,7 @@ import NrIcon from "../../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrPasswordField extends NrView {
 
@@ -39,12 +40,16 @@ export class NrPasswordField extends NrView {
      * @param [label] {string}
      * @param [placeholder] {string}
      * @param [icon] {NrIcon}
+     * @param [value] {string}
+     * @param [readOnly] {boolean}
      */
     constructor ({
         name = undefined
         , label = undefined
         , placeholder = undefined
+        , value = undefined
         , icon = undefined
+        , readOnly = undefined
     } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
@@ -61,6 +66,14 @@ export class NrPasswordField extends NrView {
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
             throw new TypeError(`new ${NrPasswordField.nrName}(): icon invalid: "${icon}"`);
+        }
+
+        if ( value !== undefined && !_.isString(value) ) {
+            throw new TypeError(`new ${NrPasswordField.nrName}(): value invalid: "${value}"`);
+        }
+
+        if ( readOnly !== undefined && !_.isBoolean(readOnly) ) {
+            throw new TypeError(`new ${NrPasswordField.nrName}(): readOnly invalid: "${readOnly}"`);
         }
 
         super();
@@ -92,6 +105,20 @@ export class NrPasswordField extends NrView {
          * @protected
          */
         this._icon = icon;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._value = value;
+
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._readOnly = !!readOnly;
 
     }
 
@@ -137,6 +164,22 @@ export class NrPasswordField extends NrView {
 
     /**
      *
+     * @returns {string|undefined}
+     */
+    get value () {
+        return this._value;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    get readOnly () {
+        return this._readOnly;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
@@ -146,6 +189,8 @@ export class NrPasswordField extends NrView {
             , placeholder: this._placeholder
             , name: this._name
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
+            , value       : !_.isNil(this._value) ? this._value : undefined
+            , readOnly    : this._readOnly ? true : undefined
         };
     }
 
@@ -154,14 +199,14 @@ export class NrPasswordField extends NrView {
      * @param value {*}
      * @returns {NrPasswordField}
      */
-    static parseValue (value) {
+    static parseValue (objValue) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        if ( !objValue ) {
+            throw new TypeError(`${this.nrName}.parseValue(): objValue was not defined`);
         }
 
-        if ( value instanceof NrPasswordField ) {
-            return value;
+        if ( objValue instanceof NrPasswordField ) {
+            return objValue;
         }
 
         const {
@@ -170,7 +215,9 @@ export class NrPasswordField extends NrView {
             , label
             , placeholder
             , icon
-        } = value;
+            , value
+            , readOnly
+        } = objValue;
 
         if ( type !== NrObjectType.PASSWORD_FIELD ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
@@ -181,6 +228,8 @@ export class NrPasswordField extends NrView {
             , label       : !_.isNil(label)       ? label                   : undefined
             , placeholder : !_.isNil(placeholder) ? placeholder                   : undefined
             , icon        : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
+            , value       : !_.isNil(value)       ? value                   : undefined
+            , readOnly    : !_.isNil(readOnly)    ? !!readOnly              : undefined
         });
 
     }

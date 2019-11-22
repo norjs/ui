@@ -6,6 +6,7 @@ import NrModelUtils from "../../../utils/NrModelUtils";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrOption extends NrView {
 

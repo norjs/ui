@@ -1,5 +1,6 @@
 $field-label-color: #707076;
 $field-label-size:  1rem;
+$field-background-color: #fbfbfd;
 
 $field-border-size: 2px;
 $field-border-style: solid;
@@ -22,7 +23,7 @@ $field-readonly-border-color: #e0e6e0;
 $field-readonly-background-color: #fafafa;
 $field-readonly-label-background-color: #f0f0f0;
 
-nr-textarea {
+nr-date-time-input {
 
   display: block;
   min-width: 1em;
@@ -34,7 +35,7 @@ nr-textarea {
     flex-direction: column;
     border: $field-border-size $field-border-style $field-border-color;
     border-radius: 4px;
-    background-color: #fbfbfd;
+    background-color: $field-background-color;
     min-width: 1em;
     max-width: 100%;
     padding: 0;
@@ -73,7 +74,7 @@ nr-textarea {
 
     }
 
-    & > textarea {
+    & > input {
 
       cursor: pointer;
       font-size: 0.8em;
@@ -88,7 +89,7 @@ nr-textarea {
 
       & > label {
 
-        background-color: $field-focused-label-background-color;
+        background-color: #fbfffd;
         border-bottom: $field-focused-border-size $field-focused-border-style $field-focused-border-color;
 
       }
@@ -146,7 +147,6 @@ nr-textarea {
       }
 
     }
-
 
   }
 

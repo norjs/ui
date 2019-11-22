@@ -16,9 +16,17 @@ $field-invalid-border-color: #f0a6a0;
 $field-invalid-background-color: #fffbfd;
 $field-invalid-label-background-color: #fffbfd;
 
+$field-readonly-border-size: 2px;
+$field-readonly-border-style: solid;
+$field-readonly-border-color: #e0e6e0;
+$field-readonly-background-color: #fafafa;
+$field-readonly-label-background-color: #f0f0f0;
+
 nr-number-input {
 
   display: block;
+  min-width: 1em;
+  max-width: 100%;
 
   & > .field-container {
 
@@ -27,7 +35,7 @@ nr-number-input {
     border: $field-border-size $field-border-style $field-border-color;
     border-radius: 4px;
     background-color: #fbfbfd;
-    min-width: 20em;
+    min-width: 1em;
     max-width: 100%;
     padding: 0;
     margin-top: 0.5em;
@@ -104,6 +112,41 @@ nr-number-input {
       }
 
     }
+
+    &.nr-field-readonly {
+
+      // Disables pointer cursors
+
+      cursor: auto;
+
+      & > label {
+        cursor: auto;
+        & > nr-icon { cursor: auto; }
+        & > .label { cursor: auto; }
+      }
+
+      & > input {
+        cursor: auto;
+      }
+
+      // Set colors
+
+      border: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
+      background-color: $field-readonly-background-color;
+
+      & > label {
+
+        background-color: $field-readonly-label-background-color;
+        border-bottom: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
+
+      }
+
+      & > input {
+        background-color: $field-readonly-background-color;
+      }
+
+    }
+
 
   }
 

@@ -5,6 +5,7 @@ import NrIcon from "../../NrIcon";
 
 /**
  *
+ * @implements {NrModel}
  */
 export class NrTextareaField extends NrField {
 
@@ -39,12 +40,16 @@ export class NrTextareaField extends NrField {
      * @param [label] {string}
      * @param [placeholder] {string}
      * @param [icon] {NrIcon}
+     * @param [value] {string}
+     * @param [readOnly] {boolean}
      */
     constructor ({
         name = undefined
         , label = undefined
         , placeholder = undefined
+        , value = undefined
         , icon = undefined
+        , readOnly = undefined
     } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
@@ -61,6 +66,10 @@ export class NrTextareaField extends NrField {
 
         if ( icon !== undefined && !(icon instanceof NrIcon) ) {
             throw new TypeError(`new ${NrTextareaField.nrName}(): icon invalid: "${icon}"`);
+        }
+
+        if ( value !== undefined && !_.isString(value) ) {
+            throw new TypeError(`new ${NrTextareaField.nrName}(): value invalid: "${value}"`);
         }
 
         super();
@@ -92,6 +101,20 @@ export class NrTextareaField extends NrField {
          * @protected
          */
         this._icon = icon;
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._value = value;
+
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._readOnly = !!readOnly;
 
     }
 
@@ -137,6 +160,22 @@ export class NrTextareaField extends NrField {
 
     /**
      *
+     * @returns {string|undefined}
+     */
+    get value () {
+        return this._value;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    get readOnly () {
+        return this._readOnly;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
@@ -146,6 +185,8 @@ export class NrTextareaField extends NrField {
             , placeholder : this._placeholder
             , name        : this._name
             , icon        : !_.isNil(this._icon) ? this._icon.valueOf() : null
+            , value       : !_.isNil(this._value) ? this._value : undefined
+            , readOnly    : this._readOnly ? true : undefined
         };
     }
 
@@ -159,17 +200,17 @@ export class NrTextareaField extends NrField {
 
     /**
      *
-     * @param value {*}
+     * @param objValue {*}
      * @returns {NrTextareaField}
      */
-    static parseValue (value) {
+    static parseValue (objValue) {
 
-        if ( !value ) {
-            throw new TypeError(`${this.nrName}.parseValue(): value was not defined`);
+        if ( !objValue ) {
+            throw new TypeError(`${this.nrName}.parseValue(): objValue was not defined`);
         }
 
-        if ( value instanceof NrTextareaField ) {
-            return value;
+        if ( objValue instanceof NrTextareaField ) {
+            return objValue;
         }
 
         const {
@@ -178,7 +219,9 @@ export class NrTextareaField extends NrField {
             , label
             , placeholder
             , icon
-        } = value;
+            , value
+            , readOnly
+        } = objValue;
 
         if ( type !== NrObjectType.TEXTAREA_FIELD ) {
             throw new TypeError(`${this.nrName}.parseValue(): value's type is not correct: "${type}"`);
@@ -189,6 +232,8 @@ export class NrTextareaField extends NrField {
             , label        : !_.isNil(label)       ? label                   : undefined
             , placeholder  : !_.isNil(placeholder) ? placeholder             : undefined
             , icon         : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
+            , value       : !_.isNil(value)       ? value                   : undefined
+            , readOnly    : !_.isNil(readOnly)    ? !!readOnly              : undefined
         });
 
     }

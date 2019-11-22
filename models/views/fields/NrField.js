@@ -59,6 +59,22 @@ export class NrField {
 
     /**
      *
+     * @returns {boolean}
+     */
+    get readOnly () {
+        return false;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isReadOnly () {
+        return this.readOnly;
+    }
+
+    /**
+     *
      * @returns {Object}
      * @abstract
      */

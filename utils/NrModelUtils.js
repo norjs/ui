@@ -27,8 +27,9 @@ import NrNav from "../models/views/NrNav";
 import NrOption from "../models/views/fields/NrOption";
 import NrEventList from "../models/NrEventList";
 import NrEvent from "../models/NrEvent";
-import NrDateField from "../models/views/fields/NrDateInput";
+import NrDateField from "../models/views/fields/NrDateField";
 import NrGrid from "../models/views/NrGrid";
+import NrDateTimeField from "../models/views/fields/NrDateTimeField";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -98,6 +99,7 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrPasswordField);
         NrModelUtils.registerModel(NrTextField);
         NrModelUtils.registerModel(NrDateField);
+        NrModelUtils.registerModel(NrDateTimeField);
         NrModelUtils.registerModel(NrCheckboxField);
         NrModelUtils.registerModel(NrTextareaField);
         NrModelUtils.registerModel(NrNumberField);
@@ -364,6 +366,15 @@ export class NrModelUtils {
      * @param value {*}
      * @returns {boolean}
      */
+    static isDateTimeField (value) {
+        return !!( value && value instanceof NrDateTimeField );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
     static isPasswordField (value) {
         return !!( value && value instanceof NrPasswordField );
     }
@@ -485,6 +496,13 @@ export class NrModelUtils {
         if (NrModelUtils.isDateField(model)) {
             return {
                 component: NrTag.DATE_INPUT,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isDateTimeField(model)) {
+            return {
+                component: NrTag.DATE_TIME_INPUT,
                 resolve: {[NrAttribute.MODEL]: model}
             };
         }
