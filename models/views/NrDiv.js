@@ -104,7 +104,7 @@ export class NrDiv extends NrView {
         return {
             type: this.type
             , id: this._id
-            , content: _.map(this._content, item => item.valueOf())
+            , content: this._content ? _.map(this._content, item => item.valueOf()) : []
         };
     }
 
