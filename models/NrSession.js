@@ -63,12 +63,14 @@ export class NrSession {
      * @param [version] {number}
      * @param [created] {string}
      * @param [user] {NrUser}
+     * @param [deleted] {boolean}
      */
     constructor ({
         id = undefined,
         version = 0,
         created = undefined,
-        user = undefined
+        user = undefined,
+        deleted = undefined
     } = {}) {
 
         if ( id !== undefined && !_.isString(id) ) {
@@ -118,6 +120,13 @@ export class NrSession {
          */
         this._user = user;
 
+        /**
+         *
+         * @member {boolean|undefined}
+         * @protected
+         */
+        this._deleted = deleted;
+
     }
 
     /**
@@ -166,6 +175,14 @@ export class NrSession {
      *
      * @returns {boolean}
      */
+    get deleted () {
+        return !!this._deleted;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
     isAuthenticated () {
         return !!this._user;
     }
@@ -180,7 +197,8 @@ export class NrSession {
             id: this._id,
             version: this._version,
             created: this._created,
-            user: this._user ? this._user.valueOf() : null
+            user: this._user ? this._user.valueOf() : null,
+            deleted: this._deleted !== undefined ? !!this._deleted : undefined
         };
     }
 
@@ -216,13 +234,15 @@ export class NrSession {
             , version
             , created
             , user
+            , deleted
         } = value;
 
         return new NrSession({
             id        : !_.isNil(id)        ? id        : undefined,
             version   : version,
             created   : !_.isNil(created)   ? created   : undefined,
-            user      : !_.isNil(user)      ? NrUser.parseValue(user) : undefined
+            user      : !_.isNil(user)      ? NrUser.parseValue(user) : undefined,
+            deleted   : !_.isNil(deleted)   ? deleted   : undefined
         });
 
     }

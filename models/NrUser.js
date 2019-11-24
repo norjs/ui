@@ -40,11 +40,13 @@ export class NrUser {
      * @param [version] {number}
      * @param [email] {string}
      * @param [name] {string}
+     * @param [deleted] {boolean}
      */
     constructor ({
         id = undefined,
         version = 0,
-        email = undefined
+        email = undefined,
+        deleted = undefined
     } = {}) {
 
         if ( id !== undefined && !(id && _.isString(id)) ) {
@@ -57,6 +59,10 @@ export class NrUser {
 
         if ( email !== undefined && !_.isString(email) ) {
             throw new TypeError(`new ${NrUser.nrName}(): email invalid: "${email}"`);
+        }
+
+        if ( deleted !== undefined && !_.isBoolean(deleted) ) {
+            throw new TypeError(`new ${NrUser.nrName}(): deleted invalid: "${deleted}"`);
         }
 
         /**
@@ -79,6 +85,13 @@ export class NrUser {
          * @protected
          */
         this._email = email;
+
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._deleted = !!deleted;
 
     }
 
@@ -117,6 +130,14 @@ export class NrUser {
 
     /**
      *
+     * @returns {boolean}
+     */
+    get deleted () {
+        return this._deleted;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
@@ -124,7 +145,8 @@ export class NrUser {
             type: this.type,
             id: this._id,
             version: this._version,
-            email: this._email ? this._email : null
+            email: this._email ? this._email : null,
+            deleted: this._deleted ? true : undefined
         };
     }
 
@@ -158,13 +180,15 @@ export class NrUser {
         const {
             id,
             version,
-            email
+            email,
+            deleted
         } = value;
 
         return new NrUser({
             id      : !_.isNil(id)    ? id    : undefined,
             version : version,
-            email   : !_.isNil(email) ? email : undefined
+            email   : !_.isNil(email) ? email : undefined,
+            deleted : !_.isNil(deleted) ? deleted : undefined
         });
 
     }
