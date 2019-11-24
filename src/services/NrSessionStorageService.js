@@ -78,6 +78,14 @@ export class NrSessionStorageService {
     return this.Class.nrName;
   }
 
+  get $inject () {
+    return ['$window'];
+  }
+
+  static get $inject () {
+    return ["$window"];
+  }
+
   /**
    *
    * @param $window {$window}

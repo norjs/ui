@@ -83,6 +83,10 @@ export class NrButtonController {
 		};
 	}
 
+	static get $inject () {
+		return ["$scope", "$attrs"];
+	}
+
 	/**
 	 *
 	 * @param $scope {angular.IScope}

@@ -13,6 +13,10 @@ export class NrMessageController {
 		};
 	}
 
+	static get $inject () {
+		return [];
+	}
+
 	/**
 	 *
 	 * @ngInject

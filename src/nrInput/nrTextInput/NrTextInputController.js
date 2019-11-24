@@ -100,6 +100,10 @@ export class NrTextInputController extends NrInputController {
 		};
 	}
 
+	static get $inject () {
+		return ["$attrs", "$element"];
+	}
+
 	// noinspection DuplicatedCode
 	/**
 	 *

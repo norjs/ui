@@ -83,9 +83,13 @@ export class NrFormController {
 		};
 	}
 
+	static get $inject () {
+		return ["$scope"];
+	}
+
 	/**
-	 * @ngInject
 	 * @param $scope {angular.IScope}
+	 * @ngInject
 	 */
 	constructor ($scope) {
 

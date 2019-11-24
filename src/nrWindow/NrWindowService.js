@@ -45,6 +45,10 @@ export class NrWindowService {
     return this.Class.nrName;
   }
 
+  static get $inject () {
+    return ["$compile", "$document", "$rootScope"];
+  }
+
   /**
    *
    * @param $compile {angular.ICompileService}

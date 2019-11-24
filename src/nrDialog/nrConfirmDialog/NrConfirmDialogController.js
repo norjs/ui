@@ -25,6 +25,10 @@ export class NrConfirmDialogController {
 		};
 	}
 
+	static get $inject () {
+		return [];
+	}
+
 	/**
 	 * @ngInject
 	 */

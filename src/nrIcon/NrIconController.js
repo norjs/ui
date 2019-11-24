@@ -24,6 +24,10 @@ class NrIconController {
     return this.Class.nrName;
   }
 
+  static get $inject () {
+    return [];
+  }
+
   /**
    *
    * @ngInject

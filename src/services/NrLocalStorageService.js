@@ -78,6 +78,10 @@ export class NrLocalStorageService {
     return this.Class.nrName;
   }
 
+  static get $inject () {
+    return ["$window"];
+  }
+
   /**
    *
    * @param $window {$window}

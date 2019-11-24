@@ -71,6 +71,10 @@ export class NrPasswordInputController extends NrTextInputController {
 		return super.getComponentConfig(template);
 	}
 
+	static get $inject () {
+		return ["$attrs", "$element"];
+	}
+
 	// noinspection DuplicatedCode
 	/**
 	 *

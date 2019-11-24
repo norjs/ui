@@ -94,6 +94,10 @@ export class NrSelectController extends NrTextInputController {
 		};
 	}
 
+	static get $inject () {
+		return ["$attrs", "$element"];
+	}
+
 	// noinspection DuplicatedCode
 	/**
 	 *

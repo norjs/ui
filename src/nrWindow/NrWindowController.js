@@ -98,6 +98,10 @@ export class NrWindowController {
     return this.Class.nrName;
   }
 
+  static get $inject () {
+    return ["$element", "$scope", "nrWindowService", "$document"];
+  }
+
   /**
    *
    * @param $element {JQLite}

@@ -91,6 +91,10 @@ export class NrMenuController {
 		};
 	}
 
+	static get $inject () {
+		return ["$attrs", "$element", "$scope"];
+	}
+
 	/**
 	 *
 	 * @param $attrs {angular.IAttributes}

@@ -35,6 +35,10 @@ class NrRegisterNgModelControllerDirective {
         return NrRegisterNgModelControllerDirective;
     }
 
+    static get $inject () {
+        return ["$parse"];
+    }
+
     /**
      *
      * @param $parse {angular.IParseService}

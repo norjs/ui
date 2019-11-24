@@ -73,6 +73,10 @@ export class NrDivController {
 		};
 	}
 
+	static get $inject () {
+		return [];
+	}
+
 	/**
 	 * @ngInject
 	 */

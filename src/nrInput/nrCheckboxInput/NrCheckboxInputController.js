@@ -71,6 +71,10 @@ export class NrCheckboxInputController extends NrTextInputController {
 		return super.getComponentConfig(template);
 	}
 
+	static get $inject () {
+		return ["$attrs", "$element"];
+	}
+
 	// noinspection DuplicatedCode
 	/**
 	 *

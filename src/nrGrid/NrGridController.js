@@ -75,6 +75,10 @@ export class NrGridController {
 		};
 	}
 
+	static get $inject () {
+		return ["$scope", "$element"];
+	}
+
 	/**
 	 * @param $scope {angular.IScope}
 	 * @param $element {JQLite}

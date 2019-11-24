@@ -67,6 +67,10 @@ export class NrRequestService {
         return this.Class.nrName;
     }
 
+    static get $inject () {
+        return ["$http", "$q"];
+    }
+
     /**
      *
      * @param $http {angular.IHttpService}

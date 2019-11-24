@@ -60,6 +60,10 @@ class NrNavController {
         return this.Class.nrName;
     }
 
+    static get $inject () {
+        return ["$scope"];
+    }
+
     /**
      *
      * @param $scope {angular.IScope}
