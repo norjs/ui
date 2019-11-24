@@ -36,7 +36,6 @@ const PRIVATE = {
  *
  * @TODO: Implement support for ng-touched: $setTouched(): A model is considered to be touched when the user has first
  *        focused the control element and then shifted focus away from the control (blur event).
- * @ngInject
  */
 export class NrDateTimeInputController extends NrTextInputController {
 
@@ -135,6 +134,7 @@ export class NrDateTimeInputController extends NrTextInputController {
 	 * @ngInject
 	 */
 	constructor ($attrs, $element, $timeout) {
+		'ngInject';
 
 		super($attrs, $element);
 

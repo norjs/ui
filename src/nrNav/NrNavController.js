@@ -32,7 +32,6 @@ const nrLog = LogUtils.getLogger(NrTag.NAV);
 
 /**
  *
- * @ngInject
  */
 class NrNavController {
 
@@ -76,6 +75,7 @@ class NrNavController {
     constructor (
         $scope
     ) {
+        'ngInject';
 
         /**
          *

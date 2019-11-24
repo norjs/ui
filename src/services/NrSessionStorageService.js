@@ -94,6 +94,7 @@ export class NrSessionStorageService {
   constructor (
       $window
   ) {
+    'ngInject';
 
     this[PRIVATE.$window] = $window;
 

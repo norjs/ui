@@ -37,6 +37,7 @@ export class NrConfirmDialogController {
 	 * @ngInject
 	 */
 	constructor () {
+		'ngInject';
 
 		/**
 		 *

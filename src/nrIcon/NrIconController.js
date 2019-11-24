@@ -8,7 +8,6 @@ const PRIVATE = {
 
 /**
  *
- * @ngInject
  */
 class NrIconController {
 
@@ -37,6 +36,7 @@ class NrIconController {
    * @ngInject
    */
   constructor () {
+    'ngInject';
   }
 
   /**

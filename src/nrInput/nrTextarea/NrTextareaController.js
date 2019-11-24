@@ -19,7 +19,6 @@ const PRIVATE = {
  *
  * FIXME: Implement support for ng-touched
  *
- * @ngInject
  */
 export class NrTextareaController extends NrTextInputController {
 
@@ -91,6 +90,7 @@ export class NrTextareaController extends NrTextInputController {
 		$attrs
 		, $element
 	) {
+		'ngInject';
 
 		super($attrs, $element);
 

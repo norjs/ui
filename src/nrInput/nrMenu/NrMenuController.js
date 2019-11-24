@@ -23,7 +23,6 @@ const PRIVATE = {
  *
  * FIXME: Implement support for ng-touched
  *
- * @ngInject
  */
 export class NrMenuController {
 
@@ -107,6 +106,7 @@ export class NrMenuController {
 	 * @ngInject
 	 */
 	constructor ($attrs, $element, $scope) {
+		'ngInject';
 
 		/**
 		 *

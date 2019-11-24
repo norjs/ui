@@ -17,7 +17,6 @@ const PRIVATE = {
 };
 
 /**
- * @ngInject
  */
 export class NrWindowService {
 
@@ -65,6 +64,7 @@ export class NrWindowService {
       $document,
       $rootScope
   ) {
+    'ngInject';
 
     /**
      *

@@ -85,6 +85,7 @@ export class NrDivController {
 	 * @ngInject
 	 */
 	constructor () {
+		'ngInject';
 
 		/**
 		 *

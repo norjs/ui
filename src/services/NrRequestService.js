@@ -85,6 +85,7 @@ export class NrRequestService {
         $http
         , $q
     ) {
+        'ngInject';
 
         /**
          *

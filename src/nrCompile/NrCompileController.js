@@ -180,6 +180,7 @@ class NrCompileController {
    * @ngInject
    */
   constructor ($injector, $scope, $compile, $parse, $transclude, $element) {
+    'ngInject';
 
     /**
      *

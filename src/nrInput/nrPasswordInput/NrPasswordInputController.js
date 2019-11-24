@@ -18,7 +18,6 @@ const PRIVATE = {
  *
  * FIXME: Implement support for ng-touched
  *
- * @ngInject
  */
 export class NrPasswordInputController extends NrTextInputController {
 
@@ -90,6 +89,7 @@ export class NrPasswordInputController extends NrTextInputController {
 		$attrs
 		, $element
 	) {
+		'ngInject';
 
 		super($attrs, $element);
 

@@ -94,6 +94,7 @@ export class NrLocalStorageService {
   constructor (
       $window
   ) {
+    'ngInject';
 
     this[PRIVATE.$window] = $window;
 

@@ -89,6 +89,7 @@ export class NrGridController {
 	 * @ngInject
 	 */
 	constructor ($scope, $element) {
+		'ngInject';
 
 		/**
 		 *

@@ -96,6 +96,7 @@ export class NrFormController {
 	 * @ngInject
 	 */
 	constructor ($scope) {
+		'ngInject';
 
 		/**
 		 *

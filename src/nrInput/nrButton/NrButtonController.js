@@ -14,7 +14,6 @@ const nrLog = LogUtils.getLogger(NrTag.BUTTON);
  *
  * FIXME: Implement support for ng-touched
  *
- * @ngInject
  */
 export class NrButtonController {
 
@@ -98,6 +97,7 @@ export class NrButtonController {
 	 * @ngInject
 	 */
 	constructor ($scope, $attrs) {
+		'ngInject';
 
 		/**
 		 *

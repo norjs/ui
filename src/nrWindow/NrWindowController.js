@@ -70,7 +70,6 @@ const PRIVATE = {
 /**
  * Simple floating nrWindow element
  *
- * @ngInject
  */
 export class NrWindowController {
 
@@ -120,6 +119,7 @@ export class NrWindowController {
       nrWindowService,
       $document
   ) {
+    'ngInject';
 
     /**
      *

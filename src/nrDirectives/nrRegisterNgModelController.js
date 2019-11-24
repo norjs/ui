@@ -49,6 +49,7 @@ class NrRegisterNgModelControllerDirective {
      * @ngInject
      */
     constructor ($parse) {
+        'ngInject';
 
         /**
          *
@@ -156,6 +157,7 @@ class NrRegisterNgModelControllerDirective {
  * @ngInject
  */
 export function nrRegisterNgModel ($parse) {
+    'ngInject';
     return new NrRegisterNgModelControllerDirective($parse);
 }
 
