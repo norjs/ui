@@ -78,12 +78,12 @@ export class NrSessionStorageService {
     return this.Class.nrName;
   }
 
-  get $inject () {
-    return ['$window'];
-  }
-
   static get $inject () {
+    if (this._inject) return this._inject;
     return ["$window"];
+  }
+  static set $inject (value) {
+    this._inject = value;
   }
 
   /**

@@ -36,7 +36,11 @@ class NrRegisterNgModelControllerDirective {
     }
 
     static get $inject () {
+        if (this._inject) return this._inject;
         return ["$parse"];
+    }
+    static set $inject (value) {
+        this._inject = value;
     }
 
     /**

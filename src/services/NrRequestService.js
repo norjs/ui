@@ -68,7 +68,11 @@ export class NrRequestService {
     }
 
     static get $inject () {
+        if (this._inject) return this._inject;
         return ["$http", "$q"];
+    }
+    static set $inject (value) {
+        this._inject = value;
     }
 
     /**

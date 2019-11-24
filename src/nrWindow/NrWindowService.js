@@ -46,7 +46,11 @@ export class NrWindowService {
   }
 
   static get $inject () {
+    if (this._inject) return this._inject;
     return ["$compile", "$document", "$rootScope"];
+  }
+  static set $inject (value) {
+    this._inject = value;
   }
 
   /**

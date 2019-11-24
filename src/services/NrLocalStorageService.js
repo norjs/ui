@@ -79,7 +79,11 @@ export class NrLocalStorageService {
   }
 
   static get $inject () {
+    if (this._inject) return this._inject;
     return ["$window"];
+  }
+  static set $inject (value) {
+    this._inject = value;
   }
 
   /**
