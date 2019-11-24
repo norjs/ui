@@ -30,6 +30,12 @@ nr-button {
   min-width: 1em;
   max-width: 100%;
 
+  @media only screen and (max-width: 600px) {
+    & {
+      margin: 16px 0;
+    }
+  }
+
   & > button {
 
     min-width: $button-min-width;
@@ -42,9 +48,16 @@ nr-button {
     background-color: $default-button-background-color;
     text-transform: uppercase;
     font-size: 0.7em;
-    padding: 0.7em;
     -webkit-appearance: none;
     -moz-appearance: none;
+    padding: 0.7em;
+
+    @media only screen and (max-width: 600px) {
+      & {
+        padding:  12px 0.7em;
+        min-width: 2em;
+      }
+    }
 
   }
 
@@ -58,8 +71,6 @@ nr-button {
     background-color: $default-button-background-color;
 
   }
-
-
 
   & > button.nr-default {
 

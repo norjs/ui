@@ -43,6 +43,13 @@ nr-date-time-input {
     margin-bottom: 0.5em;
     cursor: pointer;
 
+    @media only screen and (max-width: 800px) {
+      & {
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
+    }
+
     & > label {
 
       display: flex;
@@ -81,6 +88,14 @@ nr-date-time-input {
       padding: 0.8em 1em;
       border: 0;
 
+    }
+
+    @media only screen and (max-width: 800px) {
+      &.nr-field-readonly {
+        & > input {
+          padding: 0.8em 2px;
+        }
+      }
     }
 
     &.nr-focus {
