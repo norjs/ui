@@ -6,4 +6,6 @@ export const nrFormComponent = {
     template,
     controller: NrFormController,
     bindings: NrFormController.getBindings()
-}
+};
+
+export default nrFormComponent;

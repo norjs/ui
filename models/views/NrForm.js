@@ -243,12 +243,12 @@ export class NrForm extends NrView {
             type: this.type
             , label: this._label
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
-            , submit: this._submit
-            , cancel: this._cancel
+            , submit: !_.isNil(this._submit) ? this._submit.valueOf() : null
+            , cancel: !_.isNil(this._cancel) ? this._cancel.valueOf() : null
             , payload: this._payload
             , content: _.map(this._content, item => item.valueOf())
-            , submitButton: this._submitButton
-            , cancelButton: this._cancelButton
+            , submitButton: !_.isNil(this._submitButton) ? this._submitButton.valueOf() : null
+            , cancelButton: !_.isNil(this._cancelButton) ? this._cancelButton.valueOf() : null
         };
     }
 

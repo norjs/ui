@@ -18,7 +18,7 @@ const PRIVATE = {
 	nrModel                   : Symbol('_nrModel')
 	, submitAction            : Symbol('_submitAction')
 	, cancelAction            : Symbol('_cancelAction')
-	, isCancelVisible         : Symbol('_cancelVisible')
+	, isCancelVisible         : Symbol('_isCancelVisible')
 	, items                   : Symbol('_items')
 	, updateItems             : Symbol('_updateItems')
 	, ngFormController        : Symbol('_ngForm')
@@ -87,6 +87,7 @@ export class NrFormController {
 		if (this._inject) return this._inject;
 		return ["$scope"];
 	}
+
 	static set $inject (value) {
 		this._inject = value;
 	}
@@ -352,7 +353,11 @@ export class NrFormController {
 			return this[PRIVATE.isCancelVisible]({nrFormController: this});
 		}
 
-		return _.isFunction(this[PRIVATE.cancelAction]);
+		if (_.isFunction(this[PRIVATE.cancelAction])) {
+			return true;
+		}
+
+		return !!( this.nrModel && this.nrModel.cancel );
 
 	}
 
@@ -364,7 +369,7 @@ export class NrFormController {
 	 */
 	isSubmitEnabled () {
 
-		return _.isFunction(this[PRIVATE.submitAction]);
+		return true;
 
 	}
 
@@ -421,7 +426,11 @@ export class NrFormController {
 
 		} else {
 
-			nrLog.warn(`No cancel callback.`);
+			const payload = this.getModifiedPayload();
+
+			this[PRIVATE.$scope].$emit(NrEventName.FORM_CANCEL, payload, this);
+
+			nrLog.trace(`.onClick(): No cancel action configured; emitted an event FORM_CANCEL "${NrEventName.FORM_CANCEL}"`);
 
 		}
 
@@ -537,15 +546,16 @@ export class NrFormController {
 	/**
 	 * Returns an object with original payload and changes merged as one.
 	 *
+	 * @param payload {Object}
 	 * @returns {Object}
 	 */
-	getModifiedPayload () {
+	getModifiedPayload (payload= {}) {
 
 		const originalPayload = this[PRIVATE.nrModel].payload || {};
 
 		const modifiedValues = this[PRIVATE.getFieldValues]();
 
-		return _.merge({}, originalPayload, modifiedValues);
+		return _.merge({}, originalPayload, payload, modifiedValues);
 
 	}
 
