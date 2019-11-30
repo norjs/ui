@@ -1,0 +1,24 @@
+$field-label-color: #707076;
+$field-label-size:  1rem;
+$field-background-color: #fcfcfd;
+
+$field-border-size: 2px;
+$field-border-style: solid;
+$field-border-color: #f0f0f6;
+
+$field-focused-border-size: 2px;
+$field-focused-border-style: solid;
+$field-focused-border-color: #e0e6e0;
+$field-focused-label-background-color: #fbfffd;
+
+$field-invalid-border-size: 2px;
+$field-invalid-border-style: solid;
+$field-invalid-border-color: #f0a6a0;
+$field-invalid-background-color: #fffbfd;
+$field-invalid-label-background-color: #fffbfd;
+
+$field-readonly-border-size: 2px;
+$field-readonly-border-style: solid;
+$field-readonly-border-color: #e0e6e0;
+$field-readonly-background-color: $field-background-color;
+$field-readonly-label-background-color: $field-background-color;

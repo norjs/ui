@@ -1,23 +1,28 @@
 <div class="field-container" ng-class="$ctrl.getFieldStyles()">
 
-    <label ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()"
-           ng-click="$ctrl.onLabelClick($event)">
-        <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
-        <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
-    </label>
+    <div class="icon-container" ng-click="$ctrl.onLabelClick($event)" ng-if="$ctrl.hasIconValue()">
+        <nr-icon nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+    </div>
 
-    <input
-        type="text"
-        class="form-input theme-input"
-        autocomplete="off"
-        placeholder="{{ $ctrl.getPlaceholder()|translate }}"
-        ng-model="$ctrl.bindModelValue"
-        nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
-        ng-change="$ctrl.onChange()"
-        ng-focus="$ctrl.onFocus($event)"
-        ng-blur="$ctrl.onBlur($event)"
-        ng-readonly="$ctrl.isReadOnly()"
-        ng-model-options="{
+    <div class="input-container">
+
+        <label ng-if="$ctrl.useLabel()"
+               ng-click="$ctrl.onLabelClick($event)">
+            <span class="label" translate="{{::$ctrl.getLabel()}}"></span>
+        </label>
+
+        <input
+                type="text"
+                class="form-input theme-input"
+                autocomplete="off"
+                placeholder="{{ $ctrl.getPlaceholder()|translate }}"
+                ng-model="$ctrl.bindModelValue"
+                nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
+                ng-change="$ctrl.onChange()"
+                ng-focus="$ctrl.onFocus($event)"
+                ng-blur="$ctrl.onBlur($event)"
+                ng-readonly="$ctrl.isReadOnly()"
+                ng-model-options="{
                 allowInvalid: '$inherit',
                 updateOn: 'default blur',
                 debounce: {
@@ -25,6 +30,8 @@
                     blur: 0
                 }
             }"
-    >
+        >
+
+    </div>
 
 </div>

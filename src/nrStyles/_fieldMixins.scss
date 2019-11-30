@@ -1,0 +1,203 @@
+@import "_fieldConfig";
+
+@mixin nr-field {
+
+    display: block;
+    min-width: 1em;
+    max-width: 100%;
+
+    & > .field-container {
+
+        display: flex;
+        flex-direction: row;
+        border: $field-border-size $field-border-style $field-border-color;
+        border-radius: 4px;
+        background-color: $field-background-color;
+        min-width: 1em;
+        max-width: 100%;
+        padding: 0;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        cursor: pointer;
+
+        @media only screen and (max-width: 800px) {
+            & {
+                margin-top: 2px;
+                margin-bottom: 2px;
+            }
+        }
+
+        & > .icon-container {
+
+            border-right: $field-border-size $field-border-style $field-border-color;
+            display: flex;
+            flex-direction: row;
+            justify-items: center;
+            align-items: center;
+
+            & > nr-icon {
+
+                display: block;
+                font-size: $field-label-size * 1.5;
+                color: $field-label-color;
+                cursor: pointer;
+                padding: 0.4em;
+
+                @media only screen and (max-width: 800px) {
+                    & {
+                        padding: 2px 4px;
+                    }
+                }
+
+            }
+
+        }
+
+        & > .input-container {
+
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 1em;
+            max-width: 100%;
+            padding: 0;
+            cursor: pointer;
+
+            & > label {
+
+                display: flex;
+                padding: 0;
+                border-bottom: $field-border-size $field-border-style $field-border-color;
+                cursor: pointer;
+
+                & > .label {
+
+                    flex: 1;
+                    font-size: $field-label-size;
+                    color: $field-label-color;
+                    cursor: pointer;
+                    text-align: left;
+                    padding: 0.5em 1em;
+
+                    @media only screen and (max-width: 800px) {
+                        & {
+                            padding: 2px 4px;
+                        }
+                    }
+
+                }
+
+            }
+
+            & > input {
+
+                cursor: pointer;
+                font-size: 0.8em;
+                border: 0;
+                padding: 0.8em 1em;
+
+                @media only screen and (max-width: 800px) {
+                    & {
+                        padding: 0.8em 1em;
+                    }
+                }
+
+            }
+
+        }
+
+        @media only screen and (max-width: 800px) {
+            &.nr-field-readonly {
+                & > .input-container > input {
+                    padding: 0.8em 2px;
+                }
+            }
+        }
+
+        &.nr-focus {
+
+            border: $field-focused-border-size $field-focused-border-style $field-focused-border-color;
+
+            & > .input-container > label {
+
+                background-color: $field-focused-label-background-color;
+                border-bottom: $field-focused-border-size $field-focused-border-style $field-focused-border-color;
+
+            }
+
+        }
+
+        &.nr-field-invalid.nr-field-dirty {
+
+            border: $field-invalid-border-size $field-invalid-border-style $field-invalid-border-color;
+            background-color: $field-invalid-background-color;
+
+            & > .input-container > label {
+
+                background-color: $field-invalid-label-background-color;
+                border-bottom: $field-invalid-border-size $field-invalid-border-style $field-invalid-border-color;
+
+            }
+
+            & > .input-container > input {
+                background-color: $field-invalid-background-color;
+            }
+
+        }
+
+        &.nr-field-readonly {
+
+            // Disables pointer cursors
+
+            cursor: auto;
+
+            & > .icon-container {
+                cursor: auto;
+
+                & > nr-icon {
+                    cursor: auto;
+                }
+
+            }
+
+            & > .input-container {
+                cursor: auto;
+            }
+
+            & > .input-container > label {
+                cursor: auto;
+                & > nr-icon { cursor: auto; }
+                & > .label { cursor: auto; }
+            }
+
+            & > .input-container > input {
+                cursor: auto;
+            }
+
+            // Set colors
+
+            border: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
+            background-color: $field-readonly-background-color;
+
+            & > .icon-container {
+
+                background-color: $field-readonly-label-background-color;
+
+            }
+
+            & > .input-container > label {
+
+                background-color: $field-readonly-label-background-color;
+                border-bottom: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
+
+            }
+
+            & > .input-container > input {
+                background-color: $field-readonly-background-color;
+            }
+
+        }
+
+    }
+
+}

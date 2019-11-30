@@ -1,3 +1,5 @@
+@import "../../nrStyles/fieldConfig";
+
 $button-min-width: 10em;
 $button-border-size: 2px;
 $button-border-type: solid;
@@ -87,6 +89,12 @@ nr-button {
     border: $button-border-size $button-border-type $icon-button-border-color;
     color: $icon-button-text-color;
     background-color: $icon-button-background-color;
+
+    & > nr-icon {
+
+      font-size: $field-label-size * 1.5;
+
+    }
 
   }
 
