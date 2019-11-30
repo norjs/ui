@@ -9,11 +9,14 @@ export const NrIconValue = {
 
     BARS                 : "bars"
     , HOME               : "home"
+    , LIST               : "list"
+    , BOOK               : "book"
     , EDIT               : "pencil-square-o"
     , STOP               : "stop"
     , MINUS              : "minus-circle"
     , PLUS               : "plus-circle"
     , TIMES              : "times-circle"
+    , PLAY               : "play-circle"
     , TASKS              : "tasks"
     , COMMENT            : "comment"
     , CHECK              : "check"
@@ -28,6 +31,7 @@ export const NrIconValue = {
     , LOGIN              : "sign-in"
     , LOGOUT             : "sign-out"
     , CLOCK              : "clock-o"
+    , ADDRESS_BOOK       : "address-book"
 
 };
 

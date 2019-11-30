@@ -31,6 +31,12 @@ export class NrModel {
 
     /**
      *
+     * @returns {Object}
+     */
+    toJSON () {}
+
+    /**
+     *
      * @param value {*}
      * @returns {NrModel}
      */
