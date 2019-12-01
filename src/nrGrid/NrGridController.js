@@ -18,7 +18,7 @@ const SMALL_SCREEN_WIDTH_LIMIT = 500;
  *
  * @type {number}
  */
-const WINDOW_RESIZE_TIMEOUT = 5;
+const WINDOW_RESIZE_TIMEOUT = 0;
 
 /**
  *
@@ -296,6 +296,11 @@ export class NrGridController {
 		this._calculateDimensionsWhenVisible();
 
 		angular.element(this.$window).bind('resize', this._resizeCallback);
+
+		this.$scope.$watch( () => {
+			const parentElement = this.$element[0];
+			return parentElement && parentElement.offsetWidth ? parentElement.offsetWidth : undefined;
+		}, () => this._resizeCallback());
 
 	}
 
