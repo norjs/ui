@@ -16,6 +16,12 @@ const SMALL_SCREEN_WIDTH_LIMIT = 500;
 
 /**
  *
+ * @type {number}
+ */
+const WINDOW_RESIZE_TIMEOUT = 5;
+
+/**
+ *
  * @enum {Symbol}
  * @readonly
  */
@@ -103,7 +109,8 @@ export class NrGridController {
 	constructor (
 		$scope,
 		$element,
-		$window
+		$window,
+		$timeout
 	) {
 		'ngInject';
 
@@ -127,6 +134,13 @@ export class NrGridController {
 		 * @private
 		 */
 		this.$window = $window;
+
+		/**
+		 *
+		 * @member {angular.ITimeoutService}
+		 * @private
+		 */
+		this.$timeout = $timeout;
 
 		/**
 		 *
@@ -186,10 +200,10 @@ export class NrGridController {
 
 		/**
 		 *
-		 * @member {boolean}
+		 * @member {angular.IPromise|undefined}
 		 * @private
 		 */
-		this[PRIVATE.calculationHasBeenDelayed] = false;
+		this[PRIVATE.calculationHasBeenDelayed] = undefined;
 
 		/**
 		 *
@@ -214,22 +228,40 @@ export class NrGridController {
 
 		/**
 		 *
+		 * @member {angular.IPromise}
+		 * @private
+		 */
+		this._resizeTimeout = undefined;
+
+		/**
+		 *
 		 * @member {Function}
 		 * @private
 		 */
 		this._resizeCallback = () => {
+			if (this._isDestroyed) return;
+			this._resizeWindowAction();
+		};
+
+	}
+
+	/**
+	 *
+	 * @private
+	 */
+	_resizeWindowAction () {
+
+		if (this._resizeTimeout) {
+			this.$timeout.cancel(this._resizeTimeout);
+		}
+
+		this._resizeTimeout = this.$timeout( () => {
 
 			if (this._isDestroyed) return;
 
-			this.$scope.$applyAsync( () => {
+			this._calculateDimensionsWhenVisible();
 
-				if (this._isDestroyed) return;
-
-				this._calculateDimensionsWhenVisible();
-
-			});
-
-		};
+		}, WINDOW_RESIZE_TIMEOUT);
 
 	}
 
@@ -237,6 +269,16 @@ export class NrGridController {
 	$onDestroy () {
 
 		this._isDestroyed = true;
+
+		if (this._resizeTimeout) {
+			this.$timeout.cancel(this._resizeTimeout);
+			this._resizeTimeout = undefined;
+		}
+
+		if (this[PRIVATE.calculationHasBeenDelayed]) {
+			this.$timeout.cancel(this[PRIVATE.calculationHasBeenDelayed]);
+			this[PRIVATE.calculationHasBeenDelayed] = undefined;
+		}
 
 		angular.element(this.$window).off('resize', this._resizeCallback);
 
@@ -266,27 +308,17 @@ export class NrGridController {
 		} else {
 
 			if (this[PRIVATE.calculationHasBeenDelayed]) {
-
-				nrLog.trace(`_calculateDimensionsWhenVisible(): Previous calculation already scheduled`);
-
-			} else {
-
-				// Check dimensions at the start of next digest loop
-				nrLog.trace(`_calculateDimensionsWhenVisible(): Delaying dimensions calculations to next digest loop because the element wasn't visible.`);
-				this.$scope.$applyAsync( () => {
-
-					if (this._isDestroyed) return;
-
-					this[PRIVATE.calculationHasBeenDelayed] = false;
-
-					this._calculateDimensions();
-
-				});
-
-				this[PRIVATE.calculationHasBeenDelayed] = true;
-
+				this.$timeout.cancel(this[PRIVATE.calculationHasBeenDelayed]);
+				this[PRIVATE.calculationHasBeenDelayed] = undefined;
 			}
 
+			// Check dimensions at the start of next digest loop
+			nrLog.trace(`_calculateDimensionsWhenVisible(): Delaying dimensions calculations to next digest loop because the element wasn't visible.`);
+			this[PRIVATE.calculationHasBeenDelayed] = this.$timeout( () => {
+				if (this._isDestroyed) return;
+				this[PRIVATE.calculationHasBeenDelayed] = undefined;
+				this._calculateDimensions();
+			}, WINDOW_RESIZE_TIMEOUT);
 
 		}
 
