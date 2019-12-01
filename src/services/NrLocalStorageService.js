@@ -80,7 +80,7 @@ export class NrLocalStorageService {
 
   /**
    *
-   * @param $window {$window}
+   * @param $window {angular.IWindowService}
    * @ngInject
    */
   constructor (

@@ -5,6 +5,7 @@ import NrButtonController from './NrButtonController';
 /**
  *
  * @type {angular.IComponentOptions}
+ * @ngInject
  */
 export const nrButtonComponent = NrButtonController.getComponentConfig(template);
 

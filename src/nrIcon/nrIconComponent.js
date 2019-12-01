@@ -7,8 +7,9 @@ import NrAttribute from "../NrAttribute";
 /**
  *
  * @type {angular.IComponentOptions}
+ * @ngInject
  */
-let nrIconComponent = {
+const nrIconComponent = {
   template
   , bindings: {
     __type: `@${NrAttribute.TYPE}`

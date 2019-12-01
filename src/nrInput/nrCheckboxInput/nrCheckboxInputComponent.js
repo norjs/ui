@@ -5,6 +5,7 @@ import NrCheckboxInputController from './NrCheckboxInputController';
 /**
  *
  * @type {angular.IComponentOptions}
+ * @ngInject
  */
 export const nrCheckboxInputComponent = NrCheckboxInputController.getComponentConfig(template);
 

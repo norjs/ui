@@ -5,6 +5,7 @@ import NrDateInputController from './NrDateInputController';
 /**
  *
  * @type {angular.IComponentOptions}
+ * @ngInject
  */
 export const nrDateInputComponent = NrDateInputController.getComponentConfig(template);
 

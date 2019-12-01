@@ -8,6 +8,7 @@ import NrAttribute from "../NrAttribute";
  * @type {angular.IComponentOptions}
  * @fixme Implement attribute to override style from nrModel
  * @fixme Implement attribute to override nr-click from options.onClick
+ * @ngInject
  */
 export const nrNavComponent = {
   template

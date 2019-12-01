@@ -104,6 +104,7 @@ export class NrTextInputController extends NrInputController {
 	 *
 	 * @param $attrs {angular.IAttributes}
 	 * @param $element {JQLite}
+	 * @param $translate {angular.translate.ITranslateService}
 	 * @ngInject
 	 */
 	constructor (

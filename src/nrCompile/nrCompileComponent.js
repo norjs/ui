@@ -5,6 +5,7 @@ import "./nr-compile-styles.scss";
 /**
  *
  * @type {{controller: NrCompileController}}
+ * @ngInject
  */
 let nrCompileComponent = {
   transclude: true
