@@ -11,14 +11,15 @@ const nrLog = LogUtils.getLogger('NrGridController');
  * The limit which to consider screen to be too small in pixels
  *
  * @type {number}
+ * @fixme This probably should be overwritable in the grid model
  */
-const SMALL_SCREEN_WIDTH_LIMIT = 500;
+const SMALL_SCREEN_WIDTH_LIMIT = 320;
 
 /**
  *
  * @type {number}
  */
-const WINDOW_RESIZE_TIMEOUT = 0;
+const WINDOW_RESIZE_TIMEOUT = 100;
 
 /**
  *
@@ -298,6 +299,7 @@ export class NrGridController {
 		angular.element(this.$window).bind('resize', this._resizeCallback);
 
 		this.$scope.$watch( () => {
+			if (this._isDestroyed) return;
 			const parentElement = this.$element[0];
 			return parentElement && parentElement.offsetWidth ? parentElement.offsetWidth : undefined;
 		}, () => this._resizeCallback());
