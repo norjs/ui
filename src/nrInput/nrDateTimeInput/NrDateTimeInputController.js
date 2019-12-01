@@ -118,14 +118,6 @@ export class NrDateTimeInputController extends NrTextInputController {
 		return this.Class.VIEW_DATE_FORMAT;
 	}
 
-	static get $inject () {
-		if (this._inject) return this._inject;
-		return ["$attrs", "$element", "$timeout"];
-	}
-	static set $inject (value) {
-		this._inject = value;
-	}
-
 	/**
 	 *
 	 * @param $attrs {angular.IAttributes}

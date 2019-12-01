@@ -83,15 +83,6 @@ export class NrFormController {
 		};
 	}
 
-	static get $inject () {
-		if (this._inject) return this._inject;
-		return ["$scope"];
-	}
-
-	static set $inject (value) {
-		this._inject = value;
-	}
-
 	/**
 	 * @param $scope {angular.IScope}
 	 * @ngInject

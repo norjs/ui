@@ -161,14 +161,6 @@ class NrCompileController {
     return name;
   }
 
-  static get $inject () {
-    if (this._inject) return this._inject;
-    return ["$injector", "$scope", "$compile", "$parse", "$transclude", "$element"];
-  }
-  static set $inject (value) {
-    this._inject = value;
-  }
-
   /**
    *
    * @param $injector {angular.auto.IInjectorService}
