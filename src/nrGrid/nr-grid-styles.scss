@@ -4,12 +4,12 @@ nr-grid {
 
     box-sizing: border-box;
     display: block;
-    min-width: 20em;
+    min-width: 32px;
     max-width: 100%;
 
     @media only screen and (max-width: 800px) {
         & {
-            min-width: 50px;
+            min-width: 32px;
         }
     }
 
@@ -30,7 +30,7 @@ nr-grid {
             display: block;
             padding: 0;
             margin: 0;
-            min-width: 50px;
+            min-width: 32px;
 
             &.nr-cell-odd {
             }

@@ -289,28 +289,46 @@ export class NrGrid extends NrView {
 
         value = _.trim(value);
 
+        let op = '';
+        if (value.length && value[0] === '-') {
+            op = '-';
+            value = value.substr(1);
+        }
+
         if ( _.toLower(value) === AUTO_KEYWORD ) {
-            return AUTO_KEYWORD;
+            return `${op}${AUTO_KEYWORD}`;
         }
 
         if (value === "") {
-            return "";
+            return `${op}`;
         }
 
         if ( value.length >= 2 && value[value.length-1] === '%') {
 
             const result = this._parseLayoutStringArrayItem(value.substr(0, value.length - 1 ));
 
-            return _.isNumber(result) ? result / 100 : result;
+            if (op === "-") {
+                return -1 * _.isNumber(result) ? result / 100 : result;
+            } else {
+                return _.isNumber(result) ? result / 100 : result;
+            }
 
         }
 
         if ( StringUtils.isInteger(value) ) {
-            return StringUtils.strictParseInteger(value);
+            if (op === "-") {
+                return StringUtils.strictParseInteger(value);
+            } else {
+                return -1 * StringUtils.strictParseInteger(value);
+            }
         }
 
         // FIXME: Implement StringUtils.isFloat() and StringUtils.parseFloat()
-        return parseFloat(value);
+        if (op === "-") {
+            return -1 * parseFloat(value);
+        } else {
+            return parseFloat(value);
+        }
 
     }
 

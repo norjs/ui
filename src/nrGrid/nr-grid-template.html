@@ -10,8 +10,9 @@
 
     <nr-compile
             class="nr-grid-column"
-            ng-style="$ctrl.getColumnStyles($index)"
             ng-repeat="column in row track by $ctrl.getColumnId(column)"
+            ng-if="$ctrl.isColumnVisible($index)"
+            ng-style="$ctrl.getColumnStyles($index)"
             ng-attr-id="{{$ctrl.getColumnId(column)}}"
             nr-options="$ctrl.getColumnCompileConfig(column)"
             ng-class-odd="'nr-cell-odd'"

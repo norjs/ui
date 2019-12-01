@@ -8,6 +8,13 @@ import angular from "angular";
 const nrLog = LogUtils.getLogger('NrGridController');
 
 /**
+ * The limit which to consider screen to be too small in pixels
+ *
+ * @type {number}
+ */
+const SMALL_SCREEN_WIDTH_LIMIT = 500;
+
+/**
  *
  * @enum {Symbol}
  * @readonly
@@ -19,11 +26,12 @@ const PRIVATE = {
 	, fieldControllers        : Symbol('_fieldControllers')
 	, rowHeights              : Symbol('_rowHeights')
 	, columnWidths            : Symbol('_columnWidths')
-	, rowStyles               : Symbol('_rowStyles')
-	, columnStyles            : Symbol('_columnStyles')
-	, calculationHasBeenDelayed : Symbol('_calculationHasBeenDelayed')
-	, originalMaxRowHeight      : Symbol('_originalMaxRowHeight')
-	, originalMaxColumnWidths   : Symbol('_originalMaxColumnWidths')
+	, columnVisibleOnSmallScreen : Symbol('_columnVisibleOnSmallScreen')
+	, rowStyles                  : Symbol('_rowStyles')
+	, columnStyles               : Symbol('_columnStyles')
+	, calculationHasBeenDelayed  : Symbol('_calculationHasBeenDelayed')
+	, originalMaxRowHeight       : Symbol('_originalMaxRowHeight')
+	, originalMaxColumnWidths    : Symbol('_originalMaxColumnWidths')
 };
 
 /**
@@ -185,10 +193,24 @@ export class NrGridController {
 
 		/**
 		 *
+		 * @member {Array.<boolean>}
+		 * @private
+		 */
+		this[PRIVATE.columnVisibleOnSmallScreen] = undefined;
+
+		/**
+		 *
 		 * @member {boolean}
 		 * @private
 		 */
 		this._isDestroyed = false;
+
+		/**
+		 *
+		 * @member {number|undefined}
+		 * @private
+		 */
+		this._windowWidth = undefined;
 
 		/**
 		 *
@@ -402,6 +424,8 @@ export class NrGridController {
 		const parentTotalHeight = parentElement.offsetHeight;
 		const parentTotalWidth = parentElement.offsetWidth;
 
+		this._windowWidth = parentTotalWidth;
+
 		if ( !parentTotalHeight || !parentTotalWidth ) {
 			nrLog.trace(`_calculateDimensions(): parent wasn't visible yet: ${parentTotalWidth} x ${parentTotalHeight}`);
 			return;
@@ -433,7 +457,7 @@ export class NrGridController {
 
 				_.forEach(row, (column, columnIndex) => {
 
-					const columnElement = parentElement.querySelector(`#${this.getColumnId(column)}`);
+					const columnElement = angular.element(rowElement.querySelector(`#${this.getColumnId(column)}`)).children().eq(0)[0];
 					const columnTotalHeight = columnElement ? columnElement.offsetHeight : 0;
 					const columnTotalWidth = columnElement ? columnElement.offsetWidth : 0;
 
@@ -516,11 +540,22 @@ export class NrGridController {
 
 		let autoColumnCount = 0;
 
+		const columnVisibleOnSmallScreen = [];
+
 		const columnWidths = _.get(this[PRIVATE.nrModel], 'columns');
+		nrLog.trace(`_buildColumnWidths(): nrModel.columns = ${columnWidths.join(' | ')}`);
 
 		this[PRIVATE.columnWidths] = _.map(maxColumnWidth, (columnWidth, columnIndex) => {
 
-			const width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
+			let visibleOnSmallScreen = true;
+			let width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
+
+			if ( _.isString(width) && width.length && width[0] === '-' ) {
+				visibleOnSmallScreen = false;
+				width = width.substr(1);
+			}
+
+			columnVisibleOnSmallScreen.push(visibleOnSmallScreen);
 
 			if (width === "auto") {
 
@@ -542,21 +577,28 @@ export class NrGridController {
 
 			} else {
 
-				return _.isNumber(width) ? Math.floor(parentTotalWidth * width) : maxColumnWidth[columnIndex];
+				return _.isNumber(width) ? Math.floor(parentTotalWidth * Math.abs(width) ) : maxColumnWidth[columnIndex];
 
 			}
 
 		});
 
-		let newTotalWidth = _.reduce(this[PRIVATE.columnWidths], (a, b) => a + b, 0);
+		this[PRIVATE.columnVisibleOnSmallScreen] = columnVisibleOnSmallScreen;
+		nrLog.trace(`_buildColumnWidths(): columnVisibleOnSmallScreen = ${ this[PRIVATE.columnVisibleOnSmallScreen] }`);
 
-		nrLog.trace(`._buildColumnWidths(): columnWidths = ${ this[PRIVATE.columnWidths] } (${ newTotalWidth })`);
+		let newTotalWidth = _.reduce(
+			_.filter(this[PRIVATE.columnWidths], (c, i) => this.isColumnVisible(i)),
+			(a, b) => a + b,
+			0
+		);
+
+		nrLog.trace(`_buildColumnWidths(): columnWidths = ${ this[PRIVATE.columnWidths] } (${ newTotalWidth })`);
 
 		if (newTotalWidth < parentTotalWidth) {
 
 			const freeSpaceAmount = parentTotalWidth - newTotalWidth;
 
-			const columnCount = this[PRIVATE.columnWidths].length;
+			const columnCount = _.filter(this[PRIVATE.columnWidths], (c, index) => this.isColumnVisible(index)).length;
 
 			if (columnCount >= 1) {
 
@@ -568,11 +610,21 @@ export class NrGridController {
 
 				this[PRIVATE.columnWidths] = _.map(this[PRIVATE.columnWidths], (columnWidth, columnIndex) => {
 
+					const isVisible = this.isColumnVisible(columnIndex);
+
+					if (!isVisible) {
+						return 0;
+					}
+
 					if (!autoEnabled) {
 						return columnWidth + appendWidth;
 					}
 
-					const width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
+					let width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
+
+					if (width.length && width[0] === '-') {
+						width = width.substr(1);
+					}
 
 					if (width === "auto") {
 						return columnWidth + appendWidth;
@@ -582,7 +634,7 @@ export class NrGridController {
 
 				});
 
-				newTotalWidth = _.reduce(this[PRIVATE.columnWidths], (a, b) => a + b, 0);
+				newTotalWidth = _.reduce(_.filter(this[PRIVATE.columnWidths], (c, i) => this.isColumnVisible(i)), (a, b) => a + b, 0);
 
 			}
 
@@ -594,7 +646,7 @@ export class NrGridController {
 
 		}
 
-		nrLog.debug(`._buildColumnWidths(): ${ this[PRIVATE.columnWidths] } (${ newTotalWidth })`);
+		nrLog.debug(`_buildColumnWidths(): ${ this[PRIVATE.columnWidths] } (${ newTotalWidth })`);
 
 	}
 
@@ -653,6 +705,31 @@ export class NrGridController {
 	getColumnStyles (columnIndex) {
 
 		return columnIndex < this[PRIVATE.columnStyles].length ? this[PRIVATE.columnStyles][columnIndex] : undefined;
+
+	}
+
+	/**
+	 *
+	 * @param index {number}
+	 * @returns {boolean}
+	 */
+	isColumnVisible (index) {
+
+		if (this._windowWidth >= SMALL_SCREEN_WIDTH_LIMIT) {
+			return true;
+		}
+
+		const columnVisibleOnSmallScreen = this[PRIVATE.columnVisibleOnSmallScreen];
+
+		if (!columnVisibleOnSmallScreen) {
+			return true;
+		}
+
+		if ( index >= columnVisibleOnSmallScreen.length ) {
+			return true;
+		}
+
+		return columnVisibleOnSmallScreen[index];
 
 	}
 

@@ -5,9 +5,9 @@
 nr-button {
 
   box-sizing: border-box;
-  display: block;
+  display: inline-block;
   margin: 2px;
-  min-width: 50px;
+  min-width: $button-min-width;
   max-width: 100%;
 
   & > button {
