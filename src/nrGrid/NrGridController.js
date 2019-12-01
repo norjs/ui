@@ -86,9 +86,14 @@ export class NrGridController {
 	/**
 	 * @param $scope {angular.IScope}
 	 * @param $element {JQLite}
+	 * @param $window {angular.IWindowService}
 	 * @ngInject
 	 */
-	constructor ($scope, $element) {
+	constructor (
+		$scope,
+		$element,
+		$window
+	) {
 		'ngInject';
 
 		/**
@@ -104,6 +109,13 @@ export class NrGridController {
 		 * @private
 		 */
 		this.$element = $element;
+
+		/**
+		 *
+		 * @member {angular.IWindowService}
+		 * @private
+		 */
+		this.$window = $window;
 
 		/**
 		 *
@@ -154,20 +166,55 @@ export class NrGridController {
 		 */
 		this[PRIVATE.calculationHasBeenDelayed] = false;
 
+		/**
+		 *
+		 * @member {boolean}
+		 * @private
+		 */
+		this._isDestroyed = false;
+
+		/**
+		 *
+		 * @member {Function}
+		 * @private
+		 */
+		this._resizeCallback = () => {
+
+			if (this._isDestroyed) return;
+
+			this.$scope.$applyAsync( () => {
+
+				if (this._isDestroyed) return;
+
+				this._calculateDimensionsWhenVisible();
+
+			});
+
+		};
+
 	}
 
 	// noinspection JSUnusedGlobalSymbols
 	$onDestroy () {
 
-		this[PRIVATE.nrModel] = undefined;
+		this._isDestroyed = true;
 
+		angular.element(this.$window).off('resize', this._resizeCallback);
+
+		this.$scope = undefined;
+		this.$element = undefined;
+		this.$window = undefined;
+		this[PRIVATE.nrModel] = undefined;
 		this[PRIVATE.items] = undefined;
+		this._resizeCallback = undefined;
 
 	}
 
 	$postLink () {
 
 		this._calculateDimensionsWhenVisible();
+
+		angular.element(this.$window).bind('resize', this._resizeCallback);
 
 	}
 
@@ -188,6 +235,8 @@ export class NrGridController {
 				// Check dimensions at the start of next digest loop
 				nrLog.trace(`${this.nrName}._calculateDimensionsWhenVisible(): Delaying dimensions calculations to next digest loop because the element wasn't visible.`);
 				this.$scope.$applyAsync( () => {
+
+					if (this._isDestroyed) return;
 
 					this[PRIVATE.calculationHasBeenDelayed] = false;
 
