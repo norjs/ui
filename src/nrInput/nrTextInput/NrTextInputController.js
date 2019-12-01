@@ -783,7 +783,7 @@ export class NrTextInputController extends NrInputController {
 		const value = this.getViewValue();
 
 		if (!value) {
-			return this.$translate.instant(this.getPlaceholder());
+			return this.getPlaceholder();
 		}
 
 		return value;

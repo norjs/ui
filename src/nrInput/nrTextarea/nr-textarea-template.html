@@ -16,7 +16,7 @@
 
         <span class="nr-input nr-input-readonly"
               ng-if="$ctrl.isReadOnly()"
-        ><span class="nr-input-value">{{ $ctrl.getReadOnlyValue() }}</span></span>
+        ><span class="nr-input-value" translate="{{$ctrl.getReadOnlyValue()}}"></span></span>
 
         <textarea
             ng-show="!$ctrl.isReadOnly()"

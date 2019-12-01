@@ -13,6 +13,8 @@ export const NrIconValue = {
     , FOOD               : "cutlery"
     , BOOK               : "book"
     , EDIT               : "pencil-square-o"
+    , BACK               : "chevron-circle-left"
+    , FORWARD            : "chevron-circle-right"
     , STOP               : "stop"
     , MINUS              : "minus-circle"
     , PLUS               : "plus-circle"
