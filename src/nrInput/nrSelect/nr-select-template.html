@@ -1,26 +1,41 @@
-<div class="field-container" ng-class="$ctrl.getFieldStyles()">
+<div class="nr-field-container" ng-class="$ctrl.getFieldStyles()">
 
-    <label ng-click="$ctrl.onLabelClick($event)"
-           ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
-        <nr-icon ng-if="$ctrl.hasIconValue()" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
-        <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
-    </label>
+    <div class="nr-icon-container"
+         ng-click="$ctrl.onLabelClick($event)"
+         ng-if="$ctrl.hasIconValue()">
+        <nr-icon class="nr-icon" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+    </div>
 
-    <select
-            class="form-input select-item theme-input"
+    <div class="nr-input-container">
+
+        <label ng-if="$ctrl.useLabel()"
+               ng-click="$ctrl.onLabelClick($event)"
+               class="nr-label-container">
+            <span class="nr-label" translate="{{::$ctrl.getLabel()}}"></span>
+        </label>
+
+        <span class="nr-input nr-input-readonly"
+              ng-if="$ctrl.isReadOnly()"
+        ><span class="nr-input-value">{{ $ctrl.getReadOnlyValue() }}</span></span>
+
+        <select
+            ng-show="!$ctrl.isReadOnly()"
+            class="nr-input nr-input-select nr-input-writable"
             ng-model="$ctrl.bindModelValue"
             nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
             ng-focus="$ctrl.onFocus($event)"
             ng-blur="$ctrl.onBlur($event)"
             ng-readonly="$ctrl.isReadOnly()"
-    >
-        <option
-                class="select-item-value"
-                ng-repeat="item in $ctrl.getList() track by $ctrl.getItemId(item)"
-                ng-value="$ctrl.getItemValue(item)"
-                ng-selected="$ctrl.isItemSelected(item)"
-                translate="{{$ctrl.getItemLabel(item)}}"
-        ></option>
-    </select>
+        >
+            <option
+                    class="nr-select-item-value"
+                    ng-repeat="item in $ctrl.getList() track by $ctrl.getItemId(item)"
+                    ng-value="$ctrl.getItemValue(item)"
+                    ng-selected="$ctrl.isItemSelected(item)"
+                    translate="{{$ctrl.getItemLabel(item)}}"
+            ></option>
+        </select>
+
+    </div>
 
 </div>

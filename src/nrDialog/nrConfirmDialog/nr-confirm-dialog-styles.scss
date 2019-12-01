@@ -1,12 +1,8 @@
-$dialog-label-color: #707076;
-$dialog-label-background-color: #f0f0f6;
-
-$dialog-border-size: 2px;
-$dialog-border-style: solid;
-$dialog-border-color: #f0f0f6;
+@import "../../nrStyles/dialogConfig";
 
 nr-confirm-dialog {
 
+  box-sizing: border-box;
   display: block;
   border: $dialog-border-size $dialog-border-style $dialog-border-color;
   border-radius: 4px;
@@ -23,12 +19,14 @@ nr-confirm-dialog {
 
   & > .confirm-dialog-header {
 
+    box-sizing: border-box;
     display: flex;
     border-bottom: $dialog-border-size $dialog-border-style $dialog-border-color;
     background-color: $dialog-label-background-color;
 
     & > .icon {
 
+      box-sizing: border-box;
       display: block;
       color: $dialog-label-color;
       border-right: $dialog-border-size $dialog-border-style $dialog-border-color;
@@ -39,6 +37,7 @@ nr-confirm-dialog {
 
     & > .label {
 
+      box-sizing: border-box;
       flex: 1;
       color: $dialog-label-color;
       padding: 0.5em;
@@ -48,15 +47,18 @@ nr-confirm-dialog {
   }
 
   & > section {
+    box-sizing: border-box;
   }
 
   & > footer {
 
+    box-sizing: border-box;
     display: flex;
     justify-content: flex-end;
     padding: 0.5em 1em;
 
     & > button {
+      box-sizing: border-box;
       margin: 8px;
     }
 

@@ -1,21 +1,20 @@
-$nav-text-color: #333333;
-$nav-selected-text-color: #333333;
-$nav-selected-background-color: #c6c6c6;
-$nav-item-border-size: 2px;
-$nav-item-border-style: solid;
-$nav-item-border-color: #d6d6d6;
+@import "../nrStyles/navConfig";
 
 nr-nav {
 
+  box-sizing: border-box;
   display: block;
   min-width: 2em;
 
   // nr-nav > nav
   & > nav {
 
+    box-sizing: border-box;
+
     // nr-nav > nav > ul
     & > ul {
 
+      box-sizing: border-box;
       display: flex;
       margin: 0;
       padding: 0;
@@ -24,9 +23,9 @@ nr-nav {
       // nr-nav > nav > ul > li
       & > li {
 
+        box-sizing: border-box;
         display: flex;
         align-items: center;
-
         width: auto;
         margin: 0;
         padding: 0;
@@ -37,6 +36,7 @@ nr-nav {
         // nr-nav > nav > ul > li > .menu-item-icon
         & > .menu-item-icon {
 
+          box-sizing: border-box;
           display: block;
           padding: 0.5em 0.25em 0.5em 0.5em;
 
@@ -45,6 +45,7 @@ nr-nav {
         // nr-nav > nav > ul > li > .menu-item-label
         & > .menu-item-label {
 
+          box-sizing: border-box;
           flex: 1;
           display: block;
           padding: 0.5em 0.5em 0.5em 0.25em;

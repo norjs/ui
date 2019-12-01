@@ -1,28 +1,37 @@
-<div class="field-container" ng-class="$ctrl.getFieldStyles()">
+<div class="nr-field-container" ng-class="$ctrl.getFieldStyles()">
 
-    <div class="icon-container" ng-click="$ctrl.onLabelClick($event)" ng-if="$ctrl.hasIconValue()">
-        <nr-icon nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+    <div class="nr-icon-container"
+         ng-click="$ctrl.onLabelClick($event)"
+         ng-if="$ctrl.hasIconValue()">
+        <nr-icon class="nr-icon" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
     </div>
 
-    <div class="input-container">
+    <div class="nr-input-container">
 
         <label ng-if="$ctrl.useLabel()"
-               ng-click="$ctrl.onLabelClick($event)">
-            <span class="label" translate="{{::$ctrl.getLabel()}}"></span>
+               ng-click="$ctrl.onLabelClick($event)"
+               class="nr-label-container">
+            <span class="nr-label" translate="{{::$ctrl.getLabel()}}"></span>
         </label>
 
+        <span class="nr-input nr-input-readonly"
+              ng-if="$ctrl.isReadOnly()"
+        ><span class="nr-input-value">{{ $ctrl.getReadOnlyValue() }}</span></span>
+
         <input
-                type="text"
-                class="form-input theme-input"
-                autocomplete="off"
-                placeholder="{{ $ctrl.getPlaceholder()|translate }}"
-                ng-model="$ctrl.bindModelValue"
-                nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
-                ng-change="$ctrl.onChange()"
-                ng-focus="$ctrl.onFocus($event)"
-                ng-blur="$ctrl.onBlur($event)"
-                ng-readonly="$ctrl.isReadOnly()"
-                ng-model-options="{
+            ng-show="!$ctrl.isReadOnly()"
+            type="text"
+            class="nr-input nr-input-writable"
+            autocomplete="off"
+            placeholder="{{ $ctrl.getPlaceholder()|translate }}"
+            ng-model="$ctrl.bindModelValue"
+            nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
+            ng-change="$ctrl.onChange()"
+            ng-focus="$ctrl.onFocus($event)"
+            ng-blur="$ctrl.onBlur($event)"
+            ng-readonly="$ctrl.isReadOnly()"
+            ng-style="$ctrl.getInputStyles()"
+            ng-model-options="{
                 allowInvalid: '$inherit',
                 updateOn: 'default blur',
                 debounce: {
@@ -30,7 +39,7 @@
                     blur: 0
                 }
             }"
-            >
+        >
 
     </div>
 

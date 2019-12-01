@@ -1,19 +1,8 @@
-$window-background-color: #ffffff;
-$window-border-color: #000000;
-$window-border-size: 3px;
-$window-shadow-color: rgba(0, 0, 0, 0.2);
-
-$window-header-background-color: #2871b6;
-$window-header-text-color: #ffffff;
-
-$window-moving-border-color: #009909;
-
-$window-scrollbar-color: darkgrey;
-$window-scrollbar-outline-size: 1px;
-$window-scrollbar-outline-color: slategrey;
-$window-scrollbar-shadow-color: rgba(0,0,0,0.3);
+@import "../nrStyles/windowConfig";
 
 nr-window {
+
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   border: $window-border-size solid $window-border-color;
@@ -23,21 +12,26 @@ nr-window {
   align-items: stretch;
 
   & > header {
+
+    box-sizing: border-box;
     background-color: $window-header-background-color;
     color: $window-header-text-color;
     flex: 0 1 auto;
     border-bottom: $window-border-size solid $window-border-color;
     padding: 0.5em;
     align-items: stretch;
-
     text-align: center;
 
     & > .actions {
+      box-sizing: border-box;
       float: right;
     }
+
   }
 
   & > section {
+
+    box-sizing: border-box;
     flex: 1 1 auto;
 
     display: flex;
@@ -50,6 +44,7 @@ nr-window {
     cursor: initial;
 
     & > * {
+      box-sizing: border-box;
       flex: 1 1 auto;
     }
 

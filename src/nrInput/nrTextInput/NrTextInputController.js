@@ -117,6 +117,7 @@ export class NrTextInputController extends NrInputController {
 	constructor (
 		$attrs
 		, $element
+		, $translate
 	) {
 		'ngInject';
 
@@ -135,6 +136,12 @@ export class NrTextInputController extends NrInputController {
 		 * @private
 		 */
 		this[PRIVATE.$element] = $element;
+
+		/**
+		 * @member {$translate}
+		 * @private
+		 */
+		this.$translate = $translate;
 
 		/**
 		 *
@@ -771,6 +778,18 @@ export class NrTextInputController extends NrInputController {
 
 	}
 
+	getReadOnlyValue () {
+
+		const value = this.getViewValue();
+
+		if (!value) {
+			return this.$translate.instant(this.getPlaceholder());
+		}
+
+		return value;
+
+	}
+
 	/**
 	 *
 	 * @returns {boolean}
@@ -778,6 +797,27 @@ export class NrTextInputController extends NrInputController {
 	isReadOnly () {
 
 		return this[PRIVATE.nrModel] && this[PRIVATE.nrModel].readOnly ? this[PRIVATE.nrModel].readOnly : undefined;
+
+	}
+
+	/**
+	 *
+	 */
+	getInputStyles () {
+
+		// if (this.isReadOnly()) {
+		//
+		// 	const viewValue = this.getViewValue();
+		//
+		// 	const charCount = viewValue && viewValue.length ? viewValue.length : 1;
+		//
+		// 	return {
+		// 		"width": `${charCount}em`
+		// 	};
+		//
+		// }
+
+		return {};
 
 	}
 

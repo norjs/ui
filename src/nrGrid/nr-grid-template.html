@@ -4,6 +4,8 @@
     ng-init="rowIndex = $index"
     ng-attr-id="{{$ctrl.getRowId(rowIndex)}}"
     ng-style="$ctrl.getRowStyles(rowIndex)"
+    ng-class-odd="'nr-row-odd'"
+    ng-class-even="'nr-row-even'"
 >
 
     <nr-compile
@@ -12,6 +14,8 @@
             ng-repeat="column in row track by $ctrl.getColumnId(column)"
             ng-attr-id="{{$ctrl.getColumnId(column)}}"
             nr-options="$ctrl.getColumnCompileConfig(column)"
+            ng-class-odd="'nr-cell-odd'"
+            ng-class-even="'nr-cell-even'"
     ></nr-compile>
 
 </div>

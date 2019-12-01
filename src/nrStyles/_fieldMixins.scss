@@ -2,22 +2,32 @@
 
 @mixin nr-field {
 
-    display: block;
-    min-width: 1em;
-    max-width: 100%;
+    $field-min-width: 64px;
+    $field-icon-min-width: 32px;
 
-    & > .field-container {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: $field-min-width;
+    max-width: 100%;
+    padding: 0;
+    margin: 2px;
+
+    & > .nr-field-container {
 
         display: flex;
         flex-direction: row;
+        justify-items: stretch;
+        align-items: stretch;
+
+        box-sizing: border-box;
         border: $field-border-size $field-border-style $field-border-color;
         border-radius: 4px;
         background-color: $field-background-color;
-        min-width: 1em;
+        min-width: $field-min-width;
         max-width: 100%;
         padding: 0;
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
+        margin-top: 8px;
+        margin-bottom: 8px;
         cursor: pointer;
 
         @media only screen and (max-width: 800px) {
@@ -27,21 +37,26 @@
             }
         }
 
-        & > .icon-container {
+        & > .nr-icon-container {
 
+            box-sizing: border-box;
             border-right: $field-border-size $field-border-style $field-border-color;
+
             display: flex;
             flex-direction: row;
             justify-items: center;
             align-items: center;
 
-            & > nr-icon {
+            min-width: $field-icon-min-width;
 
+            & > .nr-icon {
+
+                box-sizing: border-box;
                 display: block;
                 font-size: $field-label-size * 1.5;
                 color: $field-label-color;
                 cursor: pointer;
-                padding: 0.4em;
+                padding: 8px;
 
                 @media only screen and (max-width: 800px) {
                     & {
@@ -53,31 +68,35 @@
 
         }
 
-        & > .input-container {
+        & > .nr-input-container {
 
             flex: 1;
+
             display: flex;
             flex-direction: column;
-            min-width: 1em;
+
+            box-sizing: border-box;
+            min-width: $field-min-width - $field-icon-min-width;
             max-width: 100%;
             padding: 0;
             cursor: pointer;
 
-            & > label {
+            & > .nr-label-container {
 
+                box-sizing: border-box;
                 display: flex;
                 padding: 0;
                 border-bottom: $field-border-size $field-border-style $field-border-color;
                 cursor: pointer;
 
-                & > .label {
+                & > .nr-label {
 
                     flex: 1;
                     font-size: $field-label-size;
                     color: $field-label-color;
                     cursor: pointer;
                     text-align: left;
-                    padding: 0.5em 1em;
+                    padding: 4px 8px;
 
                     @media only screen and (max-width: 800px) {
                         & {
@@ -89,36 +108,48 @@
 
             }
 
-            & > input {
+            & > .nr-input {
 
-                cursor: pointer;
+                box-sizing: border-box;
                 font-size: 0.8em;
                 border: 0;
-                padding: 0.8em 1em;
+                padding: 16px;
 
-                @media only screen and (max-width: 800px) {
-                    & {
-                        padding: 0.8em 1em;
-                    }
+            }
+
+            & > .nr-input-writable {
+                cursor: pointer;
+            }
+
+            & > .nr-input-readonly {
+
+                display: flex;
+                padding: 16px;
+
+                & > .nr-input-value {
+
+                    box-sizing: border-box;
+                    white-space: nowrap;
+
                 }
 
             }
 
-        }
+            @media only screen and (max-width: 800px) {
 
-        @media only screen and (max-width: 800px) {
-            &.nr-field-readonly {
-                & > .input-container > input {
-                    padding: 0.8em 2px;
+                & > .nr-input {
+                    padding: 16px;
                 }
+
             }
+
         }
 
         &.nr-focus {
 
             border: $field-focused-border-size $field-focused-border-style $field-focused-border-color;
 
-            & > .input-container > label {
+            & > .nr-input-container > .nr-label-container {
 
                 background-color: $field-focused-label-background-color;
                 border-bottom: $field-focused-border-size $field-focused-border-style $field-focused-border-color;
@@ -132,14 +163,14 @@
             border: $field-invalid-border-size $field-invalid-border-style $field-invalid-border-color;
             background-color: $field-invalid-background-color;
 
-            & > .input-container > label {
+            & > .nr-input-container > .nr-label-container {
 
                 background-color: $field-invalid-label-background-color;
                 border-bottom: $field-invalid-border-size $field-invalid-border-style $field-invalid-border-color;
 
             }
 
-            & > .input-container > input {
+            & > .nr-input-container > .nr-input {
                 background-color: $field-invalid-background-color;
             }
 
@@ -151,26 +182,26 @@
 
             cursor: auto;
 
-            & > .icon-container {
+            & > .nr-icon-container {
                 cursor: auto;
 
-                & > nr-icon {
+                & > .nr-icon {
                     cursor: auto;
                 }
 
             }
 
-            & > .input-container {
+            & > .nr-input-container {
                 cursor: auto;
             }
 
-            & > .input-container > label {
+            & > .nr-input-container > .nr-label-container {
                 cursor: auto;
-                & > nr-icon { cursor: auto; }
-                & > .label { cursor: auto; }
+                & > .nr-icon { cursor: auto; }
+                & > .nr-label { cursor: auto; }
             }
 
-            & > .input-container > input {
+            & > .nr-input-container > .nr-input {
                 cursor: auto;
             }
 
@@ -179,20 +210,20 @@
             border: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
             background-color: $field-readonly-background-color;
 
-            & > .icon-container {
+            & > .nr-icon-container {
 
                 background-color: $field-readonly-label-background-color;
 
             }
 
-            & > .input-container > label {
+            & > .nr-input-container > .nr-label-container {
 
                 background-color: $field-readonly-label-background-color;
                 border-bottom: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
 
             }
 
-            & > .input-container > input {
+            & > .nr-input-container > .nr-input {
                 background-color: $field-readonly-background-color;
             }
 

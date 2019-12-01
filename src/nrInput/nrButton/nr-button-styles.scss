@@ -4,13 +4,15 @@
 
 nr-button {
 
+  box-sizing: border-box;
   display: block;
-  margin: 0.2em;
-  min-width: 1em;
+  margin: 2px;
+  min-width: 50px;
   max-width: 100%;
 
   & > button {
 
+    box-sizing: border-box;
     min-width: $button-min-width;
     display: inline-block;
     cursor: pointer;
@@ -33,12 +35,12 @@ nr-button {
     @include nr-button-default;
   }
 
-  & > button.nr-default {
-    @include nr-button-default;
+  & > button.nr-icon {
+    @include nr-button-icon-colors;
   }
 
-  & > button.nr-icon {
-    @include nr-button-icon;
+  & > button.nr-default {
+    @include nr-button-default;
   }
 
   & > button.nr-accept {
@@ -57,6 +59,10 @@ nr-button {
     @include nr-button-disabled;
   }
 
+  & > button.nr-icon {
+    @include nr-button-icon;
+  }
+
 }
 
 nr-button.nr-default {
@@ -67,7 +73,7 @@ nr-button.nr-default {
 
 nr-button.nr-icon {
   & > button {
-    @include nr-button-icon;
+    @include nr-button-icon-colors;
   }
 }
 
@@ -92,6 +98,12 @@ nr-button.nr-cancel {
 nr-button.nr-disabled {
   & > button {
     @include nr-button-disabled;
+  }
+}
+
+nr-button.nr-icon {
+  & > button {
+    @include nr-button-icon;
   }
 }
 
@@ -128,10 +140,6 @@ nr-button.nr-disabled {
       @include nr-button-icon;
     }
 
-    & > button.nr-icon {
-      @include nr-button-icon;
-    }
-
     & > button.nr-accept {
       @include nr-button-icon;
     }
@@ -145,6 +153,10 @@ nr-button.nr-disabled {
     }
 
     & > button.nr-disabled {
+      @include nr-button-icon;
+    }
+
+    & > button.nr-icon {
       @include nr-button-icon;
     }
 

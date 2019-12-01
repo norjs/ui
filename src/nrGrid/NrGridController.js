@@ -2,9 +2,10 @@ import _ from 'lodash';
 import LogUtils from "@norjs/utils/Log";
 import NrTag from "../NrTag";
 import NrModelUtils from "../../utils/NrModelUtils";
+import angular from "angular";
 
 // noinspection JSUnusedLocalSymbols
-const nrLog = LogUtils.getLogger('nrFormController');
+const nrLog = LogUtils.getLogger('NrGridController');
 
 /**
  *
@@ -21,6 +22,8 @@ const PRIVATE = {
 	, rowStyles               : Symbol('_rowStyles')
 	, columnStyles            : Symbol('_columnStyles')
 	, calculationHasBeenDelayed : Symbol('_calculationHasBeenDelayed')
+	, originalMaxRowHeight      : Symbol('_originalMaxRowHeight')
+	, originalMaxColumnWidths   : Symbol('_originalMaxColumnWidths')
 };
 
 /**
@@ -133,6 +136,20 @@ export class NrGridController {
 
 		/**
 		 *
+		 * @member {number}
+		 * @private
+		 */
+		this[PRIVATE.originalMaxRowHeight] = undefined;
+
+		/**
+		 *
+		 * @member {Array<string|number>}
+		 * @private
+		 */
+		this[PRIVATE.originalMaxColumnWidths] = undefined;
+
+		/**
+		 *
 		 * @member {Array<string|number>}
 		 * @private
 		 */
@@ -228,12 +245,12 @@ export class NrGridController {
 
 			if (this[PRIVATE.calculationHasBeenDelayed]) {
 
-				nrLog.trace(`${this.nrName}._calculateDimensionsWhenVisible(): Previous calculation already scheduled`);
+				nrLog.trace(`_calculateDimensionsWhenVisible(): Previous calculation already scheduled`);
 
 			} else {
 
 				// Check dimensions at the start of next digest loop
-				nrLog.trace(`${this.nrName}._calculateDimensionsWhenVisible(): Delaying dimensions calculations to next digest loop because the element wasn't visible.`);
+				nrLog.trace(`_calculateDimensionsWhenVisible(): Delaying dimensions calculations to next digest loop because the element wasn't visible.`);
 				this.$scope.$applyAsync( () => {
 
 					if (this._isDestroyed) return;
@@ -386,50 +403,63 @@ export class NrGridController {
 		const parentTotalWidth = parentElement.offsetWidth;
 
 		if ( !parentTotalHeight || !parentTotalWidth ) {
-			nrLog.trace(`${this.nrName}._calculateDimensions(): parent wasn't visible yet: ${parentTotalWidth} x ${parentTotalHeight}`);
+			nrLog.trace(`_calculateDimensions(): parent wasn't visible yet: ${parentTotalWidth} x ${parentTotalHeight}`);
 			return;
 		}
 
-		nrLog.trace(`${this.nrName}._calculateDimensions(): parent is ${parentTotalWidth} x ${parentTotalHeight}`);
+		nrLog.trace(`_calculateDimensions(): parent is ${parentTotalWidth} x ${parentTotalHeight}`);
 
 		let maxRowHeight = 0;
 
 		let maxColumnWidth = [];
 
-		_.forEach(this[PRIVATE.items], (row, rowIndex) => {
+		if ( this[PRIVATE.originalMaxColumnWidths] === undefined ) {
 
-			const rowElement = parentElement.querySelector(`#${this.getRowId(rowIndex)}`);
-			const rowTotalHeight = rowElement && rowElement.offsetHeight || 0;
-			const rowTotalWidth = rowElement && rowElement.offsetWidth || 0;
+			_.forEach(this[PRIVATE.items], (row, rowIndex) => {
 
-			nrLog.trace(`${this.nrName}._calculateDimensions(): row#${rowIndex} is ${rowTotalWidth} x ${rowTotalHeight}`);
+				const rowElement = parentElement.querySelector(`#${this.getRowId(rowIndex)}`);
+				const rowTotalHeight = rowElement && rowElement.offsetHeight || 0;
+				const rowTotalWidth = rowElement && rowElement.offsetWidth || 0;
 
-			if (maxRowHeight < rowTotalHeight) {
-				maxRowHeight = rowTotalHeight;
-			}
+				nrLog.trace(`_calculateDimensions(): row#${rowIndex} is ${rowTotalWidth} x ${rowTotalHeight}`);
 
-			while ( row.length >= 1 && maxColumnWidth.length < row.length ) {
-				maxColumnWidth.push(0);
-			}
-
-			_.forEach(row, (column, columnIndex) => {
-
-				const columnElement = parentElement.querySelector(`#${this.getColumnId(column)}`);
-				const columnTotalHeight = columnElement ? columnElement.offsetHeight : 0;
-				const columnTotalWidth = columnElement ? columnElement.offsetWidth : 0;
-
-				nrLog.trace(`${this.nrName}._calculateDimensions(): row#${rowIndex}/column#${columnIndex} is ${columnTotalWidth} x ${columnTotalHeight}`);
-
-				if (maxColumnWidth[columnIndex] < columnTotalWidth) {
-					maxColumnWidth[columnIndex] = columnTotalWidth;
+				if (maxRowHeight < rowTotalHeight) {
+					maxRowHeight = rowTotalHeight;
 				}
+
+				while ( row.length >= 1 && maxColumnWidth.length < row.length ) {
+					maxColumnWidth.push(0);
+				}
+
+				_.forEach(row, (column, columnIndex) => {
+
+					const columnElement = parentElement.querySelector(`#${this.getColumnId(column)}`);
+					const columnTotalHeight = columnElement ? columnElement.offsetHeight : 0;
+					const columnTotalWidth = columnElement ? columnElement.offsetWidth : 0;
+
+					nrLog.trace(`_calculateDimensions(): row#${rowIndex}/column#${columnIndex} is ${columnTotalWidth} x ${columnTotalHeight}`);
+
+					if (maxColumnWidth[columnIndex] < columnTotalWidth) {
+						maxColumnWidth[columnIndex] = columnTotalWidth;
+					}
+
+				});
 
 			});
 
-		});
+			this[PRIVATE.originalMaxRowHeight] = maxRowHeight;
+			this[PRIVATE.originalMaxColumnWidths] = maxColumnWidth;
 
-		nrLog.trace(`${this.nrName}._calculateDimensions(): maxRowHeight is ${maxRowHeight}`);
-		nrLog.trace(`${this.nrName}._calculateDimensions(): maxColumnWidths are ${maxColumnWidth}`);
+		} else {
+
+			maxRowHeight = this[PRIVATE.originalMaxRowHeight];
+			maxColumnWidth = _.map(this[PRIVATE.originalMaxColumnWidths], i => i);
+
+		}
+
+		nrLog.trace(`_calculateDimensions(): maxRowHeight is ${maxRowHeight}`);
+
+		nrLog.trace(`_calculateDimensions(): maxColumnWidths are ${maxColumnWidth} (${ _.reduce(maxColumnWidth, (a, b) => a + b, 0) })`);
 
 		this._buildRowHeights(parentTotalHeight, maxRowHeight);
 		this._buildColumnWidths(parentTotalWidth, maxColumnWidth);
@@ -456,17 +486,17 @@ export class NrGridController {
 
 			if (height === "auto") {
 
-				return rowCount ? Math.round(parentTotalHeight / rowCount ) : maxRowHeight;
+				return rowCount ? Math.floor(parentTotalHeight / rowCount ) : maxRowHeight;
 
 			} else {
 
-				return _.isNumber(height) ? Math.round(parentTotalHeight * height) : maxRowHeight;
+				return _.isNumber(height) ? Math.floor(parentTotalHeight * height) : maxRowHeight;
 
 			}
 
 		});
 
-		nrLog.trace(`${this.nrName}._buildRowHeights(): rowHeights as ${ this[PRIVATE.rowHeights] }`);
+		nrLog.trace(`_buildRowHeights(): rowHeights as ${ this[PRIVATE.rowHeights] }`);
 
 	}
 
@@ -478,27 +508,93 @@ export class NrGridController {
 	 */
 	_buildColumnWidths (parentTotalWidth, maxColumnWidth) {
 
+		nrLog.trace(`_buildColumnWidths(): parentTotalWidth = ${parentTotalWidth}`);
+		nrLog.trace(`_buildColumnWidths(): maxColumnWidth = ${maxColumnWidth}`);
+
 		const columnCount = maxColumnWidth.length;
+		nrLog.trace(`_buildColumnWidths(): columnCount = ${columnCount}`);
+
+		let autoColumnCount = 0;
+
+		const columnWidths = _.get(this[PRIVATE.nrModel], 'columns');
 
 		this[PRIVATE.columnWidths] = _.map(maxColumnWidth, (columnWidth, columnIndex) => {
 
-			const columnWidths = _.get(this[PRIVATE.nrModel], 'columns');
-
-			let width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
+			const width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
 
 			if (width === "auto") {
 
-				return columnCount ? Math.round(parentTotalWidth / columnCount) : maxColumnWidth[columnIndex];
+				autoColumnCount += 1;
+
+				const maxWidth = maxColumnWidth[columnIndex];
+
+				if (columnCount) {
+
+					let width = Math.floor(parentTotalWidth / columnCount);
+
+					return width > maxWidth ? maxWidth : width;
+
+				} else {
+
+					return maxColumnWidth[columnIndex];
+
+				}
 
 			} else {
 
-				return _.isNumber(width) ? Math.round(parentTotalWidth * width) : maxColumnWidth[columnIndex];
+				return _.isNumber(width) ? Math.floor(parentTotalWidth * width) : maxColumnWidth[columnIndex];
 
 			}
 
 		});
 
-		nrLog.trace(`${this.nrName}._buildColumnWidths(): columnWidths as ${ this[PRIVATE.columnWidths] }`);
+		let newTotalWidth = _.reduce(this[PRIVATE.columnWidths], (a, b) => a + b, 0);
+
+		nrLog.trace(`._buildColumnWidths(): columnWidths = ${ this[PRIVATE.columnWidths] } (${ newTotalWidth })`);
+
+		if (newTotalWidth < parentTotalWidth) {
+
+			const freeSpaceAmount = parentTotalWidth - newTotalWidth;
+
+			const columnCount = this[PRIVATE.columnWidths].length;
+
+			if (columnCount >= 1) {
+
+				const autoEnabled = autoColumnCount >= 1;
+				const appendCount = autoEnabled ? autoColumnCount : columnCount;
+				const appendWidth = Math.floor(freeSpaceAmount / appendCount );
+
+				nrLog.trace(`_buildColumnWidths(): We have total of ${freeSpaceAmount} pixels left to fill with ${appendCount} columns (${ appendWidth } px per column)`);
+
+				this[PRIVATE.columnWidths] = _.map(this[PRIVATE.columnWidths], (columnWidth, columnIndex) => {
+
+					if (!autoEnabled) {
+						return columnWidth + appendWidth;
+					}
+
+					const width = columnWidths && columnIndex < columnWidths.length ? columnWidths[columnIndex] : undefined;
+
+					if (width === "auto") {
+						return columnWidth + appendWidth;
+					}
+
+					return columnWidth;
+
+				});
+
+				newTotalWidth = _.reduce(this[PRIVATE.columnWidths], (a, b) => a + b, 0);
+
+			}
+
+		}
+
+		if (newTotalWidth > parentTotalWidth) {
+
+			nrLog.warn(`Warning! ._buildColumnWidths(): newTotalWidth ${newTotalWidth} is greater than parentTotalWidth ${parentTotalWidth}`);
+
+		}
+
+		nrLog.debug(`._buildColumnWidths(): ${ this[PRIVATE.columnWidths] } (${ newTotalWidth })`);
 
 	}
 
@@ -509,10 +605,14 @@ export class NrGridController {
 	 */
 	_buildRowStyles () {
 
+		nrLog.trace(`._buildRowStyles(): rowHeights: `, this[PRIVATE.rowHeights]);
+
 		this[PRIVATE.rowStyles] = _.map(
 			this[PRIVATE.rowHeights],
 			height => height ? {height: `${ height }px`} : {}
 		);
+
+		nrLog.debug(`._buildRowStyles(): `, this[PRIVATE.rowStyles]);
 
 	}
 
@@ -523,10 +623,14 @@ export class NrGridController {
 	 */
 	_buildColumnStyles () {
 
+		nrLog.trace(`._buildColumnStyles(): columnWidths: `, this[PRIVATE.columnWidths]);
+
 		this[PRIVATE.columnStyles] = _.map(
 			this[PRIVATE.columnWidths],
 			width => width ? {width: `${ width }px`} : {}
 		);
+
+		nrLog.debug(`._buildColumnStyles(): `, this[PRIVATE.columnStyles]);
 
 	}
 

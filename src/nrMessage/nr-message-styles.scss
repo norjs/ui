@@ -1,30 +1,13 @@
-$message-border-size: 2px;
-$message-border-style: solid;
-$message-border-color: #f0f0f6;
-$message-background-color: #fbfbfd;
-$message-header-text-color: #707076;
-$message-header-background-color: #f0f0f6;
-
-$info-message-border-size: 2px;
-$info-message-border-style: solid;
-$info-message-border-color: #f0f0f6;
-$info-message-background-color: #fbfbfd;
-$info-message-header-text-color: #707076;
-$info-message-header-background-color: #f0f0f6;
-
-$error-message-border-size: 2px;
-$error-message-border-style: solid;
-$error-message-border-color: #f6f0f0;
-$error-message-background-color: #fdfbfb;
-$error-message-header-text-color: #767070;
-$error-message-header-background-color: #f6f0f0;
+@import "../nrStyles/messageConfig";
 
 nr-message {
 
+  box-sizing: border-box;
   display: block;
 
   & > .nr-message-container {
 
+    box-sizing: border-box;
     border: $message-border-size $message-border-style $message-border-color;
     border-radius: 4px;
     background-color: $message-background-color;
@@ -40,10 +23,12 @@ nr-message {
 
     & > .nr-message-header {
 
+      box-sizing: border-box;
       display: flex;
 
       & > .nr-message-icon {
 
+        box-sizing: border-box;
         display: flex;
         color: $message-header-text-color;
         background-color: $message-header-background-color;
@@ -57,6 +42,7 @@ nr-message {
 
       & > .nr-message-label {
 
+        box-sizing: border-box;
         flex: 1;
         padding: 0.5em 0.75em;
 
@@ -66,6 +52,7 @@ nr-message {
 
     & > .nr-message-content {
 
+      box-sizing: border-box;
       border-top: $message-border-size $message-border-style $message-border-color;
       padding: 0.5em 0.75em;
 
@@ -73,13 +60,17 @@ nr-message {
 
     &.nr-info-message {
 
+      box-sizing: border-box;
       border: $info-message-border-size $info-message-border-style $info-message-border-color;
       background-color: $info-message-background-color;
 
       & > .nr-message-header {
 
+        box-sizing: border-box;
+
         & > .nr-message-icon {
 
+          box-sizing: border-box;
           color: $info-message-header-text-color;
           background-color: $info-message-header-background-color;
           border-right: $info-message-border-size $info-message-border-style $info-message-border-color;
@@ -92,13 +83,17 @@ nr-message {
 
     &.nr-error-message {
 
+      box-sizing: border-box;
       border: $error-message-border-size $error-message-border-style $error-message-border-color;
       background-color: $error-message-background-color;
 
       & > .nr-message-header {
 
+        box-sizing: border-box;
+
         & > .nr-message-icon {
 
+          box-sizing: border-box;
           color: $error-message-header-text-color;
           background-color: $error-message-header-background-color;
           border-right: $error-message-border-size $error-message-border-style $error-message-border-color;

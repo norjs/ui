@@ -1,12 +1,8 @@
-$form-label-color: #707076;
-$form-label-background-color: #f0f0f6;
-
-$form-border-size: 2px;
-$form-border-style: solid;
-$form-border-color: #f0f0f6;
+@import "../nrStyles/formConfig";
 
 nr-form {
 
+  box-sizing: border-box;
   display: block;
   border: $form-border-size $form-border-style $form-border-color;
   border-radius: 4px;
@@ -23,14 +19,18 @@ nr-form {
 
   & > form {
 
+    box-sizing: border-box;
+
     & > .form-header {
 
+      box-sizing: border-box;
       display: flex;
       border-bottom: $form-border-size $form-border-style $form-border-color;
       background-color: $form-label-background-color;
 
       & > .icon {
 
+        box-sizing: border-box;
         display: block;
         color: $form-label-color;
         border-right: $form-border-size $form-border-style $form-border-color;
@@ -47,6 +47,7 @@ nr-form {
 
       & > .label {
 
+        box-sizing: border-box;
         flex: 1;
         color: $form-label-color;
         padding: 0.5em;
@@ -63,6 +64,7 @@ nr-form {
 
     & > .form-body {
 
+      box-sizing: border-box;
       background-color: #ffffff;
       padding: 0.5em 1em;
 
@@ -76,12 +78,14 @@ nr-form {
 
     & > .form-footer {
 
+      box-sizing: border-box;
       display: flex;
       justify-content: flex-end;
       border-top: $form-border-size $form-border-style $form-border-color;
       padding: 0.5em 1em;
 
       & > button {
+        box-sizing: border-box;
         margin: 8px;
       }
 

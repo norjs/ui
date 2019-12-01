@@ -226,7 +226,7 @@ export class NrButtonController {
 	 */
 	getClasses () {
 		return {
-			"nr-icon": this.style === NrButton.Style.ICON,
+			"nr-icon": this.style === NrButton.Style.ICON || !this.label,
 			"nr-submit": this.style === NrButton.Style.SUBMIT,
 			"nr-cancel": this.style === NrButton.Style.CANCEL,
 			"nr-default": this.style === NrButton.Style.DEFAULT,

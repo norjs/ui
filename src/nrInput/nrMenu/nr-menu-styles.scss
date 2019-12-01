@@ -1,11 +1,13 @@
 nr-menu {
 
+  box-sizing: border-box;
   display: block;
   min-width: 1em;
   max-width: 100%;
 
   & > .field-container {
 
+    box-sizing: border-box;
     margin: 0.2em;
     padding: 0;
     text-align: center;
@@ -21,25 +23,30 @@ nr-menu {
     max-height: 1.4em;
 
     & > .menu-icon {
+
+      box-sizing: border-box;
       margin: 0;
       text-align: center;
       border-radius: 4px;
       padding: 5px;
       vertical-align: middle;
-
       align-self: flex-end;
 
       &.active {
+
+        box-sizing: border-box;
         z-index: 998;
         border-radius: 4px 4px 0 0;
         box-shadow: 4px 4px rgba(0, 0, 0, .2);
 
         &.top {
+          box-sizing: border-box;
           border-radius: 0 0 4px 4px;
           box-shadow: 4px 4px rgba(0, 0, 0, .2);
         }
 
         &.bottom {
+          box-sizing: border-box;
           border-radius: 4px 4px 0 0;
           box-shadow: 4px 4px rgba(0, 0, 0, .2);
         }
@@ -49,6 +56,7 @@ nr-menu {
     }
 
     .placeholder {
+      box-sizing: border-box;
       background-color: rgba(0, 0, 0, .2);
       position: fixed;
       top: 0;
@@ -59,26 +67,31 @@ nr-menu {
 
     & > .menu-container {
 
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
       position: absolute;
       flex-direction: column;
 
       &.top {
+        box-sizing: border-box;
         top: -1.2em;
         transform: rotate(180deg);
 
         & > .menu {
+          box-sizing: border-box;
           transform: rotate(180deg);
           border-radius: 4px 4px 0 4px;
         }
       }
 
       &.right {
+        box-sizing: border-box;
         right: 2px;
       }
 
       &.bottom {
+        box-sizing: border-box;
         z-index: 999;
         bottom: -100%;
       }
@@ -88,6 +101,7 @@ nr-menu {
       max-width: 300px;
 
       & > .menu {
+        box-sizing: border-box;
         z-index: 1000;
         flex: 1;
 
@@ -98,6 +112,7 @@ nr-menu {
         box-shadow: 4px 4px rgba(0, 0, 255, .2);
 
         & > .menu-item {
+          box-sizing: border-box;
           font-size: 0.8em;
           text-align: left;
           margin: 0.8em 0.4em;
