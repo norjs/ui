@@ -1,134 +1,145 @@
 @import "../../nrStyles/fieldConfig";
+@import "../../nrStyles/fieldMixins";
 
 nr-checkbox-input {
 
-  box-sizing: border-box;
-  display: block;
-  min-width: 1em;
-  max-width: 100%;
+  @include nr-field-core;
 
-  & > .field-container {
+  & > .nr-field-container {
 
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    border: $field-border-size $field-border-style $field-border-color;
-    border-radius: 4px;
-    background-color: #fbfbfd;
-    min-width: 1em;
-    max-width: 100%;
-    padding: 0;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    cursor: pointer;
+    @include nr-field-container;
+    @include colors-for-nr-field-readonly;
 
-    & > label {
+    & > .nr-icon-container {
+      @include nr-icon-container;
+    }
 
-      box-sizing: border-box;
-      display: flex;
-      padding: 0;
-      cursor: pointer;
+    & > .nr-input-container {
 
-      & > .checkbox-container {
+      @include nr-input-container;
 
-        box-sizing: border-box;
-        font-size: $field-label-size;
-        color: $field-label-color;
-        border-right: $field-border-size $field-border-style $field-border-color;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        padding: 0.5em 1em;
+      & > .nr-label-container {
 
-        & > input {
-          box-sizing: border-box;
-          cursor: pointer;
-          font-size: 0.8em;
-          border: 0;
-          -ms-transform: scale(1.5); /* IE */
-          -moz-transform: scale(1.5); /* FF */
-          -webkit-transform: scale(1.5); /* Safari and Chrome */
-          -o-transform: scale(1.5); /* Opera */
-          transform: scale(1.5);
+        @include nr-label-container;
+        flex-direction: row;
+        align-items: center;
+
+        & > .nr-checkbox-container {
+
+          @include nr-input;
+          width: 34px;
+
+          & > .nr-input {
+
+          }
+
+          & > .nr-input-hidden {
+
+            display: none;
+
+          }
+
         }
-      }
 
-      & > .label {
+        & > .nr-label {
 
-        box-sizing: border-box;
-        flex: 1;
-        font-size: $field-label-size;
-        color: $field-label-color;
-        cursor: pointer;
-        padding: 0.5em 1em;
-        text-align: left;
+          @include nr-label;
 
-      }
+        }
 
+      } // .nr-label-container
+
+    } // .nr-input-container
+
+
+    @include nr-field-container-with-focus;
+
+    &.nr-focus > .nr-input-container > .nr-label-container {
+      @include nr-label-container-with-focus;
     }
 
-    &.nr-focus {
 
-      border: $field-focused-border-size $field-focused-border-style $field-focused-border-color;
-
-      & > label {
-        background-color: $field-focused-label-background-color;
-      }
-    }
-
+    @include nr-field-container-with-dirty-invalid;
 
     &.nr-field-invalid.nr-field-dirty {
 
-      border: $field-invalid-border-size $field-invalid-border-style $field-invalid-border-color;
-      background-color: $field-invalid-background-color;
+      & > .nr-input-container > .nr-label-container {
 
-      & > label {
+        @include nr-label-container-with-dirty-invalid;
 
-        background-color: $field-invalid-label-background-color;
-        border-bottom: $field-invalid-border-size $field-invalid-border-style $field-invalid-border-color;
+        & > .nr-checkbox-container {
+
+          & > .nr-input {
+            @include nr-input-with-dirty-invalid;
+          }
+
+        }
 
       }
 
-      & > input {
-        background-color: $field-invalid-background-color;
-      }
+    } // &.nr-field-invalid.nr-field-dirty
 
-    }
 
     &.nr-field-readonly {
 
-      // Disables pointer cursors
-
-      cursor: auto;
-
-      & > label {
-        cursor: auto;
-        & > nr-icon { cursor: auto; }
-        & > .label { cursor: auto; }
+      & > .nr-icon-container {
+        @include nr-icon-container-with-readonly;
       }
 
-      & > input {
-        cursor: auto;
+      & > .nr-input-container {
+
+        @include nr-input-container-with-readonly;
+
+        & > .nr-label-container {
+
+          @include nr-label-container-with-readonly;
+
+          & > .nr-checkbox-container {
+
+            & > .nr-input {
+
+              @include nr-input-with-readonly;
+
+            }
+
+          }
+
+          & > .nr-label {
+
+          }
+
+        }
+
       }
 
-      // Set colors
+      // Set Colors
 
-      border: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
-      background-color: $field-readonly-background-color;
+      @include colors-for-nr-field-readonly;
 
-      & > label {
-
-        background-color: $field-readonly-label-background-color;
-        border-bottom: $field-readonly-border-size $field-readonly-border-style $field-readonly-border-color;
-
+      & > .nr-icon-container {
+        @include colors-for-nr-icon-container-readonly;
       }
 
-      & > input {
-        background-color: $field-readonly-background-color;
+      & > .nr-input-container {
+
+        & > .nr-label-container {
+
+          @include colors-for-nr-label-container-readonly;
+
+          & > .nr-checkbox-container {
+
+            & > .nr-input {
+              @include colors-for-nr-input-readonly;
+            }
+
+          }
+
+        }
+
       }
 
     }
 
+  } // .nr-field-container
 
-  }
-}
+} // nr-checkbox-input

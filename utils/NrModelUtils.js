@@ -188,7 +188,7 @@ export class NrModelUtils {
      */
     static parseModelType (value) {
 
-        if ( ! ( value && _.isObject(value) ) ) {
+        if ( ! ( value && _.isObject(value) && !_.isArray(value) ) ) {
             nrLog.trace(`.parseModelType(): value was not a model: "${value}"`);
             return undefined;
         }
@@ -236,7 +236,7 @@ export class NrModelUtils {
         const type = this.parseModelType(value);
 
         if (!type) {
-            throw new TypeError(`${this.nrName}.parseValue(): could not parse value's type: "${type}"`);
+            throw new TypeError(`${this.nrName}.parseValue(): could not parse value's type: "${value}"`);
         }
 
         const Class = this.isModelRegistered(type) ? REGISTERED_TYPES[type] : undefined;

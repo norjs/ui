@@ -190,12 +190,6 @@ export class NrTextInputController extends NrInputController {
 		 *
 		 * @type {string}
 		 */
-		this[PRIVATE.ngModel] = undefined;
-
-		/**
-		 *
-		 * @type {string}
-		 */
 		this[PRIVATE.modelValue] = undefined;
 
 		/**
@@ -204,6 +198,14 @@ export class NrTextInputController extends NrInputController {
 		 * @type {boolean}
 		 */
 		this[PRIVATE.focus] = false;
+
+	}
+
+	$onInit () {
+
+		if ( this[PRIVATE.nrModel] && this[PRIVATE.nrModel].value !== undefined ) {
+			this._setModelValue(this[PRIVATE.nrModel].value);
+		}
 
 	}
 
@@ -663,32 +665,6 @@ export class NrTextInputController extends NrInputController {
 
 		if (this[PRIVATE.label] !== value) {
 			this[PRIVATE.label] = value;
-		}
-
-	}
-
-	// noinspection JSUnusedGlobalSymbols
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @returns {string|undefined}
-	 */
-	get bindNgModel () {
-		return this[PRIVATE.ngModel];
-	}
-
-	// noinspection JSUnusedGlobalSymbols
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @param value {string|undefined}
-	 */
-	set bindNgModel (value) {
-
-		if (this[PRIVATE.ngModel] !== value) {
-
-			this[PRIVATE.ngModel] = value;
-
 		}
 
 	}

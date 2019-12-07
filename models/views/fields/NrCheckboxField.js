@@ -38,7 +38,7 @@ export class NrCheckboxField extends NrField {
      *
      * @param [name] {string}
      * @param [label] {string}
-     * @param [icon] {NrIcon}
+     * @param [icon] {NrIcon|undefined}
      * @param [value] {boolean}
      * @param [readOnly] {boolean}
      */
@@ -46,8 +46,8 @@ export class NrCheckboxField extends NrField {
         name = undefined
         , label = undefined
         , icon = undefined
-        , value = undefined
-        , readOnly = undefined
+        , value = false
+        , readOnly = false
     } = {}) {
 
         if ( name !== undefined && !_.isString(name) ) {
@@ -62,12 +62,12 @@ export class NrCheckboxField extends NrField {
             throw new TypeError(`new ${NrCheckboxField.nrName}(): icon invalid: "${icon}"`);
         }
 
-        if ( readOnly !== undefined && !_.isBoolean(readOnly) ) {
-            throw new TypeError(`new ${NrCheckboxField.nrName}(): readOnly invalid: "${readOnly}"`);
+        if ( !_.isBoolean(readOnly) ) {
+            throw new TypeError(`new ${NrCheckboxField.nrName}(): readOnly not boolean: "${readOnly}"`);
         }
 
-        if ( value !== undefined && !_.isBoolean(value) ) {
-            throw new TypeError(`new ${NrCheckboxField.nrName}(): value invalid: "${value}"`);
+        if ( !_.isBoolean(value) ) {
+            throw new TypeError(`new ${NrCheckboxField.nrName}(): value not boolean: "${value}"`);
         }
 
         super();
@@ -127,7 +127,7 @@ export class NrCheckboxField extends NrField {
 
     /**
      *
-     * @returns {NrIcon}
+     * @returns {NrIcon|undefined}
      */
     get icon () {
         return this._icon;
@@ -135,7 +135,7 @@ export class NrCheckboxField extends NrField {
 
     /**
      *
-     * @returns {string}
+     * @returns {string|undefined}
      */
     get name () {
         return this._name;
@@ -143,7 +143,7 @@ export class NrCheckboxField extends NrField {
 
     /**
      *
-     * @returns {string|undefined}
+     * @returns {boolean|undefined}
      */
     get value () {
         return this._value;
@@ -164,11 +164,11 @@ export class NrCheckboxField extends NrField {
     valueOf () {
         return {
             type: this.type
-            , label: this._label
-            , name: this._name
-            , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
-            , value       : _.isBoolean(this._value) ? this._value : undefined
-            , readOnly    : this._readOnly ? true : undefined
+            , label    : !_.isNil(this._label)    ? this._label          : undefined
+            , name     : !_.isNil(this._name)     ? this._name           : undefined
+            , icon     : !_.isNil(this._icon)     ? this._icon.valueOf() : undefined
+            , value    : this._value              ? true : undefined
+            , readOnly : this._readOnly           ? true : undefined
         };
     }
 
@@ -209,11 +209,11 @@ export class NrCheckboxField extends NrField {
         }
 
         return new NrCheckboxField({
-            name          : !_.isNil(name)      ? name                    : undefined
-            , label       : !_.isNil(label)     ? label                   : undefined
-            , icon        : !_.isNil(icon)      ? NrIcon.parseValue(icon) : undefined
-            , value       : !_.isNil(value)       ? value                 : undefined
-            , readOnly    : !_.isNil(readOnly)    ? !!readOnly            : undefined
+            name          : !_.isNil(name)        ? name                    : undefined
+            , label       : !_.isNil(label)       ? label                   : undefined
+            , icon        : !_.isNil(icon)        ? NrIcon.parseValue(icon) : undefined
+            , value       : value === true        ? true                    : undefined
+            , readOnly    : readOnly === true     ? true                    : undefined
         });
 
     }

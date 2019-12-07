@@ -1,6 +1,7 @@
 import NrTextInputController from '../nrTextInput/NrTextInputController.js';
 import NrTag from "../../NrTag";
 import LogUtils from "@norjs/utils/Log";
+import NrIconValue from "../../../models/NrIconValue";
 
 // noinspection JSUnusedLocalSymbols
 const nrLog = LogUtils.getLogger(NrTag.CHECKBOX_INPUT);
@@ -12,12 +13,13 @@ const nrLog = LogUtils.getLogger(NrTag.CHECKBOX_INPUT);
  * @readonly
  */
 const PRIVATE = {
+	$element: Symbol('$element')
 };
 
 /**
  *
  * FIXME: Implement support for ng-touched
- *
+ * @FIXME: This should not be extended from text input!
  */
 export class NrCheckboxInputController extends NrTextInputController {
 
@@ -75,21 +77,32 @@ export class NrCheckboxInputController extends NrTextInputController {
 	 *
 	 * @param $attrs {angular.IAttributes}
 	 * @param $element {JQLite}
+	 * @param $translate {angular.translate.ITranslateService}
 	 * @ngInject
 	 */
 	constructor (
 		$attrs
 		, $element
+		, $translate
 	) {
 		'ngInject';
 
-		super($attrs, $element);
+		super($attrs, $element, $translate);
+
+		/**
+		 *
+		 * @member {JQLite}
+		 * @private
+		 */
+		this[PRIVATE.$element] = $element;
 
 	}
 
 	$onDestroy () {
 
 		super.$onDestroy();
+
+		this[PRIVATE.$element] = undefined;
 
 	}
 
@@ -230,10 +243,11 @@ export class NrCheckboxInputController extends NrTextInputController {
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
-	 * @returns {string}
+	 * @returns {boolean}
 	 */
 	get bindModelValue () {
 
+		// noinspection JSValidateTypes
 		return super.bindModelValue;
 
 	}
@@ -243,10 +257,11 @@ export class NrCheckboxInputController extends NrTextInputController {
 	 *
 	 * This is used from the template by AngularJS two way binding.
 	 *
-	 * @param value {string}
+	 * @param value {boolean}
 	 */
 	set bindModelValue (value) {
 
+		// noinspection JSValidateTypes
 		super.bindModelValue = value;
 
 	}
@@ -396,28 +411,6 @@ export class NrCheckboxInputController extends NrTextInputController {
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @returns {string|undefined}
-	 */
-	get bindNgModel () {
-
-		return super.bindNgModel;
-
-	}
-
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @param value {string|undefined}
-	 */
-	set bindNgModel (value) {
-
-		super.bindNgModel = value;
-
-	}
-
-	/**
-	 * AngularJS uses this in bindings.
-	 *
 	 * @returns {NrFormController|undefined}
 	 */
 	get bindNrFormController () {
@@ -443,7 +436,26 @@ export class NrCheckboxInputController extends NrTextInputController {
 	 */
 	onLabelClick ($event) {
 
-		super.onLabelClick($event);
+		$event.preventDefault();
+		$event.stopPropagation();
+
+		this.bindModelValue = !this.bindModelValue;
+
+		const ngModelController = this.getNgModelController();
+
+		if (ngModelController) {
+			ngModelController.$setDirty();
+			ngModelController.$setTouched();
+		}
+
+		// const input = this[PRIVATE.$element][0].querySelector('input');
+		//
+		// if (input) {
+		// 	input.checked = !input.checked;
+		// 	nrLog.trace(`onLabelClick(): Input checked toggled: `, input.checked);
+		// } else {
+		// 	nrLog.error(`onLabelClick(): No input element found.`);
+		// }
 
 	}
 
@@ -460,6 +472,15 @@ export class NrCheckboxInputController extends NrTextInputController {
 	isReadOnly () {
 
 		return super.isReadOnly();
+
+	}
+
+	/**
+	 * @returns {NrIconValue|string}
+	 */
+	get checkboxIconValue () {
+
+		return this.bindModelValue ? NrIconValue.CHECKBOX_CHECKED : NrIconValue.CHECKBOX_UNCHECKED;
 
 	}
 

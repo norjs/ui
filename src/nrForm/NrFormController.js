@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import LogUtils from "@norjs/utils/Log";
-import {NrInputController} from "../nrInput/NrInputController";
+import NrInputController from "../nrInput/NrInputController";
 import NrTag from "../NrTag";
 import NrModelUtils from "../../utils/NrModelUtils";
 import NrEventName from "../../models/NrEventName";
@@ -20,11 +20,8 @@ const PRIVATE = {
 	, cancelAction            : Symbol('_cancelAction')
 	, isCancelVisible         : Symbol('_isCancelVisible')
 	, items                   : Symbol('_items')
-	, updateItems             : Symbol('_updateItems')
 	, ngFormController        : Symbol('_ngForm')
 	, fieldControllers        : Symbol('_fieldControllers')
-	, getFieldValues          : Symbol('_getFieldValues')
-	, getItemId               : Symbol('_getItemId')
 	, $scope                  : Symbol('_$scope')
 };
 
@@ -162,7 +159,7 @@ export class NrFormController {
 
 			nrLog.trace(`Model changed as: `, value);
 
-			this[PRIVATE.updateItems]();
+			this._updateItems();
 
 		}
 
@@ -544,7 +541,7 @@ export class NrFormController {
 
 		const originalPayload = this[PRIVATE.nrModel].payload || {};
 
-		const modifiedValues = this[PRIVATE.getFieldValues]();
+		const modifiedValues = this._getFieldValues();
 
 		return _.merge({}, originalPayload, payload, modifiedValues);
 
@@ -554,7 +551,7 @@ export class NrFormController {
 	 *
 	 * @private
 	 */
-	[PRIVATE.updateItems]() {
+	_updateItems() {
 
 		this[PRIVATE.items] = _.map(
 			this[PRIVATE.nrModel].content,
@@ -563,7 +560,7 @@ export class NrFormController {
 				const config = NrModelUtils.getComponentConfig(item);
 
 				return {
-					id: this[PRIVATE.getItemId](item)
+					id: this._getItemId(item)
 					, model: item
 					, config
 				};
@@ -579,7 +576,7 @@ export class NrFormController {
 	 * @param item {NrModel}
 	 * @private
 	 */
-	[PRIVATE.getItemId] (item) {
+	_getItemId (item) {
 
 		// FIXME: We need an interface for unique id in NrModel
 		return item.id || item.name;
@@ -591,7 +588,7 @@ export class NrFormController {
 	 * @returns {Object}
 	 * @private
 	 */
-	[PRIVATE.getFieldValues] (item) {
+	_getFieldValues (item) {
 
 		const values = {};
 
@@ -607,9 +604,28 @@ export class NrFormController {
 
 				const name = fieldController.getName();
 
+				if (!name) return;
+
 				const value = fieldController.getModelValue();
 
-				_.set(values, name, value);
+				nrLog.trace(`_getFieldValues(): "${name}": `, value);
+				nrLog.trace(`_getFieldValues(): fieldController.ngModel: `, fieldController.getNgModelController());
+
+				if (_.has(values, name)) {
+
+					const prop = _.get(values, name);
+
+					if (_.isArray(prop)) {
+						prop.push(value);
+					} else {
+						_.set(values, name, [prop, value]);
+					}
+
+				} else {
+
+					_.set(values, name, value);
+
+				}
 
 			}
 

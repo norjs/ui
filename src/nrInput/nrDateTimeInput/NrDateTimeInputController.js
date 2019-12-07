@@ -745,28 +745,6 @@ export class NrDateTimeInputController extends NrTextInputController {
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @returns {string|undefined}
-	 */
-	get bindNgModel () {
-		return super.bindNgModel;
-	}
-
-	// noinspection JSUnusedGlobalSymbols
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @param value {string|undefined}
-	 */
-	set bindNgModel (value) {
-
-		return super.bindNgModel = value;
-
-	}
-
-	// noinspection JSUnusedGlobalSymbols
-	/**
-	 * AngularJS uses this in bindings.
-	 *
 	 * @returns {NrFormController|undefined}
 	 */
 	get bindNrFormController () {

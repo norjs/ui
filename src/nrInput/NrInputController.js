@@ -126,7 +126,6 @@ export class NrInputController {
 		if (!ngModelController) {
 			nrLog.warn(`${this.nrName}.getModelValue(): No ngModelController detected.`);
 			return undefined;
-
 		}
 
 		return ngModelController.$modelValue;

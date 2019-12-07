@@ -396,28 +396,6 @@ export class NrPasswordInputController extends NrTextInputController {
 	/**
 	 * AngularJS uses this in bindings.
 	 *
-	 * @returns {string|undefined}
-	 */
-	get bindNgModel () {
-
-		return super.bindNgModel;
-
-	}
-
-	/**
-	 * AngularJS uses this in bindings.
-	 *
-	 * @param value {string|undefined}
-	 */
-	set bindNgModel (value) {
-
-		super.bindNgModel = value;
-
-	}
-
-	/**
-	 * AngularJS uses this in bindings.
-	 *
 	 * @returns {NrFormController|undefined}
 	 */
 	get bindNrFormController () {

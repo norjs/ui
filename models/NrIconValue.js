@@ -25,6 +25,8 @@ export const NrIconValue = {
     , INFO               : "info-circle"
     , COMMENT            : "comment"
     , CHECK              : "check"
+    , CHECKBOX_CHECKED   : "check-square-o"
+    , CHECKBOX_UNCHECKED : "square-o"
     , BAN                : "ban"
     , CHECK_CIRCLE       : "check-circle"
     , EXCLAMATION_CIRCLE : "exclamation-circle"
@@ -42,6 +44,11 @@ export const NrIconValue = {
     , CARET_RIGHT        : "caret-right"
     , CARET_DOWN         : "caret-down"
     , CARET_UP           : "caret-up"
+    , ORDER              : "shopping-cart"
+    , EMAIL              : "envelope"
+    , FIRST_NAME         : "user"
+    , LAST_NAME          : "user"
+    , GLOBE              : "globe"
 
 };
 

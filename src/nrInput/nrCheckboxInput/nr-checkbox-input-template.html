@@ -1,30 +1,44 @@
-<div class="field-container" ng-class="$ctrl.getFieldStyles()">
+<div class="nr-field-container" ng-class="$ctrl.getFieldStyles()">
 
-    <label ng-click="$ctrl.onLabelClick($event)"
-           ng-if="$ctrl.useLabel() || $ctrl.hasIconValue()">
-        <div class="checkbox-container">
-            <input
-                type="checkbox"
-                class="form-input theme-input"
-                ng-model="$ctrl.bindModelValue"
-                nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
-                ng-change="$ctrl.onChange()"
-                ng-focus="$ctrl.onFocus($event)"
-                ng-blur="$ctrl.onBlur($event)"
-                ng-readonly="$ctrl.isReadOnly()"
-                autocomplete="off"
-                ng-model-options="{
-                allowInvalid: '$inherit',
-                updateOn: 'default blur',
-                debounce: {
-                    default: 250,
-                    blur: 0
-                }
-            }"
-            >
-        </div>
+    <div class="nr-icon-container"
+         ng-click="$ctrl.onLabelClick($event)"
+         ng-if="$ctrl.hasIconValue()">
+        <nr-icon class="nr-icon" nr-type="{{$ctrl.getIconValue()}}"></nr-icon>
+    </div>
 
-        <span ng-if="$ctrl.useLabel()" class="label" translate="{{::$ctrl.getLabel()}}"></span>
-    </label>
+    <div class="nr-input-container">
+
+        <label class="nr-label-container" ng-click="$ctrl.onLabelClick($event)">
+
+            <div class="nr-checkbox-container">
+
+                <nr-icon class="nr-input" nr-type="{{$ctrl.checkboxIconValue}}"></nr-icon>
+
+                <input
+                    type="checkbox"
+                    class="nr-input-hidden"
+                    ng-model="$ctrl.bindModelValue"
+                    nr-register-ng-model-controller="$ctrl.setNgModelController(ngModelController)"
+                    ng-change="$ctrl.onChange()"
+                    ng-focus="$ctrl.onFocus($event)"
+                    ng-blur="$ctrl.onBlur($event)"
+                    ng-readonly="$ctrl.isReadOnly()"
+                    autocomplete="off"
+                    ng-model-options="{
+                    allowInvalid: '$inherit',
+                    updateOn: 'default blur',
+                    debounce: {
+                        default: 250,
+                        blur: 0
+                    }
+                }"
+                >
+            </div>
+
+            <span ng-if="$ctrl.useLabel()" class="nr-label" translate="{{::$ctrl.getLabel()}}"></span>
+
+        </label>
+
+    </div>
 
 </div>

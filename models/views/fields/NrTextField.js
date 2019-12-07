@@ -36,21 +36,29 @@ export class NrTextField extends NrField {
 
     /**
      *
+     * @param [id] {string}
      * @param [name] {string}
      * @param [label] {string}
      * @param [placeholder] {string}
      * @param [icon] {NrIcon}
      * @param [value] {string}
      * @param [readOnly] {boolean}
+     * @param [required] {boolean}
      */
     constructor ({
-        name = undefined
+        id = undefined
+        , name = undefined
         , label = undefined
         , placeholder = undefined
         , icon = undefined
         , value = undefined
-        , readOnly = undefined
+        , readOnly = false
+        , required = false
     } = {}) {
+
+        if ( id !== undefined && !_.isString(id) ) {
+            throw new TypeError(`new ${NrTextField.nrName}(): id invalid: "${id}"`);
+        }
 
         if ( name !== undefined && !_.isString(name) ) {
             throw new TypeError(`new ${NrTextField.nrName}(): name invalid: "${name}"`);
@@ -68,8 +76,12 @@ export class NrTextField extends NrField {
             throw new TypeError(`new ${NrTextField.nrName}(): icon invalid: "${icon}"`);
         }
 
-        if ( readOnly !== undefined && !_.isBoolean(readOnly) ) {
+        if ( !_.isBoolean(readOnly) ) {
             throw new TypeError(`new ${NrTextField.nrName}(): readOnly invalid: "${readOnly}"`);
+        }
+
+        if ( !_.isBoolean(required) ) {
+            throw new TypeError(`new ${NrTextField.nrName}(): required invalid: "${required}"`);
         }
 
         if ( value !== undefined && !_.isString(value) ) {
@@ -77,6 +89,13 @@ export class NrTextField extends NrField {
         }
 
         super();
+
+        /**
+         *
+         * @member {string|undefined}
+         * @protected
+         */
+        this._id = id;
 
         /**
          *
@@ -120,6 +139,13 @@ export class NrTextField extends NrField {
          */
         this._readOnly = !!readOnly;
 
+        /**
+         *
+         * @member {boolean}
+         * @protected
+         */
+        this._required = !!required;
+
     }
 
     /**
@@ -158,6 +184,14 @@ export class NrTextField extends NrField {
      *
      * @returns {string}
      */
+    get id () {
+        return this._id;
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
     get name () {
         return this._name;
     }
@@ -180,17 +214,27 @@ export class NrTextField extends NrField {
 
     /**
      *
+     * @returns {boolean}
+     */
+    get required () {
+        return this._required;
+    }
+
+    /**
+     *
      * @returns {Object}
      */
     valueOf () {
         return {
             type: this.type
+            , id: this._id
             , label: this._label
             , placeholder: this._placeholder
             , name: this._name
             , icon: !_.isNil(this._icon) ? this._icon.valueOf() : null
             , value       : !_.isNil(this._value) ? this._value : undefined
             , readOnly    : this._readOnly ? true : undefined
+            , required    : this._required ? true : undefined
         };
     }
 
@@ -219,12 +263,14 @@ export class NrTextField extends NrField {
 
         const {
             type
+            , id
             , name
             , label
             , placeholder
             , icon
             , value
             , readOnly
+            , required
         } = objValue;
 
         if ( type !== NrObjectType.TEXT_FIELD ) {
@@ -232,12 +278,14 @@ export class NrTextField extends NrField {
         }
 
         return new NrTextField({
-            name           : !_.isNil(name)         ? name                    : undefined
-            , label        : !_.isNil(label)        ? label                   : undefined
-            , placeholder  : !_.isNil(placeholder)  ? placeholder             : undefined
-            , icon         : !_.isNil(icon)         ? NrIcon.parseValue(icon) : undefined
-            , value       : !_.isNil(value)       ? value                   : undefined
-            , readOnly    : !_.isNil(readOnly)    ? !!readOnly              : undefined
+            id               : !_.isNil(id)           ? id                      : undefined
+            , name           : !_.isNil(name)         ? name                    : undefined
+            , label          : !_.isNil(label)        ? label                   : undefined
+            , placeholder    : !_.isNil(placeholder)  ? placeholder             : undefined
+            , icon           : !_.isNil(icon)         ? NrIcon.parseValue(icon) : undefined
+            , value          : !_.isNil(value)        ? value                   : undefined
+            , readOnly       : !_.isNil(readOnly)     ? !!readOnly              : undefined
+            , required       : !_.isNil(required)     ? !!required              : undefined
         });
 
     }
