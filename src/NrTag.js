@@ -9,6 +9,8 @@ export const NrTag = {
     , MAIN_VIEW        : "nrMainView"
     , COMPILE          : "nrCompile"
     , ICON             : "nrIcon"
+    , IMAGE            : "nrImage"
+    , HEADER           : "nrHeader"
     , DATE_INPUT       : "nrDateInput"
     , DATE_TIME_INPUT  : "nrDateTimeInput"
     , MENU             : "nrMenu"

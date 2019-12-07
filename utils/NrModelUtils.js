@@ -30,6 +30,8 @@ import NrEvent from "../models/NrEvent";
 import NrDateField from "../models/views/fields/NrDateField";
 import NrGrid from "../models/views/NrGrid";
 import NrDateTimeField from "../models/views/fields/NrDateTimeField";
+import NrImage from "../models/NrImage";
+import NrHeader from "../models/NrHeader";
 
 const nrLog = LogUtils.getLogger("NrModelUtils");
 
@@ -92,6 +94,8 @@ export class NrModelUtils {
         NrModelUtils.registerModel(NrSession);
         NrModelUtils.registerModel(NrRequest);
         NrModelUtils.registerModel(NrIcon);
+        NrModelUtils.registerModel(NrImage);
+        NrModelUtils.registerModel(NrHeader);
         NrModelUtils.registerModel(NrForm);
         NrModelUtils.registerModel(NrInfoMessage);
         NrModelUtils.registerModel(NrErrorMessage);
@@ -303,6 +307,24 @@ export class NrModelUtils {
      */
     static isIcon (value) {
         return !!( value && value instanceof NrIcon );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isImage (value) {
+        return !!( value && value instanceof NrImage );
+    }
+
+    /**
+     *
+     * @param value {*}
+     * @returns {boolean}
+     */
+    static isHeader (value) {
+        return !!( value && value instanceof NrHeader );
     }
 
     /**
@@ -575,6 +597,20 @@ export class NrModelUtils {
             return {
                 component: NrTag.ICON,
                 resolve: {[NrAttribute.TYPE]: model.value}
+            };
+        }
+
+        if (NrModelUtils.isImage(model)) {
+            return {
+                component: NrTag.IMAGE,
+                resolve: {[NrAttribute.MODEL]: model}
+            };
+        }
+
+        if (NrModelUtils.isHeader(model)) {
+            return {
+                component: NrTag.HEADER,
+                resolve: {[NrAttribute.MODEL]: model}
             };
         }
 

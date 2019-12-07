@@ -1,6 +1,8 @@
 import angular from 'angular';
 import nrCompileModule from './nrCompile/nrCompileModule.js';
 import nrIconModule from './nrIcon/nrIconModule.js';
+import nrImageModule from './nrImage/nrImageModule.js';
+import nrHeaderModule from './nrHeader/nrHeaderModule.js';
 import nrCommonInputModule from './nrInput/nrCommonInputModule.js';
 import nrNavModule from './nrNav/nrNavModule.js';
 import nrWindowModule from './nrWindow/nrWindowModule.js';
@@ -20,6 +22,8 @@ export const nrCommonModule = angular.module(
 		, nrDirectivesModule
 		, nrCompileModule
 		, nrIconModule
+		, nrImageModule
+		, nrHeaderModule
 		, nrCommonInputModule
 		, nrNavModule
 		, nrWindowModule

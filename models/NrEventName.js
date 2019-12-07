@@ -62,7 +62,22 @@ export const NrEventName = {
      *
      * @fixme: Check out which is type for AngularJS event
      */
-    BUTTON_CLICK: 'NrButton:onClick'
+    BUTTON_CLICK: 'NrButton:onClick',
+
+    /**
+     * Session has been changed. (Eg. authenticated/unauthenticated.)
+     */
+    SESSION_CHANGED: 'NrSession:changed',
+
+    /**
+     * The nav has been changed and should be reloaded
+     */
+    NAV_CHANGED: 'BeNavComponent:nav:changed',
+
+    /**
+     * Backend asks to move to this model view
+     */
+    OPEN_MODEL_VIEW: 'NrModel:open'
 
 };
 

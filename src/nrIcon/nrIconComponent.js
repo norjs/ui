@@ -1,5 +1,5 @@
 import template from './nr-icon-template.html';
-import './nr-icon-styles.css';
+import './nr-icon-styles.scss';
 import NrIconController from './NrIconController';
 import 'font-awesome/scss/font-awesome.scss';
 import NrAttribute from "../NrAttribute";

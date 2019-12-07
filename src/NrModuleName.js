@@ -17,6 +17,8 @@ export const NrModuleName = {
     , UI_DIRECTIVES     : "norjs.ui.nrDirectives"
     , COMPILE           : "norjs.ui.nrCompile"
     , ICON              : "norjs.ui.nrIcon"
+    , IMAGE             : "norjs.ui.nrImage"
+    , HEADER            : "norjs.ui.nrHeader"
     , INPUT             : "norjs.ui.nrInput"
     , DATE_INPUT        : "norjs.ui.nrInput.nrDate"
     , DATE_TIME_INPUT   : "norjs.ui.nrInput.nrDateTime"

@@ -11,6 +11,8 @@ export const NrObjectType = {
     ERROR_MESSAGE: 'NrErrorMessage',
     CONFIRM_DIALOG: 'NrConfirmDialog',
     ICON: 'NrIcon',
+    IMAGE: 'NrImage',
+    HEADER: 'NrHeader',
     FORM: 'NrForm',
     DIV: 'NrDiv',
     GRID: 'NrGrid',
