@@ -1,6 +1,7 @@
 <button ng-click="$ctrl.onClick($event)"
         ng-class="$ctrl.getClasses()"
-        ng-disabled="!$ctrl.enabled">
+        ng-disabled="!$ctrl.enabled"
+        type="{{$ctrl.getButtonType()}}">
     <nr-icon ng-if="$ctrl.hasIcon()" nr-type="{{$ctrl.icon}}"></nr-icon>
     <span class="label" translate="{{$ctrl.label}}"></span>
 </button>

@@ -227,6 +227,12 @@ export class NrButtonController {
 		};
 	}
 
+	getButtonType () {
+
+		return this.style === NrButton.Style.SUBMIT ? 'submit' : 'button';
+
+	}
+
 	/**
 	 *
 	 * @param $event
