@@ -32,9 +32,10 @@ export class NrViewTemplate {
     /**
      * Renders the view. This is called once for each request.
      *
+     * @param result {*} The result from the controller
      * @returns {NrModel}
      */
-    render () {}
+    render (result) {}
 
 }
 
